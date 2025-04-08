@@ -17,7 +17,7 @@ public class JwtUtils {
     @Value("${jwt.expiration}")
     private long jwtExpirationMs;
 
-public String generateJwtToken (String username, String role, String dni)
+    public String generateJwtToken(String username, String role, String dni)
 
     {
         return Jwts.builder()
@@ -28,5 +28,12 @@ public String generateJwtToken (String username, String role, String dni)
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
+    }
+
+    public String getUsernameFromJwtToken(String token) {
+        return Jwts.parser()
+                .setSigningKey(jwtSecret)
+                .parseClaimsJws(token)
+                .getSubject();
     }
 }
