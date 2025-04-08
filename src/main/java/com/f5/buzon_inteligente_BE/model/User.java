@@ -58,8 +58,8 @@ public class User implements Serializable {
         return userEmail;
     }
 
-    public String getUserPasword() {
-        return userPasword;
+    public String getUserPassword() {
+        return userPassword;
     }
 
     public Long getCredentialId() {
