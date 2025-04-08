@@ -37,7 +37,7 @@ public class User implements Serializable {
         this.userDni = userDni;
         this.userName = userName;
         this.userEmail = userEmail;
-        this.userPasword = userPassword;
+        this.userPassword = userPassword;
         this.credentialId = credentialId;
         this.lockerId = lockerId;
     }
