@@ -46,6 +46,16 @@ public class JwtUtils {
                 .getBody();
     }
 
+    public boolean validateJwtToken(String token) {
+        try {
+            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
+            return true;
+        } catch (Exception e) {
+           
+            System.err.println("Invalid JWT token: " + e.getMessage());
+        }
+        return false;
+    }
 
 
 
