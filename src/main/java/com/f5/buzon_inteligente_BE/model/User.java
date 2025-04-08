@@ -2,7 +2,7 @@ package com.f5.buzon_inteligente_BE.model;
 
 import java.io.Serializable;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
@@ -11,33 +11,33 @@ public class User implements Serializable {
     @Id
     @GenertatedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false)
-    public Long userId;
+    private Long userId;
 
     @Column(name = "user_DNI", nullable = false, length = 50)
-    public String userDni;
+    private String userDni;
 
-    public String userName;
+    private String userName;
 
     @Column(name = "user_mail", nullable = false, length = 50)
-    public String userEmail;
+    private String userEmail;
 
     @Column(name = "user_password", nullable = false, length = 50)
-    public String userPasword;
+    private String userPassword;
 
     @Column(name = "credential_id", nullable = false)
-    public Long credentialId;
+    private Long credentialId;
 
     @Column(name = "locker_id", nullable = false)
-    public Long lockerId;
+    private Long lockerId;
    
 
-    public User(Long userId, String userDni, String userName, String userEmail, String userPasword, Long credentialId,
+    public User(Long userId, String userDni, String userName, String userEmail, String userPassword, Long credentialId,
             Long lockerId) {
         this.userId = userId;
         this.userDni = userDni;
         this.userName = userName;
         this.userEmail = userEmail;
-        this.userPasword = userPasword;
+        this.userPasword = userPassword;
         this.credentialId = credentialId;
         this.lockerId = lockerId;
     }
