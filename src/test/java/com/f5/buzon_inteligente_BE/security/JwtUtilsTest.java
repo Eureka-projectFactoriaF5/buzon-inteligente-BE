@@ -39,4 +39,12 @@ public class JwtUtilsTest {
         assertNotNull(token, "Generated token should not be null");
     }
 
+    @Test
+    @DisplayName("Should validate JWT token sucessfully")
+    public void test_Validate_JWT_Token(){
+        String token = jwtUtils.generateJwtToken("testUser", "USER", "1234578A");
+        assertTrue(jwtUtils.validateJwtToken(token), "Token should be valid");       
+    }
+
+    
 }
