@@ -100,4 +100,12 @@ public class JwtUtilsTest {
         assertNull(extractedToken, "Extracted token should be null when 'Bearer' prefix is missing");
     }
 
+    @Test
+    @DisplayName("Should detect malformed JWT token")
+    public void testShouldDetectMalformedJwtToken() {
+        String malformedToken = "this.is.not.a.valid.jwt";
+
+        assertFalse(jwtUtils.validateJwtToken(malformedToken), "Malformed token should be invalid");
+    }
+
 }
