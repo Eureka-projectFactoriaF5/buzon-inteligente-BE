@@ -16,7 +16,7 @@ public class User implements Serializable {
     @Column(name = "user_dni", nullable = false, length = 50)
     private String userDni;
 
-    @Column(name="user_name", nullable = false, length = 50)
+    @Column(name = "user_name", nullable = false, length = 50)
     private String userName;
 
     @Column(name = "user_email", nullable = false, length = 50)
@@ -30,8 +30,11 @@ public class User implements Serializable {
 
     @Column(name = "locker_id", nullable = false)
     private Long lockerId;
+    @Column(name = "permanent_credential", unique = true, length = 100)
+    private String permanentCredential;
 
-    public User() { } 
+    public User() {
+    }
 
     public User(Long userId, String userDni, String userName, String userEmail, String userPassword, Long credentialId,
             Long lockerId) {
@@ -71,5 +74,13 @@ public class User implements Serializable {
     public Long getLockerId() {
         return lockerId;
     }
+    public String getPermanentCredential() {
+        return permanentCredential;
+    }
+    
+    public void setPermanentCredential(String permanentCredential) {
+        this.permanentCredential = permanentCredential;
+    }
+    
 
 }
