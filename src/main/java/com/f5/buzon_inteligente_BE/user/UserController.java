@@ -1,7 +1,7 @@
-package com.f5.buzon_inteligente_BE.controller;
+package com.f5.buzon_inteligente_BE.user;
 
 import com.f5.buzon_inteligente_BE.dto.CredentialRequest;
-import com.f5.buzon_inteligente_BE.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

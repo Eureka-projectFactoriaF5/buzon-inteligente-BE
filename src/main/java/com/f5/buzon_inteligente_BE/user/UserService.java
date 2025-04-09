@@ -1,8 +1,7 @@
-package com.f5.buzon_inteligente_BE.service;
+package com.f5.buzon_inteligente_BE.user;
 
 import com.f5.buzon_inteligente_BE.dto.CredentialRequest;
-import com.f5.buzon_inteligente_BE.user.User;
-import com.f5.buzon_inteligente_BE.user.UserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
