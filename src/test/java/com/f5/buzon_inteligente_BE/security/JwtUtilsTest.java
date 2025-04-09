@@ -80,4 +80,14 @@ public class JwtUtilsTest {
                 "Should throw ExpiredJwtException");
     }
 
+    @Test
+    @DisplayName("Should extract JWT from Authorization header")
+    public void testShouldExtractJwtFromAuthorizationHeader() {
+        when(httpServletRequest.getHeader("Authorization")).thenReturn(bearerToken);
+
+        String extractedToken = jwtUtils.getJwtFromHeader(httpServletRequest);
+
+        assertEquals(expectedToken, extractedToken, "Extracted token should match expected value");
+    }
+
 }
