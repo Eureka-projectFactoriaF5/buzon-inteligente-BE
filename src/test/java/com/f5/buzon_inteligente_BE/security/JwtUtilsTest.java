@@ -67,6 +67,17 @@ public class JwtUtilsTest {
         assertEquals(dni, claims.get("dni"), "DNI claim should match");
     }
 
-    
-}
+    @Test
+    @DisplayName("Should detect expired JWT token")
+    public void testShouldDetectExpiredJwtToken() throws InterruptedException {
+        ReflectionTestUtils.setField(jwtUtils, "jwtExpirationMs", 1);
+        String shortLivedToken = jwtUtils.generateJwtToken(username, role, dni);
 
+        Thread.sleep(10);
+
+        assertFalse(jwtUtils.validateJwtToken(shortLivedToken), "Expired token should be invalid");
+        assertThrows(ExpiredJwtException.class, () -> jwtUtils.getAllClaimsFromToken(shortLivedToken),
+                "Should throw ExpiredJwtException");
+    }
+
+}
