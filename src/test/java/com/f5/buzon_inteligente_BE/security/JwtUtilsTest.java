@@ -90,4 +90,14 @@ public class JwtUtilsTest {
         assertEquals(expectedToken, extractedToken, "Extracted token should match expected value");
     }
 
+    @Test
+    @DisplayName("Should return null when Authorization header is missing 'Bearer' prefix")
+    public void testShouldReturnNullWhenAuthorizationHeaderIsMissingBearerPrefix() {
+        when(httpServletRequest.getHeader("Authorization")).thenReturn(expectedToken);
+
+        String extractedToken = jwtUtils.getJwtFromHeader(httpServletRequest);
+
+        assertNull(extractedToken, "Extracted token should be null when 'Bearer' prefix is missing");
+    }
+
 }
