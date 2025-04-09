@@ -108,4 +108,12 @@ public class JwtUtilsTest {
         assertFalse(jwtUtils.validateJwtToken(malformedToken), "Malformed token should be invalid");
     }
 
+    @Test
+    @DisplayName("Should detect unsupported JWT token")
+    public void testShouldDetectUnsupportedJwtToken() {
+        String unsupportedToken = "eyJhbGciOiJub25lIn0.eyJzdWIiOiJ0ZXN0VXNlciIsImlhdCI6MTY1NjM4MjQwMH0.";
+
+        assertFalse(jwtUtils.validateJwtToken(unsupportedToken), "Unsupported token should be invalid");
+    }
+
 }
