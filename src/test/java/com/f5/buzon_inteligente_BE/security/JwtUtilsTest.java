@@ -124,4 +124,14 @@ public class JwtUtilsTest {
         assertFalse(jwtUtils.validateJwtToken(emptyToken), "Empty token should be invalid");
     }
 
+    @Test
+    @DisplayName("Should return null when Authorization header is null")
+    public void testShouldReturnNullWhenAuthorizationHeaderIsNull() {
+        when(httpServletRequest.getHeader("Authorization")).thenReturn(null);
+
+        String extractedToken = jwtUtils.getJwtFromHeader(httpServletRequest);
+
+        assertNull(extractedToken, "Extracted token should be null when Authorization header is null");
+    }
+
 }
