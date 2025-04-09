@@ -46,5 +46,24 @@ public class JwtUtilsTest {
         assertTrue(jwtUtils.validateJwtToken(token), "Token should be valid");       
     }
 
-    
+    @Test
+    @DisplayName("Should extract username and claims from JWT token")
+    public void test_Extract_Claims_From_JWT_Token(){
+        String username ="testUser";
+        String role = "USER";
+        String dni = "12345678A";
+
+        String token = jwtUtils.generateJwtToken(username, role, dni);
+        String extractedUsername = jwtUtils.getUserNameFromJwtToken(token);
+        assertEquals(username, extractedUsername, "Extrated username should match");
+
+        Claims claims = jwtUtils.getAllClaimsFromToken(token);
+        assertEquals(role, claims.get("role"), "Role claim should match");
+        assertEquals(dni, claims.get("dni"), "DNI claim should match");
+
+       
+    }
+
+
+
 }
