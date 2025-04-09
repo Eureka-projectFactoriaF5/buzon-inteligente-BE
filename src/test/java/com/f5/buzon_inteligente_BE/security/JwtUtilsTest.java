@@ -116,4 +116,12 @@ public class JwtUtilsTest {
         assertFalse(jwtUtils.validateJwtToken(unsupportedToken), "Unsupported token should be invalid");
     }
 
+    @Test
+    @DisplayName("Should detect empty JWT token")
+    public void testShouldDetectEmptyJwtToken() {
+        String emptyToken = "";
+
+        assertFalse(jwtUtils.validateJwtToken(emptyToken), "Empty token should be invalid");
+    }
+
 }
