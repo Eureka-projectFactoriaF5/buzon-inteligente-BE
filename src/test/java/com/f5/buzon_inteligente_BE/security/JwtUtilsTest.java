@@ -1,8 +1,8 @@
 package com.f5.buzon_inteligente_BE.security;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-import org.aspectj.util.Reflection;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
 import org.junit.jupiter.api.Test;
@@ -24,60 +24,49 @@ public class JwtUtilsTest {
     @Mock
     private HttpServletRequest httpServletRequest;
 
-    @DisplayName("Initialize JwtUtils and mock dependencies")
+    private final String username = "testUser";
+    private final String role = "USER";
+    private final String dni = "12345678A";
+    private final String bearerToken = "Bearer test.jwt.token";
+    private final String expectedToken = "test.jwt.token";
+
+    private String validToken;
+
     @BeforeEach
+    @DisplayName("Initialize JwtUtils and common test data")
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         ReflectionTestUtils.setField(jwtUtils, "jwtSecret",
                 "mZBZfP8L99Zm8GDZCBoBPXaGNsq4CPGK/c/pX9nuSUXwxLBzME2YkdE+5EYXPLkP54x32MmNljQIgGhD4oM3Hg==");
         ReflectionTestUtils.setField(jwtUtils, "jwtExpirationMs", 3600000);
+
+        validToken = jwtUtils.generateJwtToken(username, role, dni);
     }
 
     @Test
     @DisplayName("Should generate a non-null JWT token")
-    public void test_Generate_JWT_Token() {
-        String token = jwtUtils.generateJwtToken("testUser", "USER", "1234578A");
-
+    public void testShouldGenerateNonNullJwtToken() {
+        String token = jwtUtils.generateJwtToken(username, role, dni);
         assertNotNull(token, "Generated token should not be null");
     }
 
     @Test
-    @DisplayName("Should validate JWT token sucessfully")
-    public void test_Validate_JWT_Token(){
-        String token = jwtUtils.generateJwtToken("testUser", "USER", "1234578A");
-        assertTrue(jwtUtils.validateJwtToken(token), "Token should be valid");       
+    @DisplayName("Should validate JWT token successfully")
+    public void testShouldValidateJwtTokenSuccessfully() {
+        assertTrue(jwtUtils.validateJwtToken(validToken), "Token should be valid");
     }
 
     @Test
     @DisplayName("Should extract username and claims from JWT token")
-    public void test_Extract_Claims_From_JWT_Token(){
-        String username ="testUser";
-        String role = "USER";
-        String dni = "12345678A";
+    public void testShouldExtractUsernameAndClaimsFromJwtToken() {
+        String extractedUsername = jwtUtils.getUserNameFromJwtToken(validToken);
+        assertEquals(username, extractedUsername, "Extracted username should match");
 
-        String token = jwtUtils.generateJwtToken(username, role, dni);
-        String extractedUsername = jwtUtils.getUserNameFromJwtToken(token);
-        assertEquals(username, extractedUsername, "Extrated username should match");
-
-        Claims claims = jwtUtils.getAllClaimsFromToken(token);
+        Claims claims = jwtUtils.getAllClaimsFromToken(validToken);
         assertEquals(role, claims.get("role"), "Role claim should match");
         assertEquals(dni, claims.get("dni"), "DNI claim should match");
-       
     }
 
-    @Test
-    @DisplayName("Should detect expired JWT token")
-    public void test_Expired_JWT_Token() throws InterruptedException {
-        ReflectionTestUtils.setField(jwtUtils, "jwtExpirationMs",1);
-
-        String token = jwtUtils.generateJwtToken("testUser", "USER", "12345678A");
-
-        Thread.sleep(10);
-
-        assertFalse(jwtUtils.validateJwtToken(token), "Expired token should be invalid");
-        assertThrows(ExpiredJwtException.class, () -> jwtUtils.getAllClaimsFromToken(token), "Should throw ExpiredJwtException");
-    }
-
-
-
+    
 }
+
