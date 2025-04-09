@@ -1,17 +1,20 @@
 package com.f5.buzon_inteligente_BE.security;
 
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.util.Reflection;
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 
-
-public class JwtUtilsTest {    
+@DisplayName("Unit tests for JwtUtils class")
+public class JwtUtilsTest {
 
     @InjectMocks
     private JwtUtils jwtUtils;
@@ -19,12 +22,21 @@ public class JwtUtilsTest {
     @Mock
     private HttpServletRequest httpServletRequest;
 
+    @DisplayName("Initialize JwtUtils and mock dependencies")
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        ReflectionTestUtils.setField(jwtUtils, "jwtSecret", "Zm9vYmFyYmF6cXV4eHl6c2VjcmV0a2V5MTIzNDU2");
-        ReflectionTestUtils.setField(jwtUtils, "jwExpirationMs", 3600000);
+        ReflectionTestUtils.setField(jwtUtils, "jwtSecret",
+                "mZBZfP8L99Zm8GDZCBoBPXaGNsq4CPGK/c/pX9nuSUXwxLBzME2YkdE+5EYXPLkP54x32MmNljQIgGhD4oM3Hg==");
+        ReflectionTestUtils.setField(jwtUtils, "jwtExpirationMs", 3600000);
     }
 
+    @Test
+    @DisplayName("Should generate a non-null JWT token")
+    public void test_Generate_JWT_Token() {
+        String token = jwtUtils.generateJwtToken("testUser", "USER", "1234578A");
+
+        assertNotNull(token, "Generated token should not be null");
+    }
 
 }
