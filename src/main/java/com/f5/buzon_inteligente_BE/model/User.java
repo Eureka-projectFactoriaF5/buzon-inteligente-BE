@@ -9,16 +9,17 @@ import jakarta.persistence.*;
 public class User implements Serializable {
 
     @Id
-    @GenertatedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @Column(name = "user_DNI", nullable = false, length = 50)
+    @Column(name = "user_dni", nullable = false, length = 50)
     private String userDni;
 
+    @Column(name="user_name" nullable = false, length = 50)
     private String userName;
 
-    @Column(name = "user_mail", nullable = false, length = 50)
+    @Column(name = "user_email", nullable = false, length = 50)
     private String userEmail;
 
     @Column(name = "user_password", nullable = false, length = 50)
@@ -29,7 +30,8 @@ public class User implements Serializable {
 
     @Column(name = "locker_id", nullable = false)
     private Long lockerId;
-   
+
+    public User() { } 
 
     public User(Long userId, String userDni, String userName, String userEmail, String userPassword, Long credentialId,
             Long lockerId) {
