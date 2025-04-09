@@ -2,6 +2,7 @@ package com.f5.buzon_inteligente_BE.security;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.aspectj.util.Reflection;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 
 @DisplayName("Unit tests for JwtUtils class")
@@ -60,8 +62,20 @@ public class JwtUtilsTest {
         Claims claims = jwtUtils.getAllClaimsFromToken(token);
         assertEquals(role, claims.get("role"), "Role claim should match");
         assertEquals(dni, claims.get("dni"), "DNI claim should match");
-
        
+    }
+
+    @Test
+    @DisplayName("Should detect expired JWT token")
+    public void test_Expired_JWT_Token() throws InterruptedException {
+        ReflectionTestUtils.setField(jwtUtils, "jwtExpirationMs",1);
+
+        String token = jwtUtils.generateJwtToken("testUser", "USER", "12345678A");
+
+        Thread.sleep(10);
+
+        assertFalse(jwtUtils.validateJwtToken(token), "Expired token should be invalid");
+        assertThrows(ExpiredJwtException.class, () -> jwtUtils.getAllClaimsFromToken(token), "Should throw ExpiredJwtException");
     }
 
 
