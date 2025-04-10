@@ -4,6 +4,7 @@ public class RegistrationRequest {
 
     private String userDni;
     private String userName;
+    private String userSurname;
     private String userEmail;
     private String userPassword;
 
@@ -13,6 +14,7 @@ public class RegistrationRequest {
     public RegistrationRequest(String userDni, String userName, String userEmail, String userPassword) {
         this.userDni = userDni;
         this.userName = userName;
+        this.userSurname = userSurname;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
     }
@@ -47,6 +49,14 @@ public class RegistrationRequest {
 
     public void setUserPassword(String userPassword) {
         this.userPassword = userPassword;
+    }
+
+    public String getUserSurname() {
+        return userSurname;
+    }
+
+    public void setUserSurname(String userSurname) {
+        this.userSurname = userSurname;
     }
 
 }
