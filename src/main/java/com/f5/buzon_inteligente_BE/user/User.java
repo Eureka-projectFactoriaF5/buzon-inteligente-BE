@@ -2,6 +2,7 @@ package com.f5.buzon_inteligente_BE.user;
 
 import java.io.Serializable;
 
+import com.f5.buzon_inteligente_BE.roles.Role;
 import jakarta.persistence.*;
 
 @Entity
@@ -29,7 +30,9 @@ public class User implements Serializable {
     @Column(name = "user_password", nullable = false, length = 50)
     private String userPassword;
 
-    
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
 
     @Column(name = "locker_id", nullable = false)
     private Long lockerId;
@@ -78,6 +81,7 @@ public class User implements Serializable {
    public String getuserSurname() {
         return userSurname;
     }
+
 
    
 }
