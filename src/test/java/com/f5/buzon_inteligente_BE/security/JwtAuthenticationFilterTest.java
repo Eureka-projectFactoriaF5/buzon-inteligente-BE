@@ -93,6 +93,24 @@ public class JwtAuthenticationFilterTest {
         assert(authentication.getAuthorities().isEmpty());
     }
 
+    @Test
+    @DisplayName("Should not authenticate user when JWT is invalid")
+    void shouldNotAuthenticateWhenJwtIsInvalid() throws ServletException, IOException {
+        String token = "invalid-jwt";
+
+        when(jwtUtils.getJwtFromHeader(request)).thenReturn(token);
+        when(jwtUtils.validateJwtToken(token)).thenReturn(false);
+
+        jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
+
+        verify(jwtUtils).getJwtFromHeader(request);
+        verify(jwtUtils).validateJwtToken(token);
+        verify(userDetailsService, never()).loadUserByUsername(any());
+        verify(filterChain).doFilter(request, response);
+
+        assert(SecurityContextHolder.getContext().getAuthentication() == null);
+    }
+
     
     
 }
