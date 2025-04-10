@@ -49,8 +49,8 @@ public class RegisterService {
                 request.getUserName(),
                 request.getUserEmail(),
                 passwordEncoded,
-                0L, // Valor por defecto para credentialId
-                0L  // Valor por defecto para lockerId
+                0L, 
+                0L  
         );
 
    

@@ -36,9 +36,9 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(Long userId, String userDni, String userName, String userEmail, String userPassword, Long credentialId,
+    public User( String userDni, String userName, String userEmail, String userPassword, Long credentialId,
             Long lockerId) {
-        this.userId = userId;
+      
         this.userDni = userDni;
         this.userName = userName;
         this.userEmail = userEmail;
