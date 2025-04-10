@@ -23,6 +23,7 @@ import java.io.IOException;
 
 @DisplayName("JwtAuthenticationFilterTest")
 public class JwtAuthenticationFilterTest {
+
     @Mock
     private JwtUtils jwtUtils;
 
@@ -44,16 +45,21 @@ public class JwtAuthenticationFilterTest {
     @InjectMocks
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    private String token;
+    private String username;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        SecurityContextHolder.clearContext();        
+        SecurityContextHolder.clearContext();
+
+        token = "jwt-token";
+        username = "testUser";
     }
 
     @Test
     @DisplayName("Should not authenticate when token is missing")
     void testShouldNotAuthenticateWhenJwtIsMissing() throws ServletException, IOException {
-       
         when(jwtUtils.getJwtFromHeader(request)).thenReturn(null);
 
         jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
@@ -67,9 +73,6 @@ public class JwtAuthenticationFilterTest {
     @Test
     @DisplayName("Should authenticate user when JWT is valid")
     void shouldAuthenticateWhenJwtIsValid() throws ServletException, IOException {
-        String token = "valid-jwt";
-        String username = "testUser";
-
         when(jwtUtils.getJwtFromHeader(request)).thenReturn(token);
         when(jwtUtils.validateJwtToken(token)).thenReturn(true);
         when(jwtUtils.getUserNameFromJwtToken(token)).thenReturn(username);
@@ -96,8 +99,6 @@ public class JwtAuthenticationFilterTest {
     @Test
     @DisplayName("Should not authenticate user when JWT is invalid")
     void shouldNotAuthenticateWhenJwtIsInvalid() throws ServletException, IOException {
-        String token = "invalid-jwt";
-
         when(jwtUtils.getJwtFromHeader(request)).thenReturn(token);
         when(jwtUtils.validateJwtToken(token)).thenReturn(false);
 
@@ -114,8 +115,6 @@ public class JwtAuthenticationFilterTest {
     @Test
     @DisplayName("Should handle exception and continue filter chain")
     void shouldHandleExceptionAndContinueFilterChain() throws ServletException, IOException {
-        String token = "jwt-token";
-
         when(jwtUtils.getJwtFromHeader(request)).thenReturn(token);
         when(jwtUtils.validateJwtToken(token)).thenThrow(new RuntimeException("Unexpected error"));
 
@@ -127,7 +126,5 @@ public class JwtAuthenticationFilterTest {
 
         assert(SecurityContextHolder.getContext().getAuthentication() == null);
     }
-
-    
-    
 }
+
