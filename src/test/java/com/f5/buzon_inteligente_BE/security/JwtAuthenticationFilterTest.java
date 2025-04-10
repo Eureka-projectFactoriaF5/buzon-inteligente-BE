@@ -111,6 +111,23 @@ public class JwtAuthenticationFilterTest {
         assert(SecurityContextHolder.getContext().getAuthentication() == null);
     }
 
+    @Test
+    @DisplayName("Should handle exception and continue filter chain")
+    void shouldHandleExceptionAndContinueFilterChain() throws ServletException, IOException {
+        String token = "jwt-token";
+
+        when(jwtUtils.getJwtFromHeader(request)).thenReturn(token);
+        when(jwtUtils.validateJwtToken(token)).thenThrow(new RuntimeException("Unexpected error"));
+
+        jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
+
+        verify(jwtUtils).getJwtFromHeader(request);
+        verify(jwtUtils).validateJwtToken(token);
+        verify(filterChain).doFilter(request, response);
+
+        assert(SecurityContextHolder.getContext().getAuthentication() == null);
+    }
+
     
     
 }
