@@ -17,9 +17,9 @@ public class RoleService {
         return role;
     }
 
-    private Role findByRoleName(String string) {
-        throw new UnsupportedOperationException("Unimplemented method 'findByRoleName'");
-    }
+    private Role findByRoleName(String roleName) {
+        return repository.findByRoleName(roleName).orElseThrow(() -> new IllegalArgumentException("Role not found with name: " + roleName));
+        } 
 
     public Set<Role> assignDefaultRole() {
         Role defaultRole = this.findByRoleName("USER");
