@@ -20,7 +20,7 @@ public class User implements Serializable {
     @Column(name = "user_name", nullable = false, length = 50)
     private String userName;
     
-    @Column(name = "userSurname", nullable = false, length = 50)
+    @Column(name = "user_Surname", nullable = false, length = 50)
     private String userSurname;
 
     @Column(name = "user_email", nullable = false, length = 50)
@@ -42,6 +42,7 @@ public class User implements Serializable {
     }
 
     public User(Role role, String userDni, String userName, String userEmail, String userPassword, String userSurname, Long lockerId) 
+
              {
         this.role = role;
         this.userDni = userDni;
@@ -77,7 +78,7 @@ public class User implements Serializable {
         return lockerId;
     }
 
-   public String getuserSurname() {
+   public String getUserSurname() {
         return userSurname;
     }
 
