@@ -1,6 +1,6 @@
 package com.f5.buzon_inteligente_BE.auth.register;
 
-public class RegistrationRequest {
+public class RegisterRequest {
 
     private String userDni;
     private String userName;
@@ -8,10 +8,10 @@ public class RegistrationRequest {
     private String userEmail;
     private String userPassword;
 
-    public RegistrationRequest() {
+    public RegisterRequest() {
     }
 
-    public RegistrationRequest(String userDni, String userName, String userEmail, String userPassword) {
+    public RegisterRequest(String userDni, String userName, String userEmail, String userPassword) {
         this.userDni = userDni;
         this.userName = userName;
         this.userSurname = userSurname;
