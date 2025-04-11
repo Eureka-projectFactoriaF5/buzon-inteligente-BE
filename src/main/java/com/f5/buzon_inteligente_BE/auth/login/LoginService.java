@@ -30,7 +30,7 @@ public class LoginService {
 
         Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                    loginRequest.mail(), 
+                    loginRequest.email(), 
                     decodedPassword
                 )
             );
