@@ -1,12 +1,9 @@
 package com.f5.buzon_inteligente_BE.auth.login;
 
-import java.util.Base64;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
+
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,51 +12,32 @@ import org.springframework.web.bind.annotation.RestController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.f5.buzon_inteligente_BE.security.CustomUserDetails;
-import com.f5.buzon_inteligente_BE.security.JwtUtils;
 
 @RestController
 @RequestMapping("/api/auth")
 public class LoginController {
 
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
-    private final AuthenticationManager authenticationManager;
-    private final JwtUtils jwtUtils;
+    private final LoginService authService;
 
-    public LoginController(AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
-        this.authenticationManager = authenticationManager;
-        this.jwtUtils = jwtUtils;
+    public LoginController(LoginService authService) {
+        this.authService = authService;
     }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequest) {
         try {
-            byte[] decodedBytes = Base64.getDecoder().decode(loginRequest.password());
-            String decodedPassword = new String(decodedBytes);
+            LoginResponseDto response = authService.authenticate(loginRequest);
+            return ResponseEntity.ok(response);
             
-            Authentication auth = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                    loginRequest.mail(), 
-                    decodedPassword
-                )
-            );
-
-            CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
-            String role = userDetails.getRole();
-            String dni = userDetails.getDni();
-
-            String token = jwtUtils.generateJwtToken(userDetails.getUsername(), role, dni);
-
-            return ResponseEntity.ok(new LoginResponseDto("Login exitoso", token));
-            
-        }catch (AuthenticationException ex) {
+        } catch (AuthenticationException ex) {
             logger.error("Error de autenticación: {}", ex.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new LoginResponseDto("Credenciales inválidas", null));
+                    .body(new LoginResponseDto("Credenciales inválidas", null, null));
         } catch (IllegalArgumentException ex) {
             logger.error("Password no es Base64 válido: {}", ex.getMessage());
             return ResponseEntity.badRequest()
-                    .body(new LoginResponseDto("Formato de password inválido", null));
+                    .body(new LoginResponseDto("Formato de password inválido", null, null));
         }
     }
 }
