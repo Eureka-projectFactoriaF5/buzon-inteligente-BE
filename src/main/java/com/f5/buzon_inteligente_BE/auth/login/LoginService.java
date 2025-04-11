@@ -1,7 +1,7 @@
 package com.f5.buzon_inteligente_BE.auth.login;
 
 import java.util.Base64;
-
+import java.util.Base64.Decoder;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,17 +23,23 @@ public class LoginService {
     }
     
     public LoginResponseDto authenticate(LoginRequestDto loginRequest) {
-
-        byte[] decodedBytes = Base64.getDecoder().decode(loginRequest.password());
+        if (loginRequest.password() == null || loginRequest.password().isEmpty()) {
+            throw new IllegalArgumentException("Password cannot be null or empty");
+        }
+        if (loginRequest.email() == null || loginRequest.email().isEmpty()) {
+            throw new IllegalArgumentException("Email cannot be null or empty");
+        }
+        
+        Decoder decoder = Base64.getDecoder();
+        byte[] decodedBytes = decoder.decode(loginRequest.password());
         String decodedPassword = new String(decodedBytes);
         
-
         Authentication auth = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                    loginRequest.email(), 
-                    decodedPassword
-                )
-            );
+            new UsernamePasswordAuthenticationToken(
+                loginRequest.email(), 
+                decodedPassword
+            )
+        );
         
         CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
         String role = userDetails.getRole();

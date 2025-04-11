@@ -36,7 +36,7 @@ public class User implements Serializable {
     public User() {
     }
 
-    // Constructor sin el locker, ya que se ha eliminado.
+    
     public User(String userDni, String userName, String userSurname, String userEmail, String userPassword, Role role) {
         this.userDni = userDni;
         this.userName = userName;
@@ -66,7 +66,7 @@ public class User implements Serializable {
         return userPassword;
     }
 
-    public String getuserSurname() {  // Te recomiendo renombrarlo a getUserSurname() para mantener el camelCase.
+    public String getuserSurname() {  
         return userSurname;
     }
 
