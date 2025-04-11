@@ -41,16 +41,15 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User( String userDni, String userName, String userEmail, String userPassword, String userSurname, Long lockerId) 
+    public User(Role role, String userDni, String userName, String userEmail, String userPassword, String userSurname, Long lockerId) 
              {
-       
+        this.role = role;
         this.userDni = userDni;
         this.userName = userName;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
-       this.userSurname = userSurname;
+        this.userSurname = userSurname;
         this.lockerId = lockerId;
-       
     }
 
     public Long getUserId() {
@@ -82,6 +81,8 @@ public class User implements Serializable {
         return userSurname;
     }
 
-
+    public Role getRole() {
+        return role;
+    }
    
 }
