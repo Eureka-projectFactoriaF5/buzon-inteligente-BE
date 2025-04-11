@@ -30,8 +30,7 @@ public class CredencialService {
             throw new RuntimeException("Credential is already in use");
         }
         
-        user.setPermanentCredential(request.getNewCredential());
-        userRepository.save(user);
+  
 
         return true; 
     }

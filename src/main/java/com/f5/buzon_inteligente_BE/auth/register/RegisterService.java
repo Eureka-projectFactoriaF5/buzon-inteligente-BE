@@ -48,10 +48,11 @@ public class RegisterService {
         User newUser = new User(
                 request.getUserDni(),
                 request.getUserName(),
+                request.getUserSurname(),
                 request.getUserEmail(),
                 passwordEncoded,
-                0L, 
-                0L  
+                0L
+               
         );
 
    
