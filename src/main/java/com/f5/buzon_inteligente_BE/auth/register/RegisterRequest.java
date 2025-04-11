@@ -11,7 +11,7 @@ public class RegisterRequest {
     public RegisterRequest() {
     }
 
-    public RegisterRequest(String userDni, String userName, String userEmail, String userPassword) {
+    public RegisterRequest(String userDni, String userName, String userSurname,  String userEmail, String userPassword) {
         this.userDni = userDni;
         this.userName = userName;
         this.userSurname = userSurname;

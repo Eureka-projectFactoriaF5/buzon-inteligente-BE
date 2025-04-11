@@ -51,7 +51,7 @@ public class RegisterService {
                 request.getUserSurname(),
                 request.getUserEmail(),
                 passwordEncoded,
-                0L
+                null
                
         );
 
