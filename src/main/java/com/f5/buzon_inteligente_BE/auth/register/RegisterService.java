@@ -1,12 +1,13 @@
 package com.f5.buzon_inteligente_BE.auth.register;
 
 
-import com.f5.buzon_inteligente_BE.auth.register.RegistrationExceptions.EmailAlreadyExistsException;
-import com.f5.buzon_inteligente_BE.auth.register.RegistrationExceptions.RegistrationException;
+import com.f5.buzon_inteligente_BE.auth.register.RegisterExceptions.EmailAlreadyExistsException;
+import com.f5.buzon_inteligente_BE.auth.register.RegisterExceptions.RegisterException;
 import com.f5.buzon_inteligente_BE.user.User;
 import com.f5.buzon_inteligente_BE.user.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 
 import java.util.Base64;
 import java.util.Base64.Decoder;
@@ -24,7 +25,7 @@ public class RegisterService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Map<String, String> registerUser(RegistrationRequest request) {
+    public Map<String, String> registerUser(RegisterRequest request) {
         
         if (userRepository.findByUserEmail(request.getUserEmail()).isPresent()) {
             throw new EmailAlreadyExistsException("El email ya está registrado");
@@ -37,7 +38,7 @@ public class RegisterService {
             byte[] decodedBytes = decoder.decode(request.getUserPassword());
             decodedPassword = new String(decodedBytes);
         } catch (Exception e) {
-            throw new RegistrationException("Error decoding password from Base64", e);
+            throw new RegisterException("Error decoding password from Base64", e);
         }
 
         

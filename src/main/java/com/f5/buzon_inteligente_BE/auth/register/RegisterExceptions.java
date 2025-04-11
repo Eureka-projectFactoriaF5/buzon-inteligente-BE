@@ -1,6 +1,6 @@
 package com.f5.buzon_inteligente_BE.auth.register;
 
-public class RegistrationExceptions {
+public class RegisterExceptions {
 
     public static class EmailAlreadyExistsException extends RuntimeException {
         public EmailAlreadyExistsException(String message) {
@@ -8,12 +8,12 @@ public class RegistrationExceptions {
         }
     }
 
-    public static class RegistrationException extends RuntimeException {
-        public RegistrationException(String message) {
+    public static class RegisterException extends RuntimeException {
+        public RegisterException(String message) {
             super(message);
         }
         
-        public RegistrationException(String message, Throwable cause) {
+        public RegisterException(String message, Throwable cause) {
             super(message, cause);
         }
     }
