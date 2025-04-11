@@ -2,6 +2,7 @@ package com.f5.buzon_inteligente_BE.user;
 
 import java.io.Serializable;
 
+import com.f5.buzon_inteligente_BE.roles.Role;
 import jakarta.persistence.*;
 
 @Entity
@@ -19,7 +20,7 @@ public class User implements Serializable {
     @Column(name = "user_name", nullable = false, length = 50)
     private String userName;
     
-    @Column(name = "user_Surname", nullable = false, length = 50)
+    @Column(name = "user_surname", nullable = false, length = 50)
     private String userSurname;
 
     @Column(name = "user_email", nullable = false, length = 50, unique = true)
@@ -30,7 +31,9 @@ public class User implements Serializable {
     @Column(name = "user_password", nullable = false, length = 255)
     private String userPassword;
 
-    
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
 
     @Column(name = "locker_id", nullable = true)
     private Long lockerId;
@@ -40,18 +43,16 @@ public class User implements Serializable {
     }
 
 
-    public User(String userDni, String userName,String userSurname, String userEmail, String userPassword,  Long lockerId) 
-
+    public User(String userDni, String userName, String userSurname String userEmail, String userPassword, Long lockerId, Role role,) 
 
              {
-       
         this.userDni = userDni;
         this.userName = userName;
         this.userSurname = userSurname;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
         this.lockerId = lockerId;
-       
+        this.role = role;
     }
 
     public Long getUserId() {
@@ -79,9 +80,12 @@ public class User implements Serializable {
         return lockerId;
     }
 
-   public String getUserSurname() {
+   public String getuserSurname() {
         return userSurname;
     }
 
+    public Role getRole() {
+        return role;
+    }
    
 }
