@@ -1,16 +1,13 @@
 package com.f5.buzon_inteligente_BE.auth.login;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-
-import javax.naming.AuthenticationException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,10 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.f5.buzon_inteligente_BE.security.CustomUserDetails;
 import com.f5.buzon_inteligente_BE.security.JwtUtils;
 
 @RestController
-@RequestMapping("${api-endpoint}/auth")
+@RequestMapping("/api/auth")
 public class LoginController {
 
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
