@@ -26,6 +26,7 @@ public class User implements Serializable {
     private String userEmail;
 
 
+
     @Column(name = "user_password", nullable = false, length = 255)
     private String userPassword;
 
@@ -38,7 +39,10 @@ public class User implements Serializable {
     public User() {
     }
 
+
     public User(String userDni, String userName,String userSurname, String userEmail, String userPassword,  Long lockerId) 
+
+
              {
        
         this.userDni = userDni;
