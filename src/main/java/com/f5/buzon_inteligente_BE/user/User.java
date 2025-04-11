@@ -14,42 +14,45 @@ public class User implements Serializable {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @Column(name = "user_dni", nullable = false, length = 50)
+    @Column(name = "user_dni", nullable = false, length = 50, unique = true)
     private String userDni;
 
     @Column(name = "user_name", nullable = false, length = 50)
     private String userName;
     
-    @Column(name = "userSurname", nullable = false, length = 50)
+    @Column(name = "user_surname", nullable = false, length = 50)
     private String userSurname;
 
-    @Column(name = "user_email", nullable = false, length = 50)
+    @Column(name = "user_email", nullable = false, length = 50, unique = true)
     private String userEmail;
 
 
-    @Column(name = "user_password", nullable = false, length = 50)
+
+    @Column(name = "user_password", nullable = false, length = 255)
     private String userPassword;
 
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @Column(name = "locker_id", nullable = false)
+    @Column(name = "locker_id", nullable = true)
     private Long lockerId;
 
     
     public User() {
     }
 
-    public User(Role role, String userDni, String userName, String userEmail, String userPassword, String userSurname, Long lockerId) 
+
+    public User(String userDni, String userName, String userSurname String userEmail, String userPassword, Long lockerId, Role role,) 
+
              {
-        this.role = role;
         this.userDni = userDni;
         this.userName = userName;
+        this.userSurname = userSurname;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
-        this.userSurname = userSurname;
         this.lockerId = lockerId;
+        this.role = role;
     }
 
     public Long getUserId() {
