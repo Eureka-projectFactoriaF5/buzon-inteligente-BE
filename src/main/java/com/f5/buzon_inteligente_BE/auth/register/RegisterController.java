@@ -1,5 +1,6 @@
 package com.f5.buzon_inteligente_BE.auth.register;
 
+import com.f5.buzon_inteligente_BE.auth.register.RegisterExceptions.DniAlreadyExistsException;
 import com.f5.buzon_inteligente_BE.auth.register.RegisterExceptions.EmailAlreadyExistsException;
 import com.f5.buzon_inteligente_BE.auth.register.RegisterExceptions.RegisterException;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,9 @@ public class RegisterController {
         } catch (EmailAlreadyExistsException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("{\"error\": \"Email already exists: " + e.getMessage() + "\"}");
+        } catch (DniAlreadyExistsException e) {
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                .body("{\"error\": \"DNI already exists: " + e.getMessage() + "\"}");            
         } catch (RegisterException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("{\"error\": \"Registration error: " + e.getMessage() + "\"}");

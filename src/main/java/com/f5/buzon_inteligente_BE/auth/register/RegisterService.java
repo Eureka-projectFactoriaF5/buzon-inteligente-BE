@@ -1,5 +1,6 @@
 package com.f5.buzon_inteligente_BE.auth.register;
 
+import com.f5.buzon_inteligente_BE.auth.register.RegisterExceptions.DniAlreadyExistsException;
 import com.f5.buzon_inteligente_BE.auth.register.RegisterExceptions.EmailAlreadyExistsException;
 import com.f5.buzon_inteligente_BE.auth.register.RegisterExceptions.RegisterException;
 import com.f5.buzon_inteligente_BE.user.User;
@@ -31,6 +32,9 @@ public class RegisterService {
     public Map<String, String> registerUser(RegisterRequest request) {
         if (userRepository.findByUserEmail(request.getUserEmail()).isPresent()) {
             throw new EmailAlreadyExistsException("El email ya está registrado");
+        }
+        if (userRepository.findByUserDni(request.getUserDni()).isPresent()) {
+            throw new DniAlreadyExistsException("El DNI ya está registrado");
         }
 
         String decodedPassword;
