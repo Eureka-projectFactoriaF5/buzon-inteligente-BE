@@ -2,7 +2,7 @@ package com.f5.buzon_inteligente_BE.profile;
 
 import com.f5.buzon_inteligente_BE.user.User;
 import com.f5.buzon_inteligente_BE.user.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,7 +42,7 @@ public class ProfileService {
     }
 
     @Transactional
-    public Profile createProfile(Long userId, String permanentCredential) {
+    public Profile createProfile(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
 
@@ -50,7 +50,7 @@ public class ProfileService {
             throw new RuntimeException("Profile already exists for user with id: " + userId);
         }
 
-        Profile profile = new Profile(permanentCredential, user);
+        Profile profile = new Profile(user);
         return profileRepository.save(profile);
     }
 
@@ -58,9 +58,7 @@ public class ProfileService {
     public Profile updateProfile(Long id, String permanentCredential) {
         Profile existingProfile = profileRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Profile not found with id: " + id));
-
         existingProfile.setPermanentCredential(permanentCredential);
-        
         return profileRepository.save(existingProfile);
     }
 
@@ -73,14 +71,12 @@ public class ProfileService {
     }
 
     @Transactional
-    public String regenerateDeliveryPersonAccessCode(Long id) {
+    public String regeneratePermanentCredential(Long id) {
         Profile profile = profileRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Profile not found with id: " + id));
-        
-        String newCode = UUID.randomUUID().toString();
-        profile.setDeliveryPersonAccessCode(newCode);
+        String newCredential = UUID.randomUUID().toString();
+        profile.setPermanentCredential(newCredential);
         profileRepository.save(profile);
-        
-        return newCode;
+        return newCredential;
     }
 }

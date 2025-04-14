@@ -11,7 +11,5 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
 
     Optional<Profile> findByPermanentCredential(String permanentCredential);
 
-    Optional<Profile> findByDeliveryPersonAccessCode(String deliveryPersonAccessCode);
-
     boolean existsByPermanentCredential(String permanentCredential);
 }

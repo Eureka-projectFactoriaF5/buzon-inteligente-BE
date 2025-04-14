@@ -4,16 +4,14 @@ public class ProfileDTO {
     
     private Long id;
     private String permanentCredential;
-    private String deliveryPersonAccessCode;
     private Long userId;
 
     public ProfileDTO() {
     }
 
-    public ProfileDTO(Long id, String permanentCredential, String deliveryPersonAccessCode, Long userId) {
+    public ProfileDTO(Long id, String permanentCredential, Long userId) {
         this.id = id;
         this.permanentCredential = permanentCredential;
-        this.deliveryPersonAccessCode = deliveryPersonAccessCode;
         this.userId = userId;
     }
 
@@ -21,10 +19,10 @@ public class ProfileDTO {
         return new ProfileDTO(
                 profile.getId(),
                 profile.getPermanentCredential(),
-                profile.getDeliveryPersonAccessCode(),
                 profile.getUser() != null ? profile.getUser().getUserId() : null
         );
     }
+
 
     public Long getId() {
         return id;
@@ -40,14 +38,6 @@ public class ProfileDTO {
 
     public void setPermanentCredential(String permanentCredential) {
         this.permanentCredential = permanentCredential;
-    }
-
-    public String getDeliveryPersonAccessCode() {
-        return deliveryPersonAccessCode;
-    }
-
-    public void setDeliveryPersonAccessCode(String deliveryPersonAccessCode) {
-        this.deliveryPersonAccessCode = deliveryPersonAccessCode;
     }
 
     public Long getUserId() {

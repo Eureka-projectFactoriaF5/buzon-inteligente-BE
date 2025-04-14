@@ -5,7 +5,7 @@ import com.f5.buzon_inteligente_BE.user.User;
 import java.util.UUID;
 
 @Entity
-@Table(name = "user_profiles")
+@Table(name = "profiles")
 public class Profile {
 
     @Id
@@ -15,20 +15,16 @@ public class Profile {
     @Column(name = "permanent_credential", nullable = false, unique = true)
     private String permanentCredential;
 
-    @Column(name = "delivery_person_access_code", nullable = false, unique = true)
-    private String deliveryPersonAccessCode;
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
 
     public Profile() {
-        this.deliveryPersonAccessCode = UUID.randomUUID().toString();
+        this.permanentCredential = UUID.randomUUID().toString();
     }
 
-    public Profile(String permanentCredential, User user) {
+    public Profile(User user) {
         this();
-        this.permanentCredential = permanentCredential;
         this.user = user;
     }
 
@@ -46,14 +42,6 @@ public class Profile {
 
     public void setPermanentCredential(String permanentCredential) {
         this.permanentCredential = permanentCredential;
-    }
-
-    public String getDeliveryPersonAccessCode() {
-        return deliveryPersonAccessCode;
-    }
-
-    public void setDeliveryPersonAccessCode(String deliveryPersonAccessCode) {
-        this.deliveryPersonAccessCode = deliveryPersonAccessCode;
     }
 
     public User getUser() {
