@@ -19,14 +19,12 @@ public class User implements Serializable {
 
     @Column(name = "user_name", nullable = false, length = 50)
     private String userName;
-    
+
     @Column(name = "user_surname", nullable = false, length = 50)
     private String userSurname;
 
     @Column(name = "user_email", nullable = false, length = 50, unique = true)
     private String userEmail;
-
-
 
     @Column(name = "user_password", nullable = false, length = 255)
     private String userPassword;
@@ -35,23 +33,17 @@ public class User implements Serializable {
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @Column(name = "locker_id", nullable = true)
-    private Long lockerId;
-
-    
     public User() {
     }
 
 
-    public User(String userDni, String userName, String userSurname, String userEmail, String userPassword, Long lockerId, Role role) 
-
-             {
+    
+    public User(String userDni, String userName, String userSurname, String userEmail, String userPassword, Role role) {
         this.userDni = userDni;
         this.userName = userName;
         this.userSurname = userSurname;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
-        this.lockerId = lockerId;
         this.role = role;
     }
 
@@ -75,17 +67,11 @@ public class User implements Serializable {
         return userPassword;
     }
 
- 
-    public Long getLockerId() {
-        return lockerId;
-    }
-
-   public String getuserSurname() {
+    public String getUserSurname() {  
         return userSurname;
     }
 
     public Role getRole() {
         return role;
     }
-   
 }

@@ -1,6 +1,6 @@
 package com.f5.buzon_inteligente_BE.auth.register;
 
-
+import com.f5.buzon_inteligente_BE.auth.register.RegisterExceptions.DniAlreadyExistsException;
 import com.f5.buzon_inteligente_BE.auth.register.RegisterExceptions.EmailAlreadyExistsException;
 import com.f5.buzon_inteligente_BE.auth.register.RegisterExceptions.RegisterException;
 import com.f5.buzon_inteligente_BE.user.User;
@@ -8,6 +8,8 @@ import com.f5.buzon_inteligente_BE.user.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.f5.buzon_inteligente_BE.roles.Role;
+import com.f5.buzon_inteligente_BE.roles.RoleService;
 
 import java.util.Base64;
 import java.util.Base64.Decoder;
@@ -19,19 +21,22 @@ public class RegisterService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RoleService roleService;
 
-    public RegisterService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public RegisterService(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleService roleService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.roleService = roleService;
     }
 
     public Map<String, String> registerUser(RegisterRequest request) {
-        
         if (userRepository.findByUserEmail(request.getUserEmail()).isPresent()) {
             throw new EmailAlreadyExistsException("El email ya está registrado");
         }
+        if (userRepository.findByUserDni(request.getUserDni()).isPresent()) {
+            throw new DniAlreadyExistsException("El DNI ya está registrado");
+        }
 
-      
         String decodedPassword;
         try {
             Decoder decoder = Base64.getDecoder();
@@ -41,21 +46,18 @@ public class RegisterService {
             throw new RegisterException("Error decoding password from Base64", e);
         }
 
-        
         String passwordEncoded = passwordEncoder.encode(decodedPassword);
 
-      
+        Role defaultRole = roleService.getDefaultRole();
+
         User newUser = new User(
                 request.getUserDni(),
                 request.getUserName(),
                 request.getUserSurname(),
                 request.getUserEmail(),
                 passwordEncoded,
-                null
-               
-        );
+                defaultRole);
 
-   
         userRepository.save(newUser);
 
         Map<String, String> response = new HashMap<>();
