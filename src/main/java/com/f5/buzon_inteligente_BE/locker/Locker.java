@@ -22,6 +22,9 @@ public class Locker implements Serializable {
     @Column(name = "time_limit", nullable = false)
     private Integer timeLimit;
     
+    @Column(name = "locker_status_id", nullable = false)
+    private LockerStatus lockerStatus;
+
     @OneToMany(mappedBy = "locker")
     private List<Mailbox> mailboxes;
     
@@ -31,9 +34,10 @@ public class Locker implements Serializable {
     public Locker() {
     }
     
-    public Locker(String address, Integer timeLimit) {
+    public Locker(String address, Integer timeLimit, LockerStatus lockerStatus) {
         this.address = address;
         this.timeLimit = timeLimit;
+        this.lockerStatus = lockerStatus;
 
     }
 
@@ -47,6 +51,10 @@ public class Locker implements Serializable {
     
     public Integer getTimeLimit() {
         return timeLimit;
+    }
+
+    public LockerStatus getLockerStatus() {
+        return lockerStatus;
     }
     
     public List<Mailbox> getMailboxes() {
