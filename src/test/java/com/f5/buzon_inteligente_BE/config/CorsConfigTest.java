@@ -1,6 +1,7 @@
 package com.f5.buzon_inteligente_BE.config;
 
 import com.f5.buzon_inteligente_BE.security.JwtUtils;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@ActiveProfiles("test") 
+@ActiveProfiles("test")
 class CorsConfigTest {
 
     @Autowired
@@ -33,7 +33,8 @@ class CorsConfigTest {
     }
 
     @Test
-    void shouldAllowCorsRequestsFromFrontend() throws Exception {
+    @DisplayName("Should allow CORS requests from allowed origin")
+    void testShouldAllowCorsRequestsFromFrontend() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.options("/api/test")
                         .header("Origin", "http://localhost:5173")
                         .header("Access-Control-Request-Method", "GET")
@@ -44,4 +45,29 @@ class CorsConfigTest {
                 .andExpect(header().exists("Access-Control-Allow-Headers"))
                 .andExpect(header().string("Access-Control-Allow-Credentials", "true"));
     }
+
+    @Test
+    @DisplayName("Should block CORS requests from disallowed origin")
+    void testShouldBlockCorsRequestsFromUnknownOrigin() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.options("/api/test")
+                        .header("Origin", "http://malicious.com")
+                        .header("Access-Control-Request-Method", "GET")
+                        .header("Access-Control-Request-Headers", "Content-Type, Authorization"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @DisplayName("Should allow CORS requests with multiple HTTP methods")
+    void testShouldAllowCorsRequestsWithMultipleMethods() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.options("/api/test")
+                        .header("Origin", "http://localhost:5173")
+                        .header("Access-Control-Request-Method", "POST")
+                        .header("Access-Control-Request-Headers", "Content-Type, Authorization"))
+                .andExpect(status().isOk())
+                .andExpect(header().string("Access-Control-Allow-Origin", "http://localhost:5173"))
+                .andExpect(header().string("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS"))
+                .andExpect(header().exists("Access-Control-Allow-Headers"))
+                .andExpect(header().string("Access-Control-Allow-Credentials", "true"));
+    }
 }
+
