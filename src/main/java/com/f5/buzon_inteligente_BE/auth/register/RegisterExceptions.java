@@ -8,6 +8,12 @@ public class RegisterExceptions {
         }
     }
 
+    public static class DniAlreadyExistsException extends RuntimeException {
+        public DniAlreadyExistsException(String message) {
+            super(message);
+        }
+    }
+
     public static class RegisterException extends RuntimeException {
         public RegisterException(String message) {
             super(message);
