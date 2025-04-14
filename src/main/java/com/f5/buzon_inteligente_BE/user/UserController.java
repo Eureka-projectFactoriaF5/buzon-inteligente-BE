@@ -1,10 +1,10 @@
 package com.f5.buzon_inteligente_BE.user;
 
-import com.f5.buzon_inteligente_BE.dto.CredentialRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.f5.buzon_inteligente_BE.profile.dto.CredentialRequest;
 
 @RestController
 @RequestMapping("/api/credential")

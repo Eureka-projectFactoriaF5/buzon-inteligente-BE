@@ -1,9 +1,9 @@
 package com.f5.buzon_inteligente_BE.user;
 
-import com.f5.buzon_inteligente_BE.dto.CredentialRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.f5.buzon_inteligente_BE.profile.dto.CredentialRequest;
 
 import java.util.Optional;
 

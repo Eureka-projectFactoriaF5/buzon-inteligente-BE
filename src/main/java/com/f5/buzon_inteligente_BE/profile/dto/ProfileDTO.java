@@ -1,4 +1,4 @@
-package com.f5.buzon_inteligente_BE.dto;
+package com.f5.buzon_inteligente_BE.profile.dto;
 
 import com.f5.buzon_inteligente_BE.profile.Profile;
 
