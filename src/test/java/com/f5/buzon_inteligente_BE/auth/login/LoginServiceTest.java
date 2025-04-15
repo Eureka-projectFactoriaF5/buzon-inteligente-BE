@@ -1,17 +1,18 @@
 package com.f5.buzon_inteligente_BE.auth.login;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.util.Base64;
-
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import java.util.Base64;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,7 +20,6 @@ import org.springframework.security.core.Authentication;
 import com.f5.buzon_inteligente_BE.security.CustomUserDetails;
 import com.f5.buzon_inteligente_BE.security.CustomUserDetailsService;
 import com.f5.buzon_inteligente_BE.security.JwtUtils;
-
 @ExtendWith(MockitoExtension.class)
 public class LoginServiceTest {
     @InjectMocks
@@ -37,10 +37,8 @@ public class LoginServiceTest {
     @Mock
     private CustomUserDetailsService customUserDetailsService;
 
-    @Mock
-    private Authentication auth;
-
     @Test
+    @DisplayName("Should authenticate user")
     public void testAuthenticate() {
         String email = "email";
         String password = "password";
@@ -63,6 +61,49 @@ public class LoginServiceTest {
         assertEquals("token", response.token());
         assertEquals(role, response.role());
 
+    }
+    @Test
+    @DisplayName("Not authenticate user whith empty password")
+    public void testAuthenticateEmptyPassword() {
+        String email = "email";
+        String password = "";
+        LoginRequestDto request = new LoginRequestDto(email, password);
+
+        IllegalArgumentException exception = assertThrows(
+            IllegalArgumentException.class, 
+            () -> loginService.authenticate(request)
+        );
+
+        assertEquals("Password cannot be null or empty", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Not authenticate user whith null password")
+    public void testAuthenticateNullPassword() {
+        String email = "email";
+        LoginRequestDto request = new LoginRequestDto(email, null);
+
+        IllegalArgumentException exception = assertThrows(
+            IllegalArgumentException.class, 
+            () -> loginService.authenticate(request)
+        );
+
+        assertEquals("Password cannot be null or empty", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Not authenticate user whith password not Base64")
+    public void testAuthenticatePasswordNotBase64() {
+        String email = "email";
+        String password = "####";
+        LoginRequestDto request = new LoginRequestDto(email, password);
+
+        IllegalArgumentException exception = assertThrows(
+            IllegalArgumentException.class, 
+            () -> loginService.authenticate(request)
+        );
+
+        assertEquals("Formato de password inválido", exception.getMessage());
     }
 
 }
