@@ -22,7 +22,8 @@ public class Locker implements Serializable {
     @Column(name = "time_limit", nullable = false)
     private Integer timeLimit;
     
-    @Column(name = "locker_status_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "locker_status_id", nullable = false)
     private LockerStatus lockerStatus;
 
     @OneToMany(mappedBy = "locker")
