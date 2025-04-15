@@ -55,4 +55,15 @@ public class UserTest {
         assertEquals("John", user.getUserName());
 
     }
+    @Test
+    @DisplayName("GetUserSurname test case")
+    void testGetUserSurname() {
+        assertEquals("Doe", user.getUserSurname());
+    }
+
+    @Test
+    @DisplayName("GetRole test case")
+    void testGetRole() {
+        assertEquals(role, user.getRole());
+    }
 }
