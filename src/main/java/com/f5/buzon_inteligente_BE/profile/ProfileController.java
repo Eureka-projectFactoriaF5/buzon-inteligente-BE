@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/profiles")
+@RequestMapping("/api/profile")
 public class ProfileController {
 
     private final ProfileService profileService;
@@ -50,14 +50,14 @@ public class ProfileController {
         return new ResponseEntity<>(ProfileDTO.fromEntity(createdProfile), HttpStatus.CREATED);
     }
 
-    // Endpoint para actualizar la permanentCredential manualmente, si se requiere
+   
     @PutMapping("/{id}")
     public ResponseEntity<ProfileDTO> updateProfile(@PathVariable Long id, @RequestBody UpdateProfileRequest request) {
         Profile updatedProfile = profileService.updateProfile(id, request.getPermanentCredential());
         return ResponseEntity.ok(ProfileDTO.fromEntity(updatedProfile));
     }
 
-    // Endpoint para regenerar la credencial permanente
+
     @PostMapping("/{id}/regenerate-credential")
     public ResponseEntity<String> regenerateCredential(@PathVariable Long id) {
         String newCredential = profileService.regeneratePermanentCredential(id);

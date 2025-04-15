@@ -8,6 +8,8 @@ import java.util.Optional;
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
 
     Optional<Profile> findByUserUserId(Long userId);
+    
+    boolean existsByUserUserId(Long userId);
 
     Optional<Profile> findByPermanentCredential(String permanentCredential);
 

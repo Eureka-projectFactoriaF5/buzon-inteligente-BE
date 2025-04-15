@@ -2,7 +2,6 @@ package com.f5.buzon_inteligente_BE.profile;
 
 import com.f5.buzon_inteligente_BE.user.User;
 import com.f5.buzon_inteligente_BE.user.UserRepository;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,12 +42,12 @@ public class ProfileService {
 
     @Transactional
     public Profile createProfile(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
-
-        if (profileRepository.findByUserUserId(userId).isPresent()) {
+   
+        if (profileRepository.existsByUserUserId(userId)) {
             throw new RuntimeException("Profile already exists for user with id: " + userId);
         }
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
 
         Profile profile = new Profile(user);
         return profileRepository.save(profile);
@@ -58,6 +57,12 @@ public class ProfileService {
     public Profile updateProfile(Long id, String permanentCredential) {
         Profile existingProfile = profileRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Profile not found with id: " + id));
+        
+     
+        if (profileRepository.existsByPermanentCredential(permanentCredential)) {
+            throw new RuntimeException("Credential already exists: " + permanentCredential);
+        }
+        
         existingProfile.setPermanentCredential(permanentCredential);
         return profileRepository.save(existingProfile);
     }
