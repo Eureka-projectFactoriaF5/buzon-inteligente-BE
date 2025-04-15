@@ -62,4 +62,15 @@ class UserServiceTest {
         assertThat(result.get()).isEqualTo(testUser);
         verify(userRepository).findById(1L);
     }
+
+    @Test
+    @DisplayName("Should save a user")
+    void testSaveUser() {
+        when(userRepository.save(testUser)).thenReturn(testUser);
+
+        User saved = userService.save(testUser);
+
+        assertThat(saved).isEqualTo(testUser);
+        verify(userRepository).save(testUser);
+    }
 }
