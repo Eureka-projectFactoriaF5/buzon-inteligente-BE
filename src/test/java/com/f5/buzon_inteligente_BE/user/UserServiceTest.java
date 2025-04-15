@@ -50,4 +50,16 @@ class UserServiceTest {
         assertThat(result.get().getUserEmail()).isEqualTo("test@example.com");
         verify(userRepository).findByUserEmail("test@example.com");
     }
-}   
+
+    @Test
+    @DisplayName("Should find user by ID")
+    void testFindById() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
+
+        Optional<User> result = userService.findById(1L);
+
+        assertThat(result).isPresent();
+        assertThat(result.get()).isEqualTo(testUser);
+        verify(userRepository).findById(1L);
+    }
+}
