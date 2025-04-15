@@ -1,7 +1,8 @@
-package com.f5.buzon_inteligente_BE.model;
+package com.f5.buzon_inteligente_BE.user;
 
 import java.io.Serializable;
 
+import com.f5.buzon_inteligente_BE.roles.Role;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,35 +14,36 @@ public class User implements Serializable {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @Column(name = "user_dni", nullable = false, length = 50)
+    @Column(name = "user_dni", nullable = false, length = 50, unique = true)
     private String userDni;
 
-    @Column(name="user_name" nullable = false, length = 50)
+    @Column(name = "user_name", nullable = false, length = 50)
     private String userName;
 
-    @Column(name = "user_email", nullable = false, length = 50)
+    @Column(name = "user_surname", nullable = false, length = 50)
+    private String userSurname;
+
+    @Column(name = "user_email", nullable = false, length = 50, unique = true)
     private String userEmail;
 
-    @Column(name = "user_password", nullable = false, length = 50)
+    @Column(name = "user_password", nullable = false, length = 255)
     private String userPassword;
 
-    @Column(name = "credential_id", nullable = false)
-    private Long credentialId;
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
 
-    @Column(name = "locker_id", nullable = false)
-    private Long lockerId;
+    public User() {
+    }
 
-    public User() { } 
-
-    public User(Long userId, String userDni, String userName, String userEmail, String userPassword, Long credentialId,
-            Long lockerId) {
-        this.userId = userId;
+    
+    public User(String userDni, String userName, String userSurname, String userEmail, String userPassword, Role role) {
         this.userDni = userDni;
         this.userName = userName;
+        this.userSurname = userSurname;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
-        this.credentialId = credentialId;
-        this.lockerId = lockerId;
+        this.role = role;
     }
 
     public Long getUserId() {
@@ -64,12 +66,11 @@ public class User implements Serializable {
         return userPassword;
     }
 
-    public Long getCredentialId() {
-        return credentialId;
+    public String getUserSurname() {  
+        return userSurname;
     }
 
-    public Long getLockerId() {
-        return lockerId;
+    public Role getRole() {
+        return role;
     }
-
 }
