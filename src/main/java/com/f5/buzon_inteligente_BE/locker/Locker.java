@@ -2,8 +2,6 @@ package com.f5.buzon_inteligente_BE.locker;
 
 import java.io.Serializable;
 import java.util.List;
-import com.f5.buzon_inteligente_BE.mailbox.Mailbox;
-import com.f5.buzon_inteligente_BE.user.User;
 
 import jakarta.persistence.*;
 
@@ -25,12 +23,6 @@ public class Locker implements Serializable {
     @ManyToOne
     @JoinColumn(name = "locker_status_id", nullable = false)
     private LockerStatus lockerStatus;
-
-    @OneToMany(mappedBy = "locker")
-    private List<Mailbox> mailboxes;
-    
-    @OneToMany(mappedBy = "locker")
-    private List<User> users;
 
     public Locker() {
     }
@@ -56,13 +48,5 @@ public class Locker implements Serializable {
 
     public LockerStatus getLockerStatus() {
         return lockerStatus;
-    }
-    
-    public List<Mailbox> getMailboxes() {
-        return mailboxes;
-    }
-    
-    public List<User> getUsers() {
-        return users;
     }
 }
