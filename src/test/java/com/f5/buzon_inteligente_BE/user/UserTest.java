@@ -6,39 +6,23 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.f5.buzon_inteligente_BE.model.User;
+import java.lang.reflect.Field;
+
+import com.f5.buzon_inteligente_BE.roles.Role;
+
 
 public class UserTest {
     
     private User user;
+    private Role role;
 
     @BeforeEach
-    void setUp() {
-        user = new User(1L, "12345678", "John Doe", "x0N0e@example.com", "password", 1L, 1L);
-    }
-
-    @Test
-    @DisplayName("GetCredentialId test case")
-    void testGetCredentialId() {
-        assertEquals(1L, user.getCredentialId());        
-    }
-
-    @Test
-    @DisplayName("GetLockerId test case")
-    void testGetLockerId() {
-        assertEquals(1L, user.getLockerId());
-    }
-
-    @Test
-    @DisplayName("GetUserDni test case")
-    void testGetUserDni() {
-        assertEquals("12345678", user.getUserDni());
-    }
-
-    @Test
-    @DisplayName("GetUserEmail test case")
-    void testGetUserEmail() {
-        assertEquals("x0N0e@example.com", user.getUserEmail());
+    void setUp() throws Exception{
+        role = new Role("USER");
+        user = new User("12345678Y", "John", "Doe", "x0N0e@example.com", "password", role);
+        Field userIdField = User.class.getDeclaredField("userId");
+        userIdField.setAccessible(true);
+        userIdField.set(user, 1L);
     }
 
     @Test
@@ -48,15 +32,27 @@ public class UserTest {
     }
 
     @Test
-    @DisplayName("GetUserName test case")
-    void testGetUserName() {
-        assertEquals("John Doe", user.getUserName());
+    @DisplayName("GetUserDni test case")
+    void testGetUserDni() {
+        assertEquals("12345678Y", user.getUserDni());
+    }
 
+    @Test
+    @DisplayName("GetUserEmail test case")
+    void testGetUserEmail() {
+        assertEquals("x0N0e@example.com", user.getUserEmail());
     }
 
     @Test
     @DisplayName("GetUserPassword test case")
     void testGetUserPassword() {
         assertEquals("password", user.getUserPassword());
+    }
+
+    @Test
+    @DisplayName("GetUserName test case")
+    void testGetUserName() {
+        assertEquals("John", user.getUserName());
+
     }
 }
