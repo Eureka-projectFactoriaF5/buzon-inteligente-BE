@@ -15,10 +15,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 
 import com.f5.buzon_inteligente_BE.security.CustomUserDetails;
-import com.f5.buzon_inteligente_BE.security.CustomUserDetailsService;
 import com.f5.buzon_inteligente_BE.security.JwtUtils;
 @ExtendWith(MockitoExtension.class)
 public class LoginServiceTest {
@@ -34,13 +32,11 @@ public class LoginServiceTest {
     @Mock
     private CustomUserDetails userDetails;
 
-    @Mock
-    private CustomUserDetailsService customUserDetailsService;
+    private String email = "email";
 
     @Test
     @DisplayName("Should authenticate user")
     public void testAuthenticate() {
-        String email = "email";
         String password = "password";
         String role = "USER";
         String dni = "12345678A";
@@ -60,12 +56,12 @@ public class LoginServiceTest {
 
         assertEquals("token", response.token());
         assertEquals(role, response.role());
+        assertEquals("Login exitoso", response.message());
 
     }
     @Test
     @DisplayName("Not authenticate user whith empty password")
     public void testAuthenticateEmptyPassword() {
-        String email = "email";
         String password = "";
         LoginRequestDto request = new LoginRequestDto(email, password);
 
@@ -80,7 +76,6 @@ public class LoginServiceTest {
     @Test
     @DisplayName("Not authenticate user whith null password")
     public void testAuthenticateNullPassword() {
-        String email = "email";
         LoginRequestDto request = new LoginRequestDto(email, null);
 
         IllegalArgumentException exception = assertThrows(
@@ -94,9 +89,7 @@ public class LoginServiceTest {
     @Test
     @DisplayName("Not authenticate user whith password not Base64")
     public void testAuthenticatePasswordNotBase64() {
-        String email = "email";
-        String password = "####";
-        LoginRequestDto request = new LoginRequestDto(email, password);
+        LoginRequestDto request = new LoginRequestDto(email, "######");
 
         IllegalArgumentException exception = assertThrows(
             IllegalArgumentException.class, 
