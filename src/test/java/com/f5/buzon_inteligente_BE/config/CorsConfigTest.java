@@ -21,6 +21,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 class CorsConfigTest {
 
+    private static final String ALLOWED_ORIGIN = "http://localhost:5173";
+    private static final String DISALLOWED_ORIGIN = "http://malicious.com";
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -36,11 +39,11 @@ class CorsConfigTest {
     @DisplayName("Should allow CORS requests from allowed origin")
     void testShouldAllowCorsRequestsFromFrontend() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.options("/api/test")
-                        .header("Origin", "http://localhost:5173")
+                        .header("Origin", ALLOWED_ORIGIN)
                         .header("Access-Control-Request-Method", "GET")
                         .header("Access-Control-Request-Headers", "Content-Type, Authorization"))
                 .andExpect(status().isOk())
-                .andExpect(header().string("Access-Control-Allow-Origin", "http://localhost:5173"))
+                .andExpect(header().string("Access-Control-Allow-Origin", ALLOWED_ORIGIN))
                 .andExpect(header().string("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS"))
                 .andExpect(header().exists("Access-Control-Allow-Headers"))
                 .andExpect(header().string("Access-Control-Allow-Credentials", "true"));
@@ -50,7 +53,7 @@ class CorsConfigTest {
     @DisplayName("Should block CORS requests from disallowed origin")
     void testShouldBlockCorsRequestsFromUnknownOrigin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.options("/api/test")
-                        .header("Origin", "http://malicious.com")
+                        .header("Origin", DISALLOWED_ORIGIN)
                         .header("Access-Control-Request-Method", "GET")
                         .header("Access-Control-Request-Headers", "Content-Type, Authorization"))
                 .andExpect(status().isForbidden());
@@ -60,14 +63,15 @@ class CorsConfigTest {
     @DisplayName("Should allow CORS requests with multiple HTTP methods")
     void testShouldAllowCorsRequestsWithMultipleMethods() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.options("/api/test")
-                        .header("Origin", "http://localhost:5173")
+                        .header("Origin", ALLOWED_ORIGIN)
                         .header("Access-Control-Request-Method", "POST")
                         .header("Access-Control-Request-Headers", "Content-Type, Authorization"))
                 .andExpect(status().isOk())
-                .andExpect(header().string("Access-Control-Allow-Origin", "http://localhost:5173"))
+                .andExpect(header().string("Access-Control-Allow-Origin", ALLOWED_ORIGIN))
                 .andExpect(header().string("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS"))
                 .andExpect(header().exists("Access-Control-Allow-Headers"))
                 .andExpect(header().string("Access-Control-Allow-Credentials", "true"));
     }
 }
+
 
