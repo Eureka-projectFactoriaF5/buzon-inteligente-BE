@@ -34,4 +34,36 @@ class RoleTest {
         assertThat(role.getRoleId()).isNull();
     }   
 
+    @Test
+    @DisplayName("Should allow null roleName in constructor ")
+    void testConstructorWithNullRoleName() {
+        Role nullRole = new Role(null);
+        assertThat(nullRole.getRoleName()).isNull();
+    }
+
+    @Test
+    @DisplayName("Should allow empty string as roleName")
+    void testConstructorWithEmptyRoleName() {
+        Role emptyNameRole = new Role("");
+        assertThat(emptyNameRole.getRoleName()).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Should allow roleName with exactly 50 characters (boundary test)")
+    void testRoleNameWithMaxLength() {
+        String longName = "R".repeat(50);
+        Role longNameRole = new Role(longName);
+        assertThat(longNameRole.getRoleName()).hasSize(50);
+    }
+
+    @Test
+    @DisplayName("Should accept roleName longer than 50 characters (but may fail on persistence)")
+    void testRoleNameExceedingMaxLength() {
+        String tooLong = "R".repeat(60);
+        Role tooLongRole = new Role(tooLong);
+        assertThat(tooLongRole.getRoleName()).hasSize(60);
+    }
+
+
+
 }
