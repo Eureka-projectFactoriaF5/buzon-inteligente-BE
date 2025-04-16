@@ -44,5 +44,26 @@ class RoleServiceTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Role not found with ID: 99");
     }
-}
 
+    @Test
+    @DisplayName("Should return default role with name USER")
+    void testGetDefaultRole() {
+        Role role = new Role("USER");
+        when(roleRepository.findByRoleName("USER")).thenReturn(Optional.of(role));
+
+        Role result = roleService.getDefaultRole();
+
+        assertThat(result.getRoleName()).isEqualTo("USER");
+        verify(roleRepository).findByRoleName("USER");
+    }
+
+    @Test
+    @DisplayName("Should throw exception when default role USER not found")
+    void testGetDefaultRoleNotFound() {
+        when(roleRepository.findByRoleName("USER")).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> roleService.getDefaultRole())
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Role not found with name: USER");
+    }
+}
