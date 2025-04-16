@@ -78,5 +78,12 @@ public class ProfileDTOTest {
         assertEquals("CRED002", dto.getPermanentCredential());
         assertNull(dto.getUserId());
     }
+    @Test
+    @DisplayName("Should handle null Profile in fromEntity gracefully (edge case)")
+    void testShouldFromEntityWithNullProfile() {
+        assertThrows(NullPointerException.class, () -> {
+            ProfileDTO.fromEntity(null);
+        });
+    }
     
 }
