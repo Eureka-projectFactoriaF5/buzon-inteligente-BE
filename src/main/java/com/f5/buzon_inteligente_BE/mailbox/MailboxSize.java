@@ -16,13 +16,13 @@ public class MailboxSize {
     private Long mailboxSizeId;
 
     @Column(name = "size_name", nullable = false, length = 50)
-    private String mailboxStatusName;
+    private String mailboxSizeName;
 
     public MailboxSize() {
     }
 
-    public MailboxSize(String mailboxStatusName) {
-        this.mailboxStatusName = mailboxStatusName;
+    public MailboxSize(String mailboxSizeName) {
+        this.mailboxSizeName = mailboxSizeName;
     }
 
     public Long getMailboxSizeId() {
@@ -30,11 +30,11 @@ public class MailboxSize {
     }
 
     public String getMailboxStatusName() {
-        return mailboxStatusName;
+        return mailboxSizeName;
     }
 
-    public void setMailboxStatusName(String mailboxStatusName) {
-        this.mailboxStatusName = mailboxStatusName;
+    public void setMailboxStatusName(String mailboxSizeName) {
+        this.mailboxSizeName = mailboxSizeName;
     }
 
 }
