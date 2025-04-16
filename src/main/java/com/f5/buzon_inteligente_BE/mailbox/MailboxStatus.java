@@ -25,8 +25,7 @@ public class MailboxStatus {
         return mailboxStatusName;
     }
 
-    public MailboxStatus(Long mailboxStatusId, String mailboxStatusName) {
-        this.mailboxStatusId = mailboxStatusId;
+    public MailboxStatus(String mailboxStatusName) {
         this.mailboxStatusName = mailboxStatusName;
     }
 
