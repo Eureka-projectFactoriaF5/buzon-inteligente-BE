@@ -1,4 +1,7 @@
-package com.f5.buzon_inteligente_BE.profile;
+package com.f5.buzon_inteligente_BE.profile.DTO;
+
+import com.f5.buzon_inteligente_BE.profile.Profile;
+
 
 public class ProfileDTO {
     
