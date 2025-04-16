@@ -1,4 +1,4 @@
-/*package com.f5.buzon_inteligente_BE.locker;
+package com.f5.buzon_inteligente_BE.locker;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -82,4 +82,3 @@ public class Locker implements Serializable {
     }
 }
 
-*/
