@@ -29,4 +29,8 @@ public class MailboxStatus {
         this.mailboxStatusId = mailboxStatusId;
         this.mailboxStatusName = mailboxStatusName;
     }
+
+    public void setMailboxStatusName(String mailboxStatusName) {
+        this.mailboxStatusName = mailboxStatusName;
+    }
 }
