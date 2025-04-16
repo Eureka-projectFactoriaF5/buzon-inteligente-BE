@@ -10,36 +10,31 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "mailbox_sizes")
 public class MailboxSize {
-    @Id 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "mailbox_size_id",nullable = false)    
+    @Column(name = "mailbox_size_id", nullable = false)
     private Long mailboxSizeId;
 
-@Column(name = "size_name",nullable =  false,length = 50) 
+    @Column(name = "size_name", nullable = false, length = 50)
     private String mailboxStatusName;
 
-public MailboxSize() {
-}
+    public MailboxSize() {
+    }
 
+    public MailboxSize(String mailboxStatusName) {
+        this.mailboxStatusName = mailboxStatusName;
+    }
 
-public MailboxSize(Long mailboxSizeId, String mailboxStatusName) {
-    this.mailboxSizeId = mailboxSizeId;
-    this.mailboxStatusName = mailboxStatusName;
-}
+    public Long getMailboxSizeId() {
+        return mailboxSizeId;
+    }
 
+    public String getMailboxStatusName() {
+        return mailboxStatusName;
+    }
 
-public Long getMailboxSizeId() {
-    return mailboxSizeId;
-}
-
-
-public String getMailboxStatusName() {
-    return mailboxStatusName;
-}
-
-public void setMailboxStatusName(String mailboxStatusName) {
-    this.mailboxStatusName = mailboxStatusName;
-}
-
+    public void setMailboxStatusName(String mailboxStatusName) {
+        this.mailboxStatusName = mailboxStatusName;
+    }
 
 }
