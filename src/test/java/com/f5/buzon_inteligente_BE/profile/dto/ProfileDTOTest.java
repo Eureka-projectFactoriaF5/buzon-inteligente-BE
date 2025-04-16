@@ -85,5 +85,17 @@ public class ProfileDTOTest {
             ProfileDTO.fromEntity(null);
         });
     }
+
+    @Test
+    @DisplayName("Should handle empty permanentCredential")
+    void testShouldWithEmptyPermanentCredential() {
+        profile.setId(7L);
+        profile.setPermanentCredential("");
+        profile.setUser(null);
+
+        ProfileDTO dto = ProfileDTO.fromEntity(profile);
+
+        assertEquals("", dto.getPermanentCredential());
+    }
     
 }
