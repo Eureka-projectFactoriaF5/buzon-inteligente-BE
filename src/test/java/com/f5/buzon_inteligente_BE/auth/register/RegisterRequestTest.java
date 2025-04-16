@@ -41,32 +41,42 @@ public class RegisterRequestTest {
 
     @Test
     void testSetUserDni() {
-        registerRequest.setUserDni("87654321");
-        assertEquals("87654321", registerRequest.getUserDni());
+        registerRequestEmpty.setUserDni("87654321");
+        assertEquals("87654321", registerRequestEmpty.getUserDni());
+        registerRequestEmpty.setUserDni("12345678");
+        assertEquals("12345678", registerRequestEmpty.getUserDni());
     }
 
     @Test
     void testSetUserEmail() {
-        registerRequest.setUserEmail("example@email");
-        assertEquals("example@email", registerRequest.getUserEmail());
+        registerRequestEmpty.setUserEmail("example@email");
+        assertEquals("example@email", registerRequestEmpty.getUserEmail());
+        registerRequestEmpty.setUserEmail("email@example.com");
+        assertEquals("email@example.com", registerRequestEmpty.getUserEmail());
     }
 
     @Test
     void testSetUserName() {
-        registerRequest.setUserName("newName");
-        assertEquals("newName", registerRequest.getUserName());
+        registerRequestEmpty.setUserName("newName");
+        assertEquals("newName", registerRequestEmpty.getUserName());
+        registerRequestEmpty.setUserName("Name");
+        assertEquals("Name", registerRequestEmpty.getUserName());
     }
 
     @Test
     void testSetUserPassword() {
-        registerRequest.setUserPassword("newPassword");
-        assertEquals("newPassword", registerRequest.getUserPassword());
+        registerRequestEmpty.setUserPassword("newPassword");
+        assertEquals("newPassword", registerRequestEmpty.getUserPassword());
+        registerRequestEmpty.setUserPassword("Password");
+        assertEquals("Password", registerRequestEmpty.getUserPassword());
     }
 
     @Test
     void testSetUserSurname() {
-        registerRequest.setUserSurname("newSurname");
-        assertEquals("newSurname", registerRequest.getUserSurname());
+        registerRequestEmpty.setUserSurname("newSurname");
+        assertEquals("newSurname", registerRequestEmpty.getUserSurname());
+        registerRequestEmpty.setUserSurname("Surname");
+        assertEquals("Surname", registerRequestEmpty.getUserSurname());
     }
 
 }
