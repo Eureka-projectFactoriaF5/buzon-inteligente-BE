@@ -64,5 +64,19 @@ public class ProfileDTOTest {
         assertEquals("CRED001", dto.getPermanentCredential());
         assertEquals(100L, dto.getUserId());
     }
+
+    @Test
+    @DisplayName("Should convert Profile to ProfileDTO when user is null")
+    void testShouldFromEntityWithoutUser() {
+        profile.setId(6L);
+        profile.setPermanentCredential("CRED002");
+        profile.setUser(null);
+
+        ProfileDTO dto = ProfileDTO.fromEntity(profile);
+
+        assertEquals(6L, dto.getId());
+        assertEquals("CRED002", dto.getPermanentCredential());
+        assertNull(dto.getUserId());
+    }
     
 }
