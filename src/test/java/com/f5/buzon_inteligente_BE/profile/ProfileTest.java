@@ -42,7 +42,7 @@ class ProfileTest {
     @Test
     @DisplayName("Should set user via constructor and keep permanentCredential")
     void testConstructorWithUser() {
-        User mockUser = new User(); 
+        User mockUser = new User();
         Profile profileWithUser = new Profile(mockUser);
 
         assertThat(profileWithUser.getUser()).isEqualTo(mockUser);
@@ -73,4 +73,22 @@ class ProfileTest {
         profile.setPermanentCredential(null);
         assertThat(profile.getPermanentCredential()).isNull();
     }
+
+    @Test
+    @DisplayName("Should allow changing the permanentCredential")
+    void testCredentialIsMutable() {
+        profile.setPermanentCredential("NEWCODE01");
+        assertThat(profile.getPermanentCredential()).isEqualTo("NEWCODE01");
+    }
+
+    @Test
+    @DisplayName("Should generate unique permanentCredentials in multiple instances")
+    void testUniquePermanentCredential() {
+        Profile p1 = new Profile();
+        Profile p2 = new Profile();
+
+        assertThat(p1.getPermanentCredential())
+                .isNotEqualTo(p2.getPermanentCredential());
+    }
+
 }
