@@ -29,11 +29,11 @@ public class MailboxSize {
         return mailboxSizeId;
     }
 
-    public String getMailboxStatusName() {
+    public String getMailboxSizeName() {
         return mailboxSizeName;
     }
 
-    public void setMailboxStatusName(String mailboxSizeName) {
+    public void setMailboxSizeName(String mailboxSizeName) {
         this.mailboxSizeName = mailboxSizeName;
     }
 
