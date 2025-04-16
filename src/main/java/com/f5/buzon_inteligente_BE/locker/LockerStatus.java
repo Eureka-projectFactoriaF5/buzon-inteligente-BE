@@ -38,6 +38,10 @@ public class LockerStatus implements Serializable {
         this.lockerStatusName = lockerStatusName;
     }
 
+    public List<Locker> getLockers() {
+        return lockers;
+    }
+
     public void setLockers(List<Locker> lockers) {
         this.lockers = lockers;
     }
