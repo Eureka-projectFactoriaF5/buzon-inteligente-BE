@@ -30,6 +30,12 @@ public class Mailbox implements Serializable {
     private int mailboxNumber;
 
     public Mailbox() {}
+    public Mailbox(MailboxSize mailboxSize, Locker locker, MailboxStatus mailboxStatus, int mailboxNumber) {
+        this.mailboxSize = mailboxSize;
+        this.locker = locker;
+        this.mailboxStatus = mailboxStatus;
+        this.mailboxNumber = mailboxNumber;
+    }
 
     public Long getMailboxId() {
         return mailboxId;
