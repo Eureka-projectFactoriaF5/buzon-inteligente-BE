@@ -12,6 +12,9 @@ import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
+import com.f5.buzon_inteligente_BE.profile.Profile;
+import com.f5.buzon_inteligente_BE.accesscode.AccessCodeStatus;
+import com.f5.buzon_inteligente_BE.parcel.Parcel;
 
 @Entity
 @Table(name = "access_code")
@@ -27,11 +30,11 @@ public class AccessCode implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "profile_id", nullable = false)
-    private Long profileId;
+    private Profile profile;
 
     @ManyToOne
     @JoinColumn(name = "access_code_status_id", nullable = false)
-    private Long accessCodeStatusId;
+    private AccessCodeStatus accessCodeStatus;
 
     @OneToMany(mappedBy = "accessCode")
     private List<Parcel> parcels = new ArrayList<>();
@@ -39,11 +42,11 @@ public class AccessCode implements Serializable {
     public AccessCode() {
     }
 
-    public AccessCode(String code, String name, Long profileId, Long statusId) {
+    public AccessCode(String code, String name, Profile profile, AccessCodeStatus accessCodeStatus) {
         this.accessCode = code;
         this.accessCodeName = name;
-        this.profileId = profileId;
-        this.accessCodeStatusId = statusId;
+        this.profile = profile;
+        this.accessCodeStatus = accessCodeStatus;
     }
 
     public Long getAccessCodeId() {
@@ -58,15 +61,19 @@ public class AccessCode implements Serializable {
         return accessCodeName;
     }
 
+    public List<Parcel> getParcels() {
+        return parcels;
+    }
+
     public void setAccessCodeName(String accessCodeName) {
         this.accessCodeName = accessCodeName;
     }
 
-    public Long getAccessCodeStatusId() {
-        return accessCodeStatusId;
+    public AccessCodeStatus getAccessCodeStatus() {
+        return accessCodeStatus;
     }
 
-    public Long getProfileId() {
-        return profileId;
+    public void setParcels(List<Parcel> parcels) {
+        this.parcels = parcels;
     }
 }
