@@ -11,7 +11,7 @@ public class Mailbox implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "mailbox_id", nullable = false)
+    @Column(name = "mailbox_id")
     private Long mailboxId;
 
     @ManyToOne
