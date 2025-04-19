@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.f5.buzon_inteligente_BE.user.User;
 import com.f5.buzon_inteligente_BE.mailbox.Mailbox;
+import com.f5.buzon_inteligente_BE.locker.LockerStatus;
 
 import jakarta.persistence.*;
 
@@ -24,7 +25,7 @@ public class Locker implements Serializable {
     @Column(name = "time_limit", nullable = false)
     private Long timeLimit;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "locker_status_id", nullable = false)
     private LockerStatus lockerStatus;
 
