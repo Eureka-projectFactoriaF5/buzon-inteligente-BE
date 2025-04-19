@@ -23,7 +23,7 @@ public class Locker implements Serializable {
     private String address;
 
     @Column(name = "time_limit", nullable = false)
-    private Integer timeLimit;
+    private Long timeLimit;
 
     @ManyToOne
     @JoinColumn(name = "locker_status_id", nullable = false)
@@ -38,7 +38,7 @@ public class Locker implements Serializable {
     public Locker() {
     }
 
-    public Locker(String address, Integer timeLimit, LockerStatus lockerStatus) {
+    public Locker(String address, Long timeLimit, LockerStatus lockerStatus) {
         this.address = address;
         this.timeLimit = timeLimit;
         this.lockerStatus = lockerStatus;
@@ -57,11 +57,11 @@ public class Locker implements Serializable {
         this.address = address;
     }
 
-    public Integer getTimeLimit() {
+    public Long getTimeLimit() {
         return timeLimit;
     }
 
-    public void setTimeLimit(Integer timeLimit) {
+    public void setTimeLimit(Long timeLimit) {
         this.timeLimit = timeLimit;
     }
 
