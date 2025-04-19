@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.f5.buzon_inteligente_BE.user.User;
 import com.f5.buzon_inteligente_BE.mailbox.Mailbox;
-import com.f5.buzon_inteligente_BE.lockerStatus.LockerStatus;
+import com.f5.buzon_inteligente_BE.locker.LockerStatus;
 
 import jakarta.persistence.*;
 
@@ -81,3 +81,4 @@ public class Locker implements Serializable {
         return users;
     }
 }
+
