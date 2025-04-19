@@ -29,7 +29,7 @@ public class Parcel {
     @JoinColumn(name = "access_code_id", referencedColumnName = "access_code_id",  nullable = false)
     private AccessCode accessCode;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "mailbox_id", referencedColumnName = "mailbox_id",  nullable = false)
     private Mailbox mailbox;
 
