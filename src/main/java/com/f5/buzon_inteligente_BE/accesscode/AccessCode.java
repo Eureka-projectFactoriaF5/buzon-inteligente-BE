@@ -2,12 +2,11 @@ package com.f5.buzon_inteligente_BE.accesscode;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
 import com.f5.buzon_inteligente_BE.profile.Profile;
-import com.f5.buzon_inteligente_BE.accesscode.AccessCodeStatus;
 import com.f5.buzon_inteligente_BE.parcel.Parcel;
+import com.f5.buzon_inteligente_BE.accesscode.AccessCodeStatus;
 
 @Entity
 @Table(name = "access_code")
@@ -24,16 +23,16 @@ public class AccessCode implements Serializable {
     @Column(name = "access_code_name", nullable = false)
     private String accessCodeName;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", nullable = false)
     private Profile profile;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "access_code_status_id", nullable = false)
     private AccessCodeStatus accessCodeStatus;
 
-    @OneToMany(mappedBy = "accessCode")
-    private List<Parcel> parcels = new ArrayList<>();
+    @OneToMany(mappedBy = "accessCode", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Parcel> parcels;
 
     public AccessCode() {
     }
