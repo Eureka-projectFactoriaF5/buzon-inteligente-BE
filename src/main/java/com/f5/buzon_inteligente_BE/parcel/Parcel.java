@@ -2,7 +2,9 @@ package com.f5.buzon_inteligente_BE.parcel;
 
 import java.time.LocalDateTime;
 
+import com.f5.buzon_inteligente_BE.accesscode.AccessCode;
 import com.f5.buzon_inteligente_BE.locker.Locker;
+import com.f5.buzon_inteligente_BE.mailbox.Mailbox;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

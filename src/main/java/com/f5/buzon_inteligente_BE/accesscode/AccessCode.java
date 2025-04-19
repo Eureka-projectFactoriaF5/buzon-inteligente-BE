@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
 import com.f5.buzon_inteligente_BE.profile.Profile;
-import com.f5.buzon_inteligente_BE.accesscode.AccessCodeStatus;
 import com.f5.buzon_inteligente_BE.parcel.Parcel;
 
 @Entity
