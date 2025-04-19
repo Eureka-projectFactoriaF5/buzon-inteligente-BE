@@ -1,14 +1,7 @@
 package com.f5.buzon_inteligente_BE.accesscode;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
@@ -19,6 +12,9 @@ import com.f5.buzon_inteligente_BE.parcel.Parcel;
 @Entity
 @Table(name = "access_code")
 public class AccessCode implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "access_code_id", nullable = false)
@@ -73,7 +69,18 @@ public class AccessCode implements Serializable {
         return accessCodeStatus;
     }
 
+    public void setAccessCodeStatus(AccessCodeStatus accessCodeStatus) {
+        this.accessCodeStatus = accessCodeStatus;
+    }
+
     public void setParcels(List<Parcel> parcels) {
         this.parcels = parcels;
+    }
+
+    public Profile getProfile() {
+        return profile;
+    }
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
 }
