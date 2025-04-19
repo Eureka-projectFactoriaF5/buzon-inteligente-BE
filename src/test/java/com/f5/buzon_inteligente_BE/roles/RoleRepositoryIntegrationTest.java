@@ -19,13 +19,11 @@ class RoleRepositoryIntegrationTest {
 
     @Autowired
     private RoleRepository roleRepository;
-  
 
     @AfterEach
     void tearDown() {
         roleRepository.deleteAll();
     }
-    
 
     @Test
     @DisplayName("Should save Role and retrieve it by ID")
@@ -83,7 +81,24 @@ class RoleRepositoryIntegrationTest {
 
         assertThat(result).isNotPresent();
     }
+
+    @Test
+    @DisplayName("Should save Role with special characters in name")
+    void testShouldRoleNameWithSpecialCharacters() {
+        roleRepository.save(new Role("ROLE_DEV$%#"));
+        Optional<Role> result = roleRepository.findByRoleName("ROLE_DEV$%#");
+
+        assertThat(result).isPresent();
+        assertThat(result.get().getRoleName()).isEqualTo("ROLE_DEV$%#");
+    }
+
+    @Test
+    @DisplayName("Should save Role with trailing whitespace (not trimmed)")
+    void testShouldRoleWithTrailingWhitespace() {
+        roleRepository.save(new Role("ROLE_USER "));
+        Optional<Role> result = roleRepository.findByRoleName("ROLE_USER ");
+
+        assertThat(result).isPresent();
+        assertThat(result.get().getRoleName()).isEqualTo("ROLE_USER ");
+    }
 }
-
-
-
