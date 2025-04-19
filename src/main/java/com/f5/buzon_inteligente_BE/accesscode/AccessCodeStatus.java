@@ -3,14 +3,13 @@ package com.f5.buzon_inteligente_BE.accesscode;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.f5.buzon_inteligente_BE.accesscode.AccessCode;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "access_code_status")
 public class AccessCodeStatus implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +19,9 @@ public class AccessCodeStatus implements Serializable {
     @Column(name = "access_code_status_name", nullable = false, length = 50)
     private String accessCodeStatusName;
 
-    @OneToMany(mappedBy = "accessCodeStatus", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "accessCodeStatus", cascade = { CascadeType.PERSIST,
+            CascadeType.MERGE }, orphanRemoval = true)
+    @JsonIgnore
     private List<AccessCode> accessCodes = new ArrayList<>();
 
     public AccessCodeStatus() {
