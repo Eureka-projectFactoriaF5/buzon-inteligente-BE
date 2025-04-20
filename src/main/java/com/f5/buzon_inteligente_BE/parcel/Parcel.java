@@ -52,6 +52,10 @@ public class Parcel {
         this.deadlineDate = deadlineDate;
     }
 
+    public Long getParcelId(){
+        return parcelId;
+    }
+    
     public AccessCode getAccessCode(){
         return accessCode;
     }
