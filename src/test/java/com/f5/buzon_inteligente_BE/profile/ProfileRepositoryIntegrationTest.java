@@ -1,0 +1,65 @@
+package com.f5.buzon_inteligente_BE.profile;
+
+import com.f5.buzon_inteligente_BE.roles.Role;
+import com.f5.buzon_inteligente_BE.roles.RoleRepository;
+import com.f5.buzon_inteligente_BE.user.User;
+import com.f5.buzon_inteligente_BE.user.UserRepository;
+import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
+
+import java.lang.reflect.Field;
+
+@DataJpaTest
+@ActiveProfiles("test")
+class ProfileRepositoryIntegrationTest {
+
+    @Autowired
+    private ProfileRepository profileRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
+    private Role defaultRole;
+
+    @BeforeEach
+    void setUp() {
+        defaultRole = createRole("USER");
+    }
+
+    @AfterEach
+    void tearDown() {
+        profileRepository.deleteAll();
+        userRepository.deleteAll();
+        roleRepository.deleteAll();
+    }
+
+    private User createUserWithProfile(String dni, String name, String email, String credential) {
+        User user = new User(dni, name, "Test", email, "test123", defaultRole);
+        user = userRepository.save(user);
+
+        Profile profile = new Profile();
+        profile.setUser(user);
+        profile.setPermanentCredential(credential);
+        profileRepository.save(profile);
+
+        return user;
+    }
+
+    private Role createRole(String roleName) {
+        Role role = new Role();
+        try {
+            Field field = Role.class.getDeclaredField("roleName");
+            field.setAccessible(true);
+            field.set(role, roleName);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to set roleName via reflection", e);
+        }
+        return roleRepository.save(role);
+    }
+
+}
