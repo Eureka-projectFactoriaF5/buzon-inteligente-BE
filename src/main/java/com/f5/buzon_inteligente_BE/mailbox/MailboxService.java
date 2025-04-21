@@ -1,6 +1,5 @@
 package com.f5.buzon_inteligente_BE.mailbox;
 
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,8 +13,6 @@ public class MailboxService {
     private final MailboxSizeRepository sizeRepo;
     private final MailboxStatusRepository statusRepo;
 
-    private static final String FREE_STATUS = "FREE";
-
     public MailboxService(MailboxRepository mailboxRepo, MailboxSizeRepository sizeRepo,
             MailboxStatusRepository statusRepo) {
         this.mailboxRepo = mailboxRepo;
@@ -25,27 +22,25 @@ public class MailboxService {
 
     @Transactional(readOnly = true)
     public Mailbox findNextAvailableMailbox(Long requestedSizeId) {
-
         MailboxSize requestedSize = sizeRepo.findById(requestedSizeId)
-                .orElseThrow(() -> new MailboxNotFoundException(
-                        "Tamaño de buzón no encontrado: " + requestedSizeId));
+            .orElseThrow(() -> new MailboxNotFoundException("Tamaño no existe"));
 
-        Long freeStatusId = statusRepo.findByStatusName(FREE_STATUS)
-                .orElseThrow(() -> new MailboxNotFoundException("Estado FREE no definido"))
-                .getMailboxStatusId();
+        Integer requestedCapacity = requestedSize.getCapacity();
 
-        Optional<Mailbox> exact = mailboxRepo
-                .findFirstByMailboxSize_IdAndMailboxStatus_Id(
-                        requestedSize.getMailboxSizeId(), freeStatusId);
+        Long freeStatusId = statusRepo.findByStatusName("FREE")
+            .orElseThrow(() -> new MailboxNotFoundException("Estado FREE no definido"))
+            .getMailboxStatusId();
 
-        if (exact.isPresent()) {
-            return exact.get();
-        }
-
-        return mailboxRepo
-                .findFirstByMailboxSize_IdGreaterThanAndMailboxStatus_IdOrderByMailboxSize_IdAsc(
-                        requestedSize.getMailboxSizeId(), freeStatusId)
-                .orElseThrow(() -> new MailboxNotFoundException(
-                        "No hay buzones libres de tamaño " + requestedSizeId + " ni superiores"));
+        return mailboxRepo.findFirstByMailboxSize_IdAndMailboxStatus_Id(requestedSizeId, freeStatusId)
+            .or(() ->
+                mailboxRepo
+                  .findFirstByMailboxSize_CapacityGreaterThanAndMailboxStatus_IdOrderByMailboxSize_CapacityAsc(
+                      requestedCapacity, freeStatusId
+                  )
+            )
+            .orElseThrow(() ->
+                new MailboxNotFoundException("No hay buzones libres de tamaño " +
+                                              requestedCapacity + " ni superiores")
+            );
     }
 }

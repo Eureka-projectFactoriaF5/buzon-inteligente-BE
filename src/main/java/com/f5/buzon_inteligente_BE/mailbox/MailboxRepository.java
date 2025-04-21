@@ -11,8 +11,8 @@ public interface MailboxRepository extends JpaRepository<Mailbox, Long> {
         Long mailboxStatusId
     );
 
-    Optional<Mailbox> findFirstByMailboxSize_IdGreaterThanAndMailboxStatus_IdOrderByMailboxSize_IdAsc(
-        Long mailboxSizeId,
+    Optional<Mailbox> findFirstByMailboxSize_CapacityGreaterThanAndMailboxStatus_IdOrderByMailboxSize_CapacityAsc(
+        Integer capacity,
         Long mailboxStatusId
     );
 }
