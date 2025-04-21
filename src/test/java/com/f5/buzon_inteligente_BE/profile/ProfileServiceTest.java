@@ -9,7 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,5 +38,17 @@ class ProfileServiceTest {
         assertEquals(2, result.size());
         verify(profileRepository).findAll();
     }  
+
+    @Test
+    @DisplayName("Should return profile by ID when it exists")
+    void testShouldGetProfileById_found() {
+        Profile profile = new Profile();
+        when(profileRepository.findById(1L)).thenReturn(Optional.of(profile));
+
+        Optional<Profile> result = profileService.getProfileById(1L);
+
+        assertTrue(result.isPresent());
+        assertEquals(profile, result.get());
+    }
 
 }
