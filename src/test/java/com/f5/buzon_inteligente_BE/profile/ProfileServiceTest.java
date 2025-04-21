@@ -234,4 +234,19 @@ class ProfileServiceTest {
         assertNull(profile.getPermanentCredential());
     }
 
+    @Test
+    @DisplayName("Should regenerate credential even if previous was null")
+    void testShouldRegeneratePermanentCredential_whenPreviousIsNull_shouldSucceed() {
+        Profile profile = new Profile();
+        profile.setPermanentCredential(null);
+
+        when(profileRepository.findById(1L)).thenReturn(Optional.of(profile));
+        when(profileRepository.save(profile)).thenReturn(profile);
+
+        String newCredential = profileService.regeneratePermanentCredential(1L);
+
+        assertNotNull(newCredential);
+        assertEquals(newCredential, profile.getPermanentCredential());
+    }
+
 }
