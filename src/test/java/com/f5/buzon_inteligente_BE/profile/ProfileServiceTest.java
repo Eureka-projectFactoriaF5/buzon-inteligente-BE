@@ -167,5 +167,17 @@ class ProfileServiceTest {
                 () -> profileService.updateProfile(1L, "any"));
         assertEquals("Profile not found with id: 1", exception.getMessage());
     }
+
+    @Test
+    @DisplayName("Should throw exception when credential already exists")
+    void testShouldUpdateProfile_credentialExists_throwsException() {
+        Profile profile = new Profile();
+        when(profileRepository.findById(1L)).thenReturn(Optional.of(profile));
+        when(profileRepository.existsByPermanentCredential("taken-cred")).thenReturn(true);
+
+        RuntimeException exception = assertThrows(RuntimeException.class,
+                () -> profileService.updateProfile(1L, "taken-cred"));
+        assertEquals("Credential already exists: taken-cred", exception.getMessage());
+    }   
     
 }
