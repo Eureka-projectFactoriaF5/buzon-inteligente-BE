@@ -1,27 +1,27 @@
 package com.f5.buzon_inteligente_BE.locker;
 
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
-
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class LockerService {
 
-    private final LockerRepository lockerRepo;
+    private final LockerRepository lockerRepository;
 
-    public LockerService(LockerRepository lockerRepo) {
-        this.lockerRepo = lockerRepo;
+    public LockerService(LockerRepository lockerRepository) {
+        this.lockerRepository = lockerRepository;
     }
 
-    @Transactional(readOnly = true)
-    public Locker getRandomLocker() {
-        List<Locker> lockers = lockerRepo.findAll();
+    public Optional<Locker> getRandomLocker() {
+        List<Locker> lockers = lockerRepository.findAll();
         if (lockers.isEmpty()) {
-            throw new RuntimeException("No lockers available to assign");
+            return Optional.empty();
         }
-        int idx = ThreadLocalRandom.current().nextInt(lockers.size());
-        return lockers.get(idx);
+        Random random = new Random();
+        Locker selectedLocker = lockers.get(random.nextInt(lockers.size()));
+        return Optional.of(selectedLocker);
     }
 }

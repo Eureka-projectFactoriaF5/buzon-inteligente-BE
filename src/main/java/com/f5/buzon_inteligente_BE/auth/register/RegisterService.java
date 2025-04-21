@@ -12,6 +12,7 @@ import com.f5.buzon_inteligente_BE.roles.Role;
 import com.f5.buzon_inteligente_BE.roles.RoleService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Base64;
 import java.util.Base64.Decoder;
@@ -36,6 +37,7 @@ public class RegisterService {
         this.lockerService = lockerService;
     }
 
+    @Transactional
     public Map<String, String> registerUser(RegisterRequest request) {
 
         if (userRepository.findByUserEmail(request.getUserEmail()).isPresent()) {
@@ -59,8 +61,8 @@ public class RegisterService {
 
         Role defaultRole = roleService.getDefaultRole();
 
-   
-        Locker locker = lockerService.getRandomLocker();
+        Locker locker = lockerService.getRandomLocker()
+                .orElseThrow(() -> new RegisterException("No hay lockers disponibles para asignar"));
 
         User newUser = new User(
                 request.getUserDni(),
@@ -72,11 +74,9 @@ public class RegisterService {
         );
         newUser.setLocker(locker);
 
+        User savedUser = userRepository.save(newUser);
 
-        userRepository.save(newUser);
-
-     
-        profileService.createProfile(newUser.getUserId());
+        profileService.createProfile(savedUser.getUserId());
 
         Map<String, String> response = new HashMap<>();
         response.put("message", "Success");
