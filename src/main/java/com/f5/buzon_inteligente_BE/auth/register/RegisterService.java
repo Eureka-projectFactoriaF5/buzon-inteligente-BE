@@ -3,6 +3,8 @@ package com.f5.buzon_inteligente_BE.auth.register;
 import com.f5.buzon_inteligente_BE.auth.register.RegisterExceptions.DniAlreadyExistsException;
 import com.f5.buzon_inteligente_BE.auth.register.RegisterExceptions.EmailAlreadyExistsException;
 import com.f5.buzon_inteligente_BE.auth.register.RegisterExceptions.RegisterException;
+import com.f5.buzon_inteligente_BE.locker.Locker;
+import com.f5.buzon_inteligente_BE.locker.LockerService;
 import com.f5.buzon_inteligente_BE.user.User;
 import com.f5.buzon_inteligente_BE.user.UserRepository;
 import com.f5.buzon_inteligente_BE.profile.ProfileService;
@@ -23,13 +25,16 @@ public class RegisterService {
     private final PasswordEncoder passwordEncoder;
     private final ProfileService profileService;
     private final RoleService roleService;
+    private final LockerService lockerService;
 
     public RegisterService(UserRepository userRepository, PasswordEncoder passwordEncoder,
-            ProfileService profileService, RoleService roleService) {
+            ProfileService profileService, RoleService roleService, LockerService lockerService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.profileService = profileService;
         this.roleService = roleService;
+        this.lockerService = lockerService;
+
     }
 
     public Map<String, String> registerUser(RegisterRequest request) {
@@ -66,6 +71,10 @@ public class RegisterService {
         userRepository.save(newUser);
 
         profileService.createProfile(newUser.getUserId());
+
+        Locker locker = lockerService.getRandomLocker();
+        newUser.setLocker(locker);
+        userRepository.save(newUser);
 
         Map<String, String> response = new HashMap<>();
         response.put("message", "Success");
