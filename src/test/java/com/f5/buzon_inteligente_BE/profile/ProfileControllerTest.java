@@ -87,4 +87,14 @@ class ProfileControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1));
     }
+
+    
+    @Test
+    @DisplayName("Should return 404 when profile does not exist")
+    void testShouldReturnNotFoundWhenProfileNotExists() throws Exception {
+        when(profileService.getProfileById(99L)).thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/api/profile/99"))
+                .andExpect(status().isNotFound());
+    }
 }
