@@ -28,13 +28,12 @@ public class RegisterService {
     private final LockerService lockerService;
 
     public RegisterService(UserRepository userRepository, PasswordEncoder passwordEncoder,
-            ProfileService profileService, RoleService roleService, LockerService lockerService) {
+                           ProfileService profileService, RoleService roleService, LockerService lockerService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.profileService = profileService;
         this.roleService = roleService;
         this.lockerService = lockerService;
-
     }
 
     public Map<String, String> registerUser(RegisterRequest request) {
@@ -60,21 +59,24 @@ public class RegisterService {
 
         Role defaultRole = roleService.getDefaultRole();
 
+   
+        Locker locker = lockerService.getRandomLocker();
+
         User newUser = new User(
                 request.getUserDni(),
                 request.getUserName(),
                 request.getUserSurname(),
                 request.getUserEmail(),
                 passwordEncoded,
-                defaultRole);
-
-        userRepository.save(newUser);
-
-        profileService.createProfile(newUser.getUserId());
-
-        Locker locker = lockerService.getRandomLocker();
+                defaultRole
+        );
         newUser.setLocker(locker);
+
+
         userRepository.save(newUser);
+
+     
+        profileService.createProfile(newUser.getUserId());
 
         Map<String, String> response = new HashMap<>();
         response.put("message", "Success");
