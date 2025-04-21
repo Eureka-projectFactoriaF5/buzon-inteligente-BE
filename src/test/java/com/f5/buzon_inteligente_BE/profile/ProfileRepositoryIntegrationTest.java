@@ -115,4 +115,11 @@ class ProfileRepositoryIntegrationTest {
         assertThat(exists).isFalse();
     }
 
+    @Test
+    @DisplayName("Should return empty when userId is null")
+    void testShouldFindByUserUserId_shouldReturnEmpty_whenUserIdIsNull() {
+        Optional<Profile> result = profileRepository.findByUserUserId(null);
+        assertThat(result).isNotPresent();
+    }
+
 }
