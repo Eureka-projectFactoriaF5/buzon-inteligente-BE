@@ -76,4 +76,14 @@ class ProfileRepositoryIntegrationTest {
         assertThat(result.get().getUser().getUserName()).isEqualTo("Pepe");
     }
 
+    @Test
+    @DisplayName("Should return true when profile exists for user")
+    void testShouldexistsByUserUserId_shouldReturnTrue() {
+        User user = createUserWithProfile("98765432B", "Carlos", "carlos@example.com", "cred456");
+
+        boolean exists = profileRepository.existsByUserUserId(user.getUserId());
+
+        assertThat(exists).isTrue();
+    }
+
 }
