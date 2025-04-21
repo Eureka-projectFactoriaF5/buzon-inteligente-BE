@@ -74,4 +74,15 @@ class ProfileServiceTest {
         verify(profileRepository).findByUserUserId(1L);
     }
 
+    @Test
+    @DisplayName("Should return empty Optional when profile by userId does not exist")
+    void testShouldGetProfileByUserId_notFound() {
+        when(profileRepository.findByUserUserId(1L)).thenReturn(Optional.empty());
+
+        Optional<Profile> result = profileService.getProfileByUserId(1L);
+
+        assertTrue(result.isEmpty());
+        verify(profileRepository).findByUserUserId(1L);
+    }
+
 }
