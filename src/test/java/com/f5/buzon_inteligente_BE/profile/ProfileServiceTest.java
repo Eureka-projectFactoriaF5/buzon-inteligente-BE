@@ -157,5 +157,15 @@ class ProfileServiceTest {
 
         assertEquals("unique-cred", result.getPermanentCredential());
     }
+
+    @Test
+    @DisplayName("Should throw exception when profile not found in update")
+    void testShouldUpdateProfile_profileNotFound_throwsException() {
+        when(profileRepository.findById(1L)).thenReturn(Optional.empty());
+
+        RuntimeException exception = assertThrows(RuntimeException.class,
+                () -> profileService.updateProfile(1L, "any"));
+        assertEquals("Profile not found with id: 1", exception.getMessage());
+    }
     
 }
