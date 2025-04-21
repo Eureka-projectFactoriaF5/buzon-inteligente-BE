@@ -141,5 +141,20 @@ public class RegisterServiceTest {
 
         assertEquals("Error decoding password from Base64", exception.getMessage());
     }
-        
+    
+    @Test
+    @DisplayName("Should throw exception when there are no lockers available")
+    void testRegisterUserFailNoLockersAvailable() throws Exception, SecurityException {
+        when(userRepository.findByUserEmail("test@example.com")).thenReturn(Optional.empty());
+        when(userRepository.findByUserDni("DNI")).thenReturn(Optional.empty());
+
+        when(roleService.getDefaultRole()).thenReturn(testRole);
+        when(passwordEncoder.encode("Password")).thenReturn(encodedPassword);
+        when(lockerService.getRandomLocker()).thenReturn(Optional.empty());
+
+        RegisterException exception = assertThrows(RegisterException.class,
+                () -> registerService.registerUser(registerRequest));
+
+        assertEquals("No hay lockers disponibles para asignar", exception.getMessage());
+    }
 }
