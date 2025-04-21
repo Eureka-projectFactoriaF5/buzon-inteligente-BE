@@ -2,6 +2,7 @@ package com.f5.buzon_inteligente_BE.user;
 
 import java.io.Serializable;
 
+import com.f5.buzon_inteligente_BE.locker.Locker;
 import com.f5.buzon_inteligente_BE.roles.Role;
 import jakarta.persistence.*;
 
@@ -33,10 +34,13 @@ public class User implements Serializable {
     @JoinColumn(name = "role_id")
     private Role role;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "locker_id")
+    private Locker locker;
+
     public User() {
     }
 
-    
     public User(String userDni, String userName, String userSurname, String userEmail, String userPassword, Role role) {
         this.userDni = userDni;
         this.userName = userName;
@@ -66,11 +70,19 @@ public class User implements Serializable {
         return userPassword;
     }
 
-    public String getUserSurname() {  
+    public String getUserSurname() {
         return userSurname;
     }
 
     public Role getRole() {
         return role;
+    }
+
+    public Locker getLocker() {
+        return locker;
+    }
+
+    public void setLocker(Locker locker) {
+        this.locker = locker;
     }
 }

@@ -3,6 +3,8 @@ package com.f5.buzon_inteligente_BE.auth.register;
 import com.f5.buzon_inteligente_BE.auth.register.RegisterExceptions.DniAlreadyExistsException;
 import com.f5.buzon_inteligente_BE.auth.register.RegisterExceptions.EmailAlreadyExistsException;
 import com.f5.buzon_inteligente_BE.auth.register.RegisterExceptions.RegisterException;
+import com.f5.buzon_inteligente_BE.locker.Locker;
+import com.f5.buzon_inteligente_BE.locker.LockerService;
 import com.f5.buzon_inteligente_BE.user.User;
 import com.f5.buzon_inteligente_BE.user.UserRepository;
 import com.f5.buzon_inteligente_BE.profile.ProfileService;
@@ -10,6 +12,7 @@ import com.f5.buzon_inteligente_BE.roles.Role;
 import com.f5.buzon_inteligente_BE.roles.RoleService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Base64;
 import java.util.Base64.Decoder;
@@ -23,15 +26,18 @@ public class RegisterService {
     private final PasswordEncoder passwordEncoder;
     private final ProfileService profileService;
     private final RoleService roleService;
+    private final LockerService lockerService;
 
     public RegisterService(UserRepository userRepository, PasswordEncoder passwordEncoder,
-            ProfileService profileService, RoleService roleService) {
+                           ProfileService profileService, RoleService roleService, LockerService lockerService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.profileService = profileService;
         this.roleService = roleService;
+        this.lockerService = lockerService;
     }
 
+    @Transactional
     public Map<String, String> registerUser(RegisterRequest request) {
 
         if (userRepository.findByUserEmail(request.getUserEmail()).isPresent()) {
@@ -55,17 +61,22 @@ public class RegisterService {
 
         Role defaultRole = roleService.getDefaultRole();
 
+        Locker locker = lockerService.getRandomLocker()
+                .orElseThrow(() -> new RegisterException("No hay lockers disponibles para asignar"));
+
         User newUser = new User(
                 request.getUserDni(),
                 request.getUserName(),
                 request.getUserSurname(),
                 request.getUserEmail(),
                 passwordEncoded,
-                defaultRole);
+                defaultRole
+        );
+        newUser.setLocker(locker);
 
-        userRepository.save(newUser);
+        User savedUser = userRepository.save(newUser);
 
-        profileService.createProfile(newUser.getUserId());
+        profileService.createProfile(savedUser.getUserId());
 
         Map<String, String> response = new HashMap<>();
         response.put("message", "Success");

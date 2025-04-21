@@ -4,12 +4,14 @@ import jakarta.persistence.*;
 
 import java.util.List;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+
 import com.f5.buzon_inteligente_BE.profile.Profile;
 import com.f5.buzon_inteligente_BE.parcel.Parcel;
 import com.f5.buzon_inteligente_BE.accesscode.AccessCodeStatus;
 
 @Entity
-@Table(name = "access_code")
+@Table(name = "access_codes")
 public class AccessCode implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -23,6 +25,9 @@ public class AccessCode implements Serializable {
     @Column(name = "access_code_name", nullable = false)
     private String accessCodeName;
 
+    @Column(name = "update_on", nullable = false)
+    private LocalDateTime updateOn;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", nullable = false)
     private Profile profile;
@@ -34,14 +39,19 @@ public class AccessCode implements Serializable {
     @OneToMany(mappedBy = "accessCode", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Parcel> parcels;
 
+    @Column(name ="is_locked", nullable = false)
+    private boolean isLocked = false;
+
     public AccessCode() {
     }
 
-    public AccessCode(String code, String name, Profile profile, AccessCodeStatus accessCodeStatus) {
+    public AccessCode(String code, String name, Profile profile, AccessCodeStatus accessCodeStatus, LocalDateTime updateOn,boolean isLocked) {
         this.accessCode = code;
         this.accessCodeName = name;
         this.profile = profile;
         this.accessCodeStatus = accessCodeStatus;
+        this.updateOn = LocalDateTime.now();
+        this.isLocked = isLocked;
     }
 
     public Long getAccessCodeId() {
@@ -70,6 +80,7 @@ public class AccessCode implements Serializable {
 
     public void setAccessCodeStatus(AccessCodeStatus accessCodeStatus) {
         this.accessCodeStatus = accessCodeStatus;
+        this.updateOn = LocalDateTime.now();
     }
 
     public void setParcels(List<Parcel> parcels) {
@@ -82,4 +93,21 @@ public class AccessCode implements Serializable {
     public void setProfile(Profile profile) {
         this.profile = profile;
     }
+
+    public LocalDateTime getUpdateOn() {
+        return updateOn;
+    }
+
+    public void setUpdateOn(LocalDateTime updateOn) {
+        this.updateOn = updateOn;
+    }
+
+    public boolean isLocked() {
+        return isLocked;
+    }
+
+    public void setLocked(boolean isLocked) {
+        this.isLocked = isLocked;
+    }
+
 }
