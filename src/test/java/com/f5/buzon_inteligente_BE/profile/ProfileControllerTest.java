@@ -1,6 +1,7 @@
 package com.f5.buzon_inteligente_BE.profile;
 
 import com.f5.buzon_inteligente_BE.profile.ProfileController.CreateProfileRequest;
+import com.f5.buzon_inteligente_BE.profile.ProfileController.UpdateProfileRequest;
 import com.f5.buzon_inteligente_BE.security.JwtUtils;
 import com.f5.buzon_inteligente_BE.user.User;
 
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -126,4 +128,21 @@ class ProfileControllerTest {
                 .andExpect(jsonPath("$.userEmail").value("user@example.com"))
                 .andExpect(jsonPath("$.permanentCredential").value("abc123"));
     }
+
+    @Test
+    @DisplayName("Should update permanent credential successfully")
+    void testShouldUpdateProfile() throws Exception {
+        UpdateProfileRequest request = new UpdateProfileRequest();
+        request.setPermanentCredential("newCredential");
+
+        mockProfile.setPermanentCredential("newCredential");
+        when(profileService.updateProfile(eq(1L), eq("newCredential"))).thenReturn(mockProfile);
+
+        mockMvc.perform(put("/api/profile/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.permanentCredential").value("newCredential"));
+    }
+
 }
