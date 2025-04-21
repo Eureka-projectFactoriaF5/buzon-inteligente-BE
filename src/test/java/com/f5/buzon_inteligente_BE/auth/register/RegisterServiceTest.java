@@ -28,6 +28,8 @@ import com.f5.buzon_inteligente_BE.roles.Role;
 import com.f5.buzon_inteligente_BE.roles.RoleService;
 import com.f5.buzon_inteligente_BE.user.User;
 import com.f5.buzon_inteligente_BE.user.UserRepository;
+import com.f5.buzon_inteligente_BE.locker.LockerService;
+import com.f5.buzon_inteligente_BE.locker.Locker;
 
 @ExtendWith(MockitoExtension.class)
 public class RegisterServiceTest {
@@ -42,6 +44,9 @@ public class RegisterServiceTest {
 
     @Mock
     private RoleService roleService;
+
+    @Mock
+    private LockerService lockerService;
 
     @InjectMocks
     private RegisterService registerService;
@@ -75,6 +80,7 @@ public class RegisterServiceTest {
 
         when(roleService.getDefaultRole()).thenReturn(testRole);
         when(passwordEncoder.encode("Password")).thenReturn(encodedPassword);
+        when(lockerService.getRandomLocker()).thenReturn(Optional.of(new Locker()));
 
         User testUser = new User(
                 registerRequest.getUserDni(),
@@ -132,7 +138,7 @@ public class RegisterServiceTest {
 
         RegisterException exception = assertThrows(RegisterException.class,
                 () -> registerService.registerUser(registerRequest));
-                
+
         assertEquals("Error decoding password from Base64", exception.getMessage());
     }
         
