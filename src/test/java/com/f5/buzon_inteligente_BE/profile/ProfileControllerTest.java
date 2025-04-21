@@ -97,4 +97,18 @@ class ProfileControllerTest {
         mockMvc.perform(get("/api/profile/99"))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    @DisplayName("Should return profile by user ID")
+    void testShouldGetProfileByUserId() throws Exception {
+        when(profileService.getProfileByUserId(1L)).thenReturn(Optional.of(mockProfile));
+
+        mockMvc.perform(get("/api/profile/user/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.userDni").value("12345678A"))
+                .andExpect(jsonPath("$.userName").value("testUser"))
+                .andExpect(jsonPath("$.userSurname").value("Rivero"))
+                .andExpect(jsonPath("$.userEmail").value("user@example.com"))
+                .andExpect(jsonPath("$.permanentCredential").value("abc123"));
+    }
 }
