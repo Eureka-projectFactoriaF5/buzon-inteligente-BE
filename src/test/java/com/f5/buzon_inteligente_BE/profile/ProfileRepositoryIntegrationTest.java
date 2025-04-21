@@ -9,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import static org.assertj.core.api.Assertions.*;
+
 import java.lang.reflect.Field;
+import java.util.Optional;
 
 @DataJpaTest
 @ActiveProfiles("test")
@@ -60,6 +63,17 @@ class ProfileRepositoryIntegrationTest {
             throw new RuntimeException("Failed to set roleName via reflection", e);
         }
         return roleRepository.save(role);
+    }
+
+    @Test
+    @DisplayName("Should return profile when user ID exists")
+    void testShouldfindByUserUserId_shouldReturnProfile() {
+        User user = createUserWithProfile("12345678A", "Pepe", "pepe@example.com", "abc123");
+
+        Optional<Profile> result = profileRepository.findByUserUserId(user.getUserId());
+
+        assertThat(result).isPresent();
+        assertThat(result.get().getUser().getUserName()).isEqualTo("Pepe");
     }
 
 }
