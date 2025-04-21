@@ -13,6 +13,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "lockers")
 public class Locker implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +34,7 @@ public class Locker implements Serializable {
     private List<Mailbox> mailboxes = new ArrayList<>();
 
     @OneToMany(mappedBy = "locker", cascade = CascadeType.PERSIST)
+    
     private List<User> users = new ArrayList<>();
 
     public Locker() {
