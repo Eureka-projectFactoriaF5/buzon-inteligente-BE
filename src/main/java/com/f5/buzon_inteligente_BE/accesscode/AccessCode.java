@@ -39,15 +39,19 @@ public class AccessCode implements Serializable {
     @OneToMany(mappedBy = "accessCode", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Parcel> parcels;
 
+    @Column(name ="is_locked", nullable = false)
+    private boolean isLocked = false;
+
     public AccessCode() {
     }
 
-    public AccessCode(String code, String name, Profile profile, AccessCodeStatus accessCodeStatus, LocalDateTime updateOn) {
+    public AccessCode(String code, String name, Profile profile, AccessCodeStatus accessCodeStatus, LocalDateTime updateOn,boolean isLocked) {
         this.accessCode = code;
         this.accessCodeName = name;
         this.profile = profile;
         this.accessCodeStatus = accessCodeStatus;
         this.updateOn = LocalDateTime.now();
+        this.isLocked = isLocked;
     }
 
     public Long getAccessCodeId() {
@@ -97,4 +101,13 @@ public class AccessCode implements Serializable {
     public void setUpdateOn(LocalDateTime updateOn) {
         this.updateOn = updateOn;
     }
+
+    public boolean isLocked() {
+        return isLocked;
+    }
+
+    public void setLocked(boolean isLocked) {
+        this.isLocked = isLocked;
+    }
+
 }
