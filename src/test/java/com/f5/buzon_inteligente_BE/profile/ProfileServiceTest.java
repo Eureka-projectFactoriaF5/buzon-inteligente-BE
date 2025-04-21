@@ -51,4 +51,14 @@ class ProfileServiceTest {
         assertEquals(profile, result.get());
     }
 
+    @Test
+    @DisplayName("Should return empty Optional when profile by ID does not exist")
+    void testShouldGetProfileById_notFound() {
+        when(profileRepository.findById(1L)).thenReturn(Optional.empty());
+
+        Optional<Profile> result = profileService.getProfileById(1L);
+
+        assertTrue(result.isEmpty());
+    }
+
 }
