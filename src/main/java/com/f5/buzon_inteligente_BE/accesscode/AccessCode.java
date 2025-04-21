@@ -11,7 +11,7 @@ import com.f5.buzon_inteligente_BE.parcel.Parcel;
 import com.f5.buzon_inteligente_BE.accesscode.AccessCodeStatus;
 
 @Entity
-@Table(name = "access_code")
+@Table(name = "access_codes")
 public class AccessCode implements Serializable {
 
     private static final long serialVersionUID = 1L;
