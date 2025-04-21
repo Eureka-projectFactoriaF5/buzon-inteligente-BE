@@ -165,4 +165,13 @@ class ProfileControllerTest {
                 .andExpect(status().isNoContent());
     }
 
+    @Test
+    @DisplayName("Should return 404 when getting profile with non-existent ID")
+    void shouldReturn404ForNonExistentProfile() throws Exception {
+        when(profileService.getProfileById(999L)).thenReturn(java.util.Optional.empty());
+
+        mockMvc.perform(get("/api/profile/999"))
+                .andExpect(status().isNotFound());
+    }
+
 }
