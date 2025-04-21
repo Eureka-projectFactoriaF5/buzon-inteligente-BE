@@ -98,4 +98,15 @@ class ProfileServiceTest {
         verify(profileRepository).findByPermanentCredential("abc-123");
     }
 
+    @Test
+    @DisplayName("Should return empty Optional when profile by permanentCredential does not exist")
+    void testShouldGetProfileByPermanentCredential_notFound() {
+        when(profileRepository.findByPermanentCredential("non-existent")).thenReturn(Optional.empty());
+
+        Optional<Profile> result = profileService.getProfileByPermanentCredential("non-existent");
+
+        assertTrue(result.isEmpty());
+        verify(profileRepository).findByPermanentCredential("non-existent");
+    }
+
 }
