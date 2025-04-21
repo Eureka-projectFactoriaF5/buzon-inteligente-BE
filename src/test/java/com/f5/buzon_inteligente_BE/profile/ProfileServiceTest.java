@@ -178,6 +178,16 @@ class ProfileServiceTest {
         RuntimeException exception = assertThrows(RuntimeException.class,
                 () -> profileService.updateProfile(1L, "taken-cred"));
         assertEquals("Credential already exists: taken-cred", exception.getMessage());
-    }   
-    
+    }
+
+    @Test
+    @DisplayName("Should delete profile when it exists")
+    void testShouldDeleteProfile_success() {
+        when(profileRepository.existsById(1L)).thenReturn(true);
+
+        profileService.deleteProfile(1L);
+
+        verify(profileRepository).deleteById(1L);
+    }
+
 }
