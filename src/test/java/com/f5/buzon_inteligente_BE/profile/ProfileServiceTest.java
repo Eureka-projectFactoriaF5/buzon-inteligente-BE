@@ -1,5 +1,6 @@
 package com.f5.buzon_inteligente_BE.profile;
 
+import com.f5.buzon_inteligente_BE.user.User;
 import com.f5.buzon_inteligente_BE.user.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -107,6 +108,22 @@ class ProfileServiceTest {
 
         assertTrue(result.isEmpty());
         verify(profileRepository).findByPermanentCredential("non-existent");
+    }
+
+    @Test
+    @DisplayName("Should create a new profile when user exists and profile does not")
+    void testShouldCreateProfile_success() {
+        User user = new User();
+        Profile profile = new Profile(user);
+
+        when(profileRepository.existsByUserUserId(1L)).thenReturn(false);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(profileRepository.save(any(Profile.class))).thenReturn(profile);
+
+        Profile result = profileService.createProfile(1L);
+
+        assertNotNull(result);
+        assertEquals(profile, result);
     }
 
 }
