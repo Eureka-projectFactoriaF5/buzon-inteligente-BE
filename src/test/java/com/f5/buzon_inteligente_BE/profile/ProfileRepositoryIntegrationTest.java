@@ -143,4 +143,11 @@ class ProfileRepositoryIntegrationTest {
         assertThat(exists).isFalse();
     }
 
+    @Test
+    @DisplayName("Should return false when userId is negative")
+    void testShouldExistsByUserUserId_shouldReturnFalse_whenUserIdIsNegative() {
+        boolean exists = profileRepository.existsByUserUserId(-1L);
+        assertThat(exists).isFalse();
+    }
+
 }
