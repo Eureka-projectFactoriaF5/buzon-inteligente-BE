@@ -85,4 +85,17 @@ class ProfileServiceTest {
         verify(profileRepository).findByUserUserId(1L);
     }
 
+    @Test
+    @DisplayName("Should return profile by permanentCredential when it exists")
+    void testShouldGetProfileByPermanentCredential_found() {
+        Profile profile = new Profile();
+        when(profileRepository.findByPermanentCredential("abc-123")).thenReturn(Optional.of(profile));
+
+        Optional<Profile> result = profileService.getProfileByPermanentCredential("abc-123");
+
+        assertTrue(result.isPresent());
+        assertEquals(profile, result.get());
+        verify(profileRepository).findByPermanentCredential("abc-123");
+    }
+
 }
