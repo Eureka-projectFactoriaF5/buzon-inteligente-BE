@@ -15,6 +15,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 import java.util.List;
 import java.util.Optional;
@@ -143,6 +144,16 @@ class ProfileControllerTest {
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.permanentCredential").value("newCredential"));
+    }
+
+    @Test
+    @DisplayName("Should regenerate permanent credential")
+    void testShouldRegenerateCredential() throws Exception {
+        when(profileService.regeneratePermanentCredential(1L)).thenReturn("newGeneratedCredential");
+
+        mockMvc.perform(post("/api/profile/1/regenerate-credential"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("newGeneratedCredential"));
     }
 
 }
