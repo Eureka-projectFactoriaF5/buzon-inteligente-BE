@@ -134,5 +134,15 @@ class ProfileServiceTest {
         RuntimeException exception = assertThrows(RuntimeException.class, () -> profileService.createProfile(1L));
         assertEquals("Profile already exists for user with id: 1", exception.getMessage());
     }
+
+    @Test
+    @DisplayName("Should throw exception when creating profile for non-existing user")
+    void testShouldCreateProfile_userNotFound_throwsException() {
+        when(profileRepository.existsByUserUserId(1L)).thenReturn(false);
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> profileService.createProfile(1L));
+        assertEquals("User not found with id: 1", exception.getMessage());
+    }
     
 }
