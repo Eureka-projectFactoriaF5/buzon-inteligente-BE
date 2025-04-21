@@ -5,12 +5,16 @@ import com.f5.buzon_inteligente_BE.user.User;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -61,4 +65,15 @@ class ProfileControllerTest {
         mockProfile.setUser(mockUser);
         mockProfile.setPermanentCredential("abc123");
     }   
+
+    @Test
+    @DisplayName("Should return all profiles successfully")
+    void testShouldGetAllProfiles() throws Exception {
+        when(profileService.getAllProfiles()).thenReturn(List.of(mockProfile));
+
+        mockMvc.perform(get("/api/profile"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].permanentCredential").value("abc123"));
+    }
 }
