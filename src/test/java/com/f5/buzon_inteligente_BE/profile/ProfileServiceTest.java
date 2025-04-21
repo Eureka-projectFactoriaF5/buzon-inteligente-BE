@@ -190,4 +190,13 @@ class ProfileServiceTest {
         verify(profileRepository).deleteById(1L);
     }
 
+    @Test
+    @DisplayName("Should throw exception when trying to delete non-existing profile")
+    void testShouldDeleteProfile_notFound_throwsException() {
+        when(profileRepository.existsById(1L)).thenReturn(false);
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> profileService.deleteProfile(1L));
+        assertEquals("Profile not found with id: 1", exception.getMessage());
+    }
+
 }
