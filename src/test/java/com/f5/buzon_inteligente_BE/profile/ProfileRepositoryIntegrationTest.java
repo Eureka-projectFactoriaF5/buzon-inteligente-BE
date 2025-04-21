@@ -97,4 +97,14 @@ class ProfileRepositoryIntegrationTest {
         assertThat(result.get().getUser().getUserName()).isEqualTo("Ana");
     }
 
+    @Test
+    @DisplayName("Should return true when credential exists")
+    void testShouldexistsByPermanentCredential_shouldReturnTrue() {
+        createUserWithProfile("11223344D", "Laura", "laura@example.com", "exists_cred");
+
+        boolean exists = profileRepository.existsByPermanentCredential("exists_cred");
+
+        assertThat(exists).isTrue();
+    }
+
 }
