@@ -136,4 +136,11 @@ class ProfileRepositoryIntegrationTest {
         assertThat(result).isEmpty();
     }
 
+    @Test
+    @DisplayName("Should return false when credential is empty")
+    void testShouldExistsByPermanentCredential_shouldReturnFalse_whenCredentialIsEmpty() {
+        boolean exists = profileRepository.existsByPermanentCredential("");
+        assertThat(exists).isFalse();
+    }
+
 }
