@@ -212,4 +212,14 @@ class ProfileServiceTest {
         assertEquals(newCredential, profile.getPermanentCredential());
     }
 
+    @Test
+    @DisplayName("Should throw exception when profile to regenerate credential not found")
+    void testShouldRegeneratePermanentCredential_notFound_throwsException() {
+        when(profileRepository.findById(1L)).thenReturn(Optional.empty());
+
+        RuntimeException exception = assertThrows(RuntimeException.class,
+                () -> profileService.regeneratePermanentCredential(1L));
+        assertEquals("Profile not found with id: 1", exception.getMessage());
+    }
+
 }
