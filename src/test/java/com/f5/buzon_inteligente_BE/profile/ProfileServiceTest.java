@@ -199,4 +199,17 @@ class ProfileServiceTest {
         assertEquals("Profile not found with id: 1", exception.getMessage());
     }
 
+    @Test
+    @DisplayName("Should regenerate a new permanentCredential")
+    void testShouldRegeneratePermanentCredential_success() {
+        Profile profile = new Profile();
+        when(profileRepository.findById(1L)).thenReturn(Optional.of(profile));
+        when(profileRepository.save(profile)).thenReturn(profile);
+
+        String newCredential = profileService.regeneratePermanentCredential(1L);
+
+        assertNotNull(newCredential);
+        assertEquals(newCredential, profile.getPermanentCredential());
+    }
+
 }
