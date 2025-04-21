@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -75,5 +76,15 @@ class ProfileControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1))
                 .andExpect(jsonPath("$[0].permanentCredential").value("abc123"));
+    }
+
+    @Test
+    @DisplayName("Should return a profile by its ID")
+    void testShouldGetProfileById() throws Exception {
+        when(profileService.getProfileById(1L)).thenReturn(Optional.of(mockProfile));
+
+        mockMvc.perform(get("/api/profile/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1));
     }
 }
