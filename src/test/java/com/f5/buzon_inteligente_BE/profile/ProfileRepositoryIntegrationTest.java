@@ -67,7 +67,7 @@ class ProfileRepositoryIntegrationTest {
 
     @Test
     @DisplayName("Should return profile when user ID exists")
-    void testShouldfindByUserUserId_shouldReturnProfile() {
+    void testShouldFindByUserUserId_shouldReturnProfile() {
         User user = createUserWithProfile("12345678A", "Pepe", "pepe@example.com", "abc123");
 
         Optional<Profile> result = profileRepository.findByUserUserId(user.getUserId());
@@ -78,7 +78,7 @@ class ProfileRepositoryIntegrationTest {
 
     @Test
     @DisplayName("Should return true when profile exists for user")
-    void testShouldexistsByUserUserId_shouldReturnTrue() {
+    void testShouldExistsByUserUserId_shouldReturnTrue() {
         User user = createUserWithProfile("98765432B", "Carlos", "carlos@example.com", "cred456");
 
         boolean exists = profileRepository.existsByUserUserId(user.getUserId());
@@ -88,7 +88,7 @@ class ProfileRepositoryIntegrationTest {
 
     @Test
     @DisplayName("Should return profile when credential exists")
-    void testShouldfindByPermanentCredential_shouldReturnProfile() {
+    void testShouldFindByPermanentCredential_shouldReturnProfile() {
         createUserWithProfile("24681357C", "Ana", "ana@example.com", "unique_cred");
 
         Optional<Profile> result = profileRepository.findByPermanentCredential("unique_cred");
@@ -99,12 +99,20 @@ class ProfileRepositoryIntegrationTest {
 
     @Test
     @DisplayName("Should return true when credential exists")
-    void testShouldexistsByPermanentCredential_shouldReturnTrue() {
+    void testShouldExistsByPermanentCredential_shouldReturnTrue() {
         createUserWithProfile("11223344D", "Laura", "laura@example.com", "exists_cred");
 
         boolean exists = profileRepository.existsByPermanentCredential("exists_cred");
 
         assertThat(exists).isTrue();
+    }
+
+    @Test
+    @DisplayName("Should return false when credential does not exist")
+    void testShouldExistsByPermanentCredential_shouldReturnFalse() {
+        boolean exists = profileRepository.existsByPermanentCredential("non_existing_cred");
+
+        assertThat(exists).isFalse();
     }
 
 }
