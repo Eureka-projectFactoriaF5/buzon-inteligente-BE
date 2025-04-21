@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -154,6 +154,15 @@ class ProfileControllerTest {
         mockMvc.perform(post("/api/profile/1/regenerate-credential"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("newGeneratedCredential"));
+    }
+
+    @Test
+    @DisplayName("Should delete profile successfully")
+    void testShouldDeleteProfile() throws Exception {
+        doNothing().when(profileService).deleteProfile(1L);
+
+        mockMvc.perform(delete("/api/profile/1"))
+                .andExpect(status().isNoContent());
     }
 
 }
