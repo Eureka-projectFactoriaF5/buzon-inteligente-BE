@@ -144,5 +144,18 @@ class ProfileServiceTest {
         RuntimeException exception = assertThrows(RuntimeException.class, () -> profileService.createProfile(1L));
         assertEquals("User not found with id: 1", exception.getMessage());
     }
+
+    @Test
+    @DisplayName("Should update permanentCredential if profile exists and credential is unique")
+    void testShouldUpdateProfile_success() {
+        Profile profile = new Profile();
+        when(profileRepository.findById(1L)).thenReturn(Optional.of(profile));
+        when(profileRepository.existsByPermanentCredential("unique-cred")).thenReturn(false);
+        when(profileRepository.save(profile)).thenReturn(profile);
+
+        Profile result = profileService.updateProfile(1L, "unique-cred");
+
+        assertEquals("unique-cred", result.getPermanentCredential());
+    }
     
 }
