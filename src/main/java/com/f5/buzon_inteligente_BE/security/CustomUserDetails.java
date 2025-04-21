@@ -8,22 +8,30 @@ import java.util.List;
 
 public class CustomUserDetails implements UserDetails {
 
+    private final long userId;
     private final String username;
     private final String password;
     private final String role;
     private final String dni;
     private final boolean enabled;
+    
 
-    public CustomUserDetails(String username, String password, String role, String dni, boolean enabled) {
+    public CustomUserDetails(long userId, String username, String password, String role, String dni, boolean enabled) {
+        this.userId = userId;
         this.username = username;
         this.password = password;
         this.role = role;
         this.dni = dni;
         this.enabled = enabled;
-    }
 
+    }
+    
     public String getRole() {
         return role;
+    }
+
+    public long getUserId() {
+        return userId;
     }
 
     public String getDni() {
@@ -61,4 +69,5 @@ public class CustomUserDetails implements UserDetails {
     public boolean isEnabled() {
         return enabled;
     }
+
 }
