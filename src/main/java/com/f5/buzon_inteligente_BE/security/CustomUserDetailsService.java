@@ -25,6 +25,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         String role = "USER";
 
         return new CustomUserDetails(
+                user.getUserId(),
                 user.getUserEmail(),
                 user.getUserPassword(),
                 role,

@@ -22,12 +22,13 @@ public class JwtUtils {
 
     @Value("${jwt.expiration}")
     private long jwtExpirationMs;
-
-    public String generateJwtToken(String username, String role, String dni) {
+    
+    public String generateJwtToken(String username, String role, String dni, long userId) {
         return Jwts.builder()
                 .setSubject(username)
                 .claim("role", role)
                 .claim("dni", dni)
+                .claim("id", userId) 
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(key(), SignatureAlgorithm.HS512)

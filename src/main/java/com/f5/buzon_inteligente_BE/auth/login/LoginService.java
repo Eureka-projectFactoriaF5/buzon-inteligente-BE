@@ -56,7 +56,7 @@ public class LoginService {
         
         logger.info("Authentication successful for email: {} with role: {}", loginRequest.email(), role);
         
-        String token = jwtUtils.generateJwtToken(userDetails.getUsername(), role, dni);
+        String token = jwtUtils.generateJwtToken(userDetails.getUsername(), role, dni, userDetails.getUserId());
         logger.debug("Generated token: {}", token);
         
         return new LoginResponseDto("Login exitoso", token, role);
