@@ -126,4 +126,13 @@ class ProfileServiceTest {
         assertEquals(profile, result);
     }
 
+    @Test
+    @DisplayName("Should throw exception when profile already exists for user")
+    void testShoulCreateProfile_alreadyExists_throwsException() {
+        when(profileRepository.existsByUserUserId(1L)).thenReturn(true);
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> profileService.createProfile(1L));
+        assertEquals("Profile already exists for user with id: 1", exception.getMessage());
+    }
+    
 }
