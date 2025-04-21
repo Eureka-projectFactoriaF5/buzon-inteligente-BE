@@ -222,4 +222,16 @@ class ProfileServiceTest {
         assertEquals("Profile not found with id: 1", exception.getMessage());
     }
 
+    @Test
+    @DisplayName("Should throw exception when updating with null credential")
+    void testShouldUpdateProfile_nullCredential_throwsException() {
+        Profile profile = new Profile();
+        when(profileRepository.findById(1L)).thenReturn(Optional.of(profile));
+        when(profileRepository.existsByPermanentCredential(null)).thenReturn(false);
+        when(profileRepository.save(profile)).thenReturn(profile);
+
+        assertDoesNotThrow(() -> profileService.updateProfile(1L, null));
+        assertNull(profile.getPermanentCredential());
+    }
+
 }
