@@ -129,4 +129,11 @@ class ProfileRepositoryIntegrationTest {
         assertThat(result).isEmpty();
     }
 
+    @Test
+    @DisplayName("Should return empty when credential is null")
+    void testShouldFindByPermanentCredential_shouldReturnEmpty_whenCredentialIsNull() {
+        Optional<Profile> result = profileRepository.findByPermanentCredential(null);
+        assertThat(result).isEmpty();
+    }
+
 }
