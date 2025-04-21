@@ -79,7 +79,7 @@ public class ProfileDTOTest {
         assertNull(dto.getUserId());
     }
     @Test
-    @DisplayName("Should handle null Profile in fromEntity gracefully (edge case)")
+    @DisplayName("Should handle null Profile in from Entity gracefully (edge case)")
     void testShouldFromEntityWithNullProfile() {
         assertThrows(NullPointerException.class, () -> {
             ProfileDTO.fromEntity(null);
@@ -87,7 +87,7 @@ public class ProfileDTOTest {
     }
 
     @Test
-    @DisplayName("Should handle empty permanentCredential")
+    @DisplayName("Should handle empty permanent Credential")
     void testShouldWithEmptyPermanentCredential() {
         profile.setId(7L);
         profile.setPermanentCredential("");
