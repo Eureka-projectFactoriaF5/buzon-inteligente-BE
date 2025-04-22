@@ -18,11 +18,15 @@ public class MailboxSize {
     @Column(name = "size_name", nullable = false, length = 50)
     private String mailboxSizeName;
 
+    @Column(name = "capacity", nullable = false)
+    private Integer capacity;
+
     public MailboxSize() {
     }
 
-    public MailboxSize(String mailboxSizeName) {
+    public MailboxSize(String mailboxSizeName, Integer capacity) {
         this.mailboxSizeName = mailboxSizeName;
+        this.capacity = capacity;
     }
 
     public Long getMailboxSizeId() {
@@ -35,6 +39,14 @@ public class MailboxSize {
 
     public void setMailboxSizeName(String mailboxSizeName) {
         this.mailboxSizeName = mailboxSizeName;
+    }
+    
+    public Integer getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(Integer capacity) {
+        this.capacity = capacity;
     }
 
 }
