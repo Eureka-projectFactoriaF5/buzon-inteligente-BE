@@ -1,6 +1,6 @@
 INSERT INTO roles (role_name) 
 VALUES 
-  ('USER'), ('ADMIN');
+  ('USER');
 
 INSERT INTO locker_status (locker_status_name)
 VALUES
@@ -22,7 +22,7 @@ INSERT INTO mailbox_sizes (size_name)
 VALUES
   ('SMALL'),
   ('MEDIUM'),
-  ('LARGE');
+  ('LARGE'),
   ('X-LARGE');
 
 INSERT INTO mailboxes (mailbox_size_id, locker_id, mailbox_status_id, mailbox_number)
