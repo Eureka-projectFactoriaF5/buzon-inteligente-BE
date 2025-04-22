@@ -1,12 +1,14 @@
 package com.f5.buzon_inteligente_BE.locker;
 
-
 import static org.assertj.core.api.Assertions.*;
+
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import com.f5.buzon_inteligente_BE.mailbox.Mailbox;
 
 class LockerTest {
 
@@ -17,7 +19,7 @@ class LockerTest {
     void setUp() {
         lockerStatus = new LockerStatus();
         locker = new Locker("Calle 123", 48L, lockerStatus);
-    } 
+    }
 
     @Test
     @DisplayName("Should constructor set address, timeLimit and lockerStatus correctly")
@@ -26,8 +28,6 @@ class LockerTest {
         assertThat(locker.getTimeLimit()).isEqualTo(48L);
         assertThat(locker.getLockerStatus()).isEqualTo(lockerStatus);
     }
-
-      
 
     @Test
     @DisplayName("Should Setters and Getters  work correctly")
@@ -40,6 +40,17 @@ class LockerTest {
         assertThat(locker.getAddress()).isEqualTo("Nueva dirección");
         assertThat(locker.getTimeLimit()).isEqualTo(72L);
         assertThat(locker.getLockerStatus()).isEqualTo(newStatus);
+    }
+
+    @Test
+    @DisplayName("Should mailboxes list be modifiable")
+    void testShouldAddMailbox() {
+        Mailbox mailbox = new Mailbox();
+        locker.getMailboxes().add(mailbox);
+
+        List<Mailbox> mailboxes = locker.getMailboxes();
+        assertThat(mailboxes).hasSize(1);
+        assertThat(mailboxes.get(0)).isEqualTo(mailbox);
     }
 
 }
