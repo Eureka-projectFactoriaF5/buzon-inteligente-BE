@@ -79,4 +79,16 @@ class LockerTest {
         assertThat(locker.getLockerStatus()).isEqualTo(newStatus);
     }
 
+    @Test
+    @DisplayName("Should getMailboxes return empty list initially")
+    void testShouldGetMailboxesInitiallyEmpty() {
+        assertThat(locker.getMailboxes()).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Should getUsers return empty list initially")
+    void testShouldGetUsersInitiallyEmpty() {
+        assertThat(locker.getUsers()).isEmpty();
+    }
+
 }
