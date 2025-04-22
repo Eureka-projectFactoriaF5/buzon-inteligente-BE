@@ -27,4 +27,19 @@ class LockerTest {
         assertThat(locker.getLockerStatus()).isEqualTo(lockerStatus);
     }
 
+      
+
+    @Test
+    @DisplayName("Should Setters and Getters  work correctly")
+    void testShouldSettersAndGetters() {
+        locker.setAddress("Nueva dirección");
+        locker.setTimeLimit(72L);
+        LockerStatus newStatus = new LockerStatus();
+        locker.setLockerStatus(newStatus);
+
+        assertThat(locker.getAddress()).isEqualTo("Nueva dirección");
+        assertThat(locker.getTimeLimit()).isEqualTo(72L);
+        assertThat(locker.getLockerStatus()).isEqualTo(newStatus);
+    }
+
 }
