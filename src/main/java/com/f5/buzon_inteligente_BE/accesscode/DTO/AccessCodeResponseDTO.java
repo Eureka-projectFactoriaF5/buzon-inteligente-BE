@@ -6,6 +6,7 @@ import com.f5.buzon_inteligente_BE.accesscode.AccessCode;
 import com.f5.buzon_inteligente_BE.accesscode.AccessCodeStatus;
 
 public class AccessCodeResponseDTO {
+    private Long accessCodeId; 
     private String accessCode;
     private String accessCodeName;
     private AccessCodeStatus accessCodeStatus;
@@ -15,7 +16,7 @@ public class AccessCodeResponseDTO {
     public AccessCodeResponseDTO() {
     }
 
-    public AccessCodeResponseDTO(String code, String name, AccessCodeStatus accessCodeStatus, LocalDateTime updateOn,
+    public AccessCodeResponseDTO(Long accessCodeId, String code, String name, AccessCodeStatus accessCodeStatus, LocalDateTime updateOn,
             boolean isLocked) {
         this.accessCode = code;
         this.accessCodeName = name;
@@ -26,12 +27,19 @@ public class AccessCodeResponseDTO {
 
     public static AccessCodeResponseDTO fromEntities (AccessCode accessCode){
         return new AccessCodeResponseDTO(
+            accessCode.getAccessCodeId(),
             accessCode.getAccessCode(),
             accessCode.getAccessCodeName(),
             accessCode.getAccessCodeStatus(),
             accessCode.getUpdateOn(),
             accessCode.isLocked()
         );
+    }
+    public Long getAccessCodeId() {
+        return accessCodeId;
+    }
+    public void setAccessCodeId(Long accessCodeId) {
+        this.accessCodeId = accessCodeId;
     }
 
     public String getAccessCode() {
