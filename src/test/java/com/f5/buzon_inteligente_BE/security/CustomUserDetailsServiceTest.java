@@ -17,6 +17,7 @@ import static org.mockito.Mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import com.f5.buzon_inteligente_BE.user.User;
 import com.f5.buzon_inteligente_BE.user.UserRepository;
@@ -36,16 +37,18 @@ public class CustomUserDetailsServiceTest {
     @DisplayName("Test load user by email")
     void testLoadUserByEmail() {
         Role role = new Role("USER");
-        User user = new User("12345678X", "test", "example", "test@example.com", "password123", role);
-
+        User user = new User( "12345678X", "test", "example", "test@example.com", "password123", role);
+        ReflectionTestUtils.setField(user, "userId", 1L);
+    
         when(userRepository.findByUserEmail("test@example.com")).thenReturn(Optional.of(user));
-
+    
         UserDetails userDetails = customUserDetailsService.loadUserByUsername("test@example.com");
-        
+    
         assertEquals("test@example.com", userDetails.getUsername());
         assertEquals("password123", userDetails.getPassword());
         assertTrue(userDetails.isEnabled());
     }
+    
     
     @Test
     @DisplayName("Test load user by email don't exist")
