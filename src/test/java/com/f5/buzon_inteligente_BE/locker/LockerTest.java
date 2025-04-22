@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.f5.buzon_inteligente_BE.mailbox.Mailbox;
+import com.f5.buzon_inteligente_BE.user.User;
 
 class LockerTest {
 
@@ -51,6 +52,17 @@ class LockerTest {
         List<Mailbox> mailboxes = locker.getMailboxes();
         assertThat(mailboxes).hasSize(1);
         assertThat(mailboxes.get(0)).isEqualTo(mailbox);
+    }
+
+    @Test
+    @DisplayName("Should users list be modifiable")
+    void testShouldAddUser() {
+        User user = new User();
+        locker.getUsers().add(user);
+
+        List<User> users = locker.getUsers();
+        assertThat(users).hasSize(1);
+        assertThat(users.get(0)).isEqualTo(user);
     }
 
 }
