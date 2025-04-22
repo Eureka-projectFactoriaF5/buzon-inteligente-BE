@@ -65,4 +65,18 @@ class LockerTest {
         assertThat(users.get(0)).isEqualTo(user);
     }
 
+    @Test
+    @DisplayName("Should getTimeLimit return the correct value")
+    void testShouldGetTimeLimit() {
+        assertThat(locker.getTimeLimit()).isEqualTo(48L);
+    }
+
+    @Test
+    @DisplayName("Should setLockerStatus assign the correct status")
+    void testShouldSetLockerStatus() {
+        LockerStatus newStatus = new LockerStatus();
+        locker.setLockerStatus(newStatus);
+        assertThat(locker.getLockerStatus()).isEqualTo(newStatus);
+    }
+
 }
