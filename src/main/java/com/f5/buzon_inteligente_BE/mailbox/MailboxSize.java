@@ -24,8 +24,9 @@ public class MailboxSize {
     public MailboxSize() {
     }
 
-    public MailboxSize(String mailboxSizeName) {
+    public MailboxSize(String mailboxSizeName, Integer capacity) {
         this.mailboxSizeName = mailboxSizeName;
+        this.capacity = capacity;
     }
 
     public Long getMailboxSizeId() {

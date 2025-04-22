@@ -31,10 +31,10 @@ public class MailboxService {
             .orElseThrow(() -> new MailboxNotFoundException("Estado FREE no definido"))
             .getMailboxStatusId();
 
-        return mailboxRepo.findFirstByMailboxSize_IdAndMailboxStatus_Id(requestedSizeId, freeStatusId)
+        return mailboxRepo.findFirstAvailableByExactSize(requestedSizeId, freeStatusId)
             .or(() ->
                 mailboxRepo
-                  .findFirstByMailboxSize_CapacityGreaterThanAndMailboxStatus_IdOrderByMailboxSize_CapacityAsc(
+                  .findFirstAvailableByMinCapacity(
                       requestedCapacity, freeStatusId
                   )
             )
