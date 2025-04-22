@@ -9,12 +9,14 @@ import org.junit.jupiter.api.Test;
 import java.lang.reflect.Field;
 
 import com.f5.buzon_inteligente_BE.roles.Role;
+import com.f5.buzon_inteligente_BE.locker.Locker;
 
 
 public class UserTest {
     
     private User user;
     private Role role;
+    private Locker locker;
 
     @BeforeEach
     void setUp() throws Exception{
@@ -23,6 +25,10 @@ public class UserTest {
         Field userIdField = User.class.getDeclaredField("userId");
         userIdField.setAccessible(true);
         userIdField.set(user, 1L);
+        Field lockerField = User.class.getDeclaredField("locker");
+        locker = new Locker();
+        lockerField.setAccessible(true);
+        lockerField.set(user, locker);
     }
 
     @Test
@@ -65,5 +71,11 @@ public class UserTest {
     @DisplayName("GetRole test case")
     void testGetRole() {
         assertEquals(role, user.getRole());
+    }
+
+    @Test
+    @DisplayName("GetLocker test case")
+    void testGetLocker() {
+        assertEquals(locker, user.getLocker());
     }
 }
