@@ -4,11 +4,12 @@ import com.f5.buzon_inteligente_BE.profile.Profile;
 import com.f5.buzon_inteligente_BE.profile.DTO.UserProfileResponseDTO;
 import com.f5.buzon_inteligente_BE.roles.Role;
 import com.f5.buzon_inteligente_BE.user.User;
+
+import static org.assertj.core.api.Assertions.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class UserProfileResponseDTOTest {
 
@@ -24,16 +25,15 @@ class UserProfileResponseDTOTest {
                 "López",
                 "ana@example.com",
                 "password123",
-                dummyRole
-        );
+                dummyRole);
 
         profile = new Profile();
         profile.setPermanentCredential("cred456");
     }
 
     @Test
-    @DisplayName("Constructor vacío debe crear objeto con campos null")
-    void emptyConstructor_shouldCreateObjectWithNullFields() {
+    @DisplayName("Should create object with null fields when using empty constructor")
+    void testShouldEmptyConstructor_shouldCreateObjectWithNullFields() {
         UserProfileResponseDTO dto = new UserProfileResponseDTO();
 
         assertThat(dto.getUserDni()).isNull();
@@ -44,11 +44,10 @@ class UserProfileResponseDTOTest {
     }
 
     @Test
-    @DisplayName("Constructor con argumentos debe establecer correctamente los campos")
-    void constructorWithArguments_shouldSetAllFields() {
+    @DisplayName("Should correctly set all fields using constructor with arguments")
+    void testShouldConstructorWithArguments_shouldSetAllFields() {
         UserProfileResponseDTO dto = new UserProfileResponseDTO(
-                "12345678A", "Juan", "Pérez", "juan@example.com", "abc123"
-        );
+                "12345678A", "Juan", "Pérez", "juan@example.com", "abc123");
 
         assertThat(dto.getUserDni()).isEqualTo("12345678A");
         assertThat(dto.getUserName()).isEqualTo("Juan");
@@ -58,8 +57,8 @@ class UserProfileResponseDTOTest {
     }
 
     @Test
-    @DisplayName("fromEntities debe mapear correctamente los datos desde User y Profile")
-    void fromEntities_shouldMapCorrectly() {
+    @DisplayName("Should map data correctly from User and Profile in fromEntities")
+    void testShouldFromEntities_shouldMapCorrectly() {
         UserProfileResponseDTO dto = UserProfileResponseDTO.fromEntities(user, profile);
 
         assertThat(dto.getUserDni()).isEqualTo("99999999B");
@@ -70,8 +69,8 @@ class UserProfileResponseDTOTest {
     }
 
     @Test
-    @DisplayName("Setters deben permitir actualizar los valores de los campos")
-    void setters_shouldUpdateFields() {
+    @DisplayName("Should allow updating fields using setters")
+    void testShouldSetters_shouldUpdateFields() {
         UserProfileResponseDTO dto = new UserProfileResponseDTO();
         dto.setUserDni("11111111C");
         dto.setUserName("Carlos");
@@ -83,6 +82,37 @@ class UserProfileResponseDTOTest {
         assertThat(dto.getUserSurname()).isEqualTo("Martín");
         assertThat(dto.getUserEmail()).isEqualTo("carlos@example.com");
     }
+
+    @Test
+    @DisplayName("Should throw NullPointerException when user is null in fromEntities")
+    void testShouldFromEntities_withNullUser_shouldThrowException() {
+        Profile profile = new Profile();
+        profile.setPermanentCredential("cred999");
+
+        assertThatThrownBy(() -> UserProfileResponseDTO.fromEntities(null, profile))
+                .isInstanceOf(NullPointerException.class);
+    }
+
+    @Test
+    @DisplayName("Should throw NullPointerException when profile is null in fromEntities")
+    void testShouldFromEntities_withNullProfile_shouldThrowException() {
+        Role dummyRole = new Role();
+        User user = new User("12345678A", "Pepe", "López", "pepe@example.com", "pass", dummyRole);
+
+        assertThatThrownBy(() -> UserProfileResponseDTO.fromEntities(user, null))
+                .isInstanceOf(NullPointerException.class);
+    }
+
+    @Test
+    @DisplayName("Should handle empty strings in constructor without errors")
+    void testShouldConstructorWithEmptyStrings_shouldWork() {
+        UserProfileResponseDTO dto = new UserProfileResponseDTO("", "", "", "", "");
+
+        assertThat(dto.getUserDni()).isEmpty();
+        assertThat(dto.getUserName()).isEmpty();
+        assertThat(dto.getUserSurname()).isEmpty();
+        assertThat(dto.getUserEmail()).isEmpty();
+        assertThat(dto.getPermanentCredential()).isEmpty();
+    }
+
 }
-
-
