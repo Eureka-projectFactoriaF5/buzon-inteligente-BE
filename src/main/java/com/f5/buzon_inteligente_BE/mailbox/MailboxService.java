@@ -27,7 +27,7 @@ public class MailboxService {
 
         Integer requestedCapacity = requestedSize.getCapacity();
 
-        Long freeStatusId = statusRepo.findByStatusName("FREE")
+        Long freeStatusId = statusRepo.findByMailboxStatusName("FREE")
             .orElseThrow(() -> new MailboxNotFoundException("Estado FREE no definido"))
             .getMailboxStatusId();
 
