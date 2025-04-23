@@ -14,8 +14,8 @@ public class MailboxController {
     }
 
     @GetMapping("/available")
-    public ResponseEntity<MailboxResponseDto> getAvailableMailbox(@RequestParam Long sizeId) {
-        Mailbox mailbox = mailboxService.findNextAvailableMailbox(sizeId);
+    public ResponseEntity<MailboxResponseDto> getAvailableMailbox(@RequestParam Long mailboxSizeId) {
+        Mailbox mailbox = mailboxService.findNextAvailableMailbox(mailboxSizeId);
 
         MailboxResponseDto response = new MailboxResponseDto(
             mailbox.getMailboxId(),
