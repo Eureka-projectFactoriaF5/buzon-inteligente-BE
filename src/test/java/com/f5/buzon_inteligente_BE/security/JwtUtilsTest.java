@@ -40,13 +40,13 @@ public class JwtUtilsTest {
                 "mZBZfP8L99Zm8GDZCBoBPXaGNsq4CPGK/c/pX9nuSUXwxLBzME2YkdE+5EYXPLkP54x32MmNljQIgGhD4oM3Hg==");
         ReflectionTestUtils.setField(jwtUtils, "jwtExpirationMs", 3600000);
 
-        validToken = jwtUtils.generateJwtToken(username, role, dni);
+        validToken = jwtUtils.generateJwtToken(username, role, dni, 1L);
     }
 
     @Test
     @DisplayName("Should generate a non-null JWT token")
     public void testShouldGenerateNonNullJwtToken() {
-        String token = jwtUtils.generateJwtToken(username, role, dni);
+        String token = jwtUtils.generateJwtToken(username, role, dni, 1L);
         assertNotNull(token, "Generated token should not be null");
     }
 
@@ -71,7 +71,7 @@ public class JwtUtilsTest {
     @DisplayName("Should detect expired JWT token")
     public void testShouldDetectExpiredJwtToken() throws InterruptedException {
         ReflectionTestUtils.setField(jwtUtils, "jwtExpirationMs", 1);
-        String shortLivedToken = jwtUtils.generateJwtToken(username, role, dni);
+        String shortLivedToken = jwtUtils.generateJwtToken(username, role, dni,1L);
 
         Thread.sleep(10);
 
