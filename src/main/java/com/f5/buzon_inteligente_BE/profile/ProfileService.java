@@ -1,9 +1,11 @@
 package com.f5.buzon_inteligente_BE.profile;
 
+import com.f5.buzon_inteligente_BE.profile.DTO.UserProfileResponseDTO;
 import com.f5.buzon_inteligente_BE.user.User;
 import com.f5.buzon_inteligente_BE.user.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.f5.buzon_inteligente_BE.profile.DTO.ProfileUpdateRequestDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -54,17 +56,26 @@ public class ProfileService {
     }
 
     @Transactional
-    public Profile updateProfile(Long id, String permanentCredential) {
-        Profile existingProfile = profileRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Profile not found with id: " + id));
-        
-     
-        if (profileRepository.existsByPermanentCredential(permanentCredential)) {
-            throw new RuntimeException("Credential already exists: " + permanentCredential);
+    public UserProfileResponseDTO updateUserFromProfile(Long userId, UserProfileUpdateRequestDTO dto) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con ID: " + userId));
+    
+        user.setUserDni(dto.getUserDni());
+        user.setUserName(dto.getUserName());
+        user.setUserSurname(dto.getUserSurname());
+        user.setUserEmail(dto.getUserEmail());
+    
+        if (dto.getUserPassword() != null && !dto.getUserPassword().isEmpty()) {
+            String encodedPassword = passwordEncoder.encode(dto.getUserPassword());
+            user.setUserPassword(encodedPassword);
         }
-        
-        existingProfile.setPermanentCredential(permanentCredential);
-        return profileRepository.save(existingProfile);
+    
+        User updatedUser = userRepository.save(user);
+    
+        Profile profile = profileRepository.findByUserUserId(userId)
+                .orElseThrow(() -> new RuntimeException("Perfil no encontrado para el usuario"));
+    
+        return UserProfileResponseDTO.fromEntities(updatedUser, profile);
     }
 
     @Transactional
