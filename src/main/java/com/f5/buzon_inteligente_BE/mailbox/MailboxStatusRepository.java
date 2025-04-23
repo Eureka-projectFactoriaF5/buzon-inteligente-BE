@@ -5,5 +5,5 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MailboxStatusRepository extends JpaRepository<MailboxStatus, Long> {
-    Optional<MailboxStatus> findByStatusName(String mailboxStatusName);
+    Optional<MailboxStatus> findByMailboxStatusName(String mailboxStatusName);
 }
