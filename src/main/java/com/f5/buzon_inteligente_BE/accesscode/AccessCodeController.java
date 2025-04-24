@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.*;
 public class AccessCodeController {
 
     private final AccessCodeService accessCodeService;
+    private final AccessCodeValidationService accessCodeValidationService;
 
-    public AccessCodeController(AccessCodeService accessCodeService) {
+    public AccessCodeController(AccessCodeService accessCodeService, AccessCodeValidationService accessCodeValidationService) {
         this.accessCodeService = accessCodeService;
+        this.accessCodeValidationService = accessCodeValidationService;
     }
 
     @PostMapping
@@ -40,6 +42,6 @@ public class AccessCodeController {
 
     @GetMapping("/validate")
     public ResponseEntity<?> validateAccessCode(@RequestParam String code){
-        
+        return accessCodeValidationService.validateAccessCode(code);
     }
 }
