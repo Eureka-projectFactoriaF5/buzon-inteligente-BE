@@ -14,19 +14,19 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/accesscode")
 public class AccesCodeController {
 
-    private final AccessCodeService accessCodeService; 
+    private final AccessCodeService accessCodeService;
 
     public AccesCodeController(AccessCodeService accessCodeService) {
         this.accessCodeService = accessCodeService;
     }
 
     @PostMapping
-    public ResponseEntity<AccessCodeResponseDTO> createAccessCode(@RequestBody AccessCodeRequestDTO accessCodeRequestDTO) {
+    public ResponseEntity<AccessCodeResponseDTO> createAccessCode(
+            @RequestBody AccessCodeRequestDTO accessCodeRequestDTO) {
         AccessCode createdAccessCode = accessCodeService.createAccessCode(accessCodeRequestDTO);
         return new ResponseEntity<>(
                 AccessCodeResponseDTO.fromEntities(createdAccessCode),
-                HttpStatus.CREATED
-        );
+                HttpStatus.CREATED);
     }
 
     @GetMapping("/profile/{profileId}")
