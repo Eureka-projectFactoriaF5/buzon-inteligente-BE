@@ -1,11 +1,14 @@
 package com.f5.buzon_inteligente_BE.profile;
 
+import com.f5.buzon_inteligente_BE.profile.DTO.ProfileUpdateRequestDTO;
 import com.f5.buzon_inteligente_BE.profile.DTO.UserProfileResponseDTO;
+import com.f5.buzon_inteligente_BE.profile.exception.ProfileNotFoundException;
+import com.f5.buzon_inteligente_BE.profile.exception.UserNotFoundException;
 import com.f5.buzon_inteligente_BE.user.User;
 import com.f5.buzon_inteligente_BE.user.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.f5.buzon_inteligente_BE.profile.DTO.ProfileUpdateRequestDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,10 +19,13 @@ public class ProfileService {
 
     private final ProfileRepository profileRepository;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public ProfileService(ProfileRepository profileRepository, UserRepository userRepository) {
+    public ProfileService(ProfileRepository profileRepository, UserRepository userRepository,
+                          PasswordEncoder passwordEncoder) {
         this.profileRepository = profileRepository;
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional(readOnly = true)
@@ -44,37 +50,36 @@ public class ProfileService {
 
     @Transactional
     public Profile createProfile(Long userId) {
-   
         if (profileRepository.existsByUserUserId(userId)) {
             throw new RuntimeException("Profile already exists for user with id: " + userId);
         }
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+                .orElseThrow(() -> new UserNotFoundException(userId));
 
         Profile profile = new Profile(user);
         return profileRepository.save(profile);
     }
 
     @Transactional
-    public UserProfileResponseDTO updateUserFromProfile(Long userId, UserProfileUpdateRequestDTO dto) {
+    public UserProfileResponseDTO updateUserFromProfile(Long userId, ProfileUpdateRequestDTO dto) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con ID: " + userId));
-    
+                .orElseThrow(() -> new UserNotFoundException(userId));
+
         user.setUserDni(dto.getUserDni());
         user.setUserName(dto.getUserName());
         user.setUserSurname(dto.getUserSurname());
         user.setUserEmail(dto.getUserEmail());
-    
+
         if (dto.getUserPassword() != null && !dto.getUserPassword().isEmpty()) {
             String encodedPassword = passwordEncoder.encode(dto.getUserPassword());
             user.setUserPassword(encodedPassword);
         }
-    
+
         User updatedUser = userRepository.save(user);
-    
+
         Profile profile = profileRepository.findByUserUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Perfil no encontrado para el usuario"));
-    
+                .orElseThrow(() -> new ProfileNotFoundException(userId));
+
         return UserProfileResponseDTO.fromEntities(updatedUser, profile);
     }
 

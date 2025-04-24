@@ -87,9 +87,24 @@ public class User implements Serializable {
         this.locker = locker;
     }
 
+    public void setUserDni(String userDni) {
+        this.userDni = userDni;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setUserSurname(String userSurname) {
+        this.userSurname = userSurname;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
     public void setUserPassword(String userPassword) {
         this.userPassword = userPassword;
     }
 
-    
 }
