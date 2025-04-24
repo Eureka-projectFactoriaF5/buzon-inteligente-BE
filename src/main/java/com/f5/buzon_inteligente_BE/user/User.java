@@ -86,4 +86,10 @@ public class User implements Serializable {
     public void setLocker(Locker locker) {
         this.locker = locker;
     }
+
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
+    }
+
+    
 }
