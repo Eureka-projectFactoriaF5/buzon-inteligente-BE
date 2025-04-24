@@ -1,11 +1,11 @@
 package com.f5.buzon_inteligente_BE.profile;
 
-import org.springframework.http.HttpStatus;
+import com.f5.buzon_inteligente_BE.profile.DTO.ProfileDTO;
+import com.f5.buzon_inteligente_BE.profile.DTO.ProfileUpdateRequestDTO;
+import com.f5.buzon_inteligente_BE.profile.DTO.UserProfileResponseDTO;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import com.f5.buzon_inteligente_BE.profile.DTO.ProfileDTO;
-import com.f5.buzon_inteligente_BE.profile.DTO.UserProfileResponseDTO;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,23 +45,12 @@ public class ProfileController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public ResponseEntity<UserProfileResponseDTO> createProfile(@RequestBody CreateProfileRequest request) {
-        Profile createdProfile = profileService.createProfile(request.getUserId());
-        return new ResponseEntity<>(UserProfileResponseDTO.fromEntities(createdProfile.getUser(), createdProfile),
-                HttpStatus.CREATED);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<ProfileDTO> updateProfile(@PathVariable Long id, @RequestBody UpdateProfileRequest request) {
-        Profile updatedProfile = profileService.updateProfile(id, request.getPermanentCredential());
-        return ResponseEntity.ok(ProfileDTO.fromEntity(updatedProfile));
-    }
-
-    @PostMapping("/{id}/regenerate-credential")
-    public ResponseEntity<String> regenerateCredential(@PathVariable Long id) {
-        String newCredential = profileService.regeneratePermanentCredential(id);
-        return ResponseEntity.ok(newCredential);
+    @PutMapping("/user/{userId}")
+    public ResponseEntity<UserProfileResponseDTO> updateUserFromProfile(
+            @PathVariable Long userId,
+            @RequestBody ProfileUpdateRequestDTO request) {
+        UserProfileResponseDTO updated = profileService.updateUserFromProfile(userId, request);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
@@ -70,27 +59,9 @@ public class ProfileController {
         return ResponseEntity.noContent().build();
     }
 
-    public static class CreateProfileRequest {
-        private Long userId;
-
-        public Long getUserId() {
-            return userId;
-        }
-
-        public void setUserId(Long userId) {
-            this.userId = userId;
-        }
-    }
-
-    public static class UpdateProfileRequest {
-        private String permanentCredential;
-
-        public String getPermanentCredential() {
-            return permanentCredential;
-        }
-
-        public void setPermanentCredential(String permanentCredential) {
-            this.permanentCredential = permanentCredential;
-        }
+    @PostMapping("/{id}/regenerate-credential")
+    public ResponseEntity<String> regenerateCredential(@PathVariable Long id) {
+        String newCredential = profileService.regeneratePermanentCredential(id);
+        return ResponseEntity.ok(newCredential);
     }
 }
