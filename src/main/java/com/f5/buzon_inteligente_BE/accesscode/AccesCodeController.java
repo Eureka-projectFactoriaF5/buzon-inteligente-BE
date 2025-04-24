@@ -37,4 +37,9 @@ public class AccesCodeController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(accessCodeDTOs);
     }
+
+    @GetMapìng("/validate")
+    public ResponseEntity<?> validateAccessCode(@RequestParam String code){
+        
+    }
 }
