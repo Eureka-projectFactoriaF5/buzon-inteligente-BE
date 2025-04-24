@@ -22,7 +22,7 @@ public class ProfileService {
     private final PasswordEncoder passwordEncoder;
 
     public ProfileService(ProfileRepository profileRepository, UserRepository userRepository,
-                          PasswordEncoder passwordEncoder) {
+            PasswordEncoder passwordEncoder) {
         this.profileRepository = profileRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
