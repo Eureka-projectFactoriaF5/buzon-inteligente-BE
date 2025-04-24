@@ -13,6 +13,7 @@ public interface AccessCodeRepository extends JpaRepository<AccessCode, Long> {
 
     Optional<AccessCode> findByAccessCode(String accessCode);
     
-    List<AccessCode> findAllByProfile_ProfileId(Long profileId);
+    List<AccessCode> findAllByProfile_Id(Long profileId);
+
 
 }

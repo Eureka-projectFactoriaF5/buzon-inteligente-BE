@@ -1,7 +1,7 @@
 package com.f5.buzon_inteligente_BE.accesscode;
 
-import com.f5.buzon_inteligente_BE.accesscode.DTO.AccessCodeResponseDTO;
-import com.f5.buzon_inteligente_BE.accesscode.AccessCodeException;
+import com.f5.buzon_inteligente_BE.accesscode.DTO.AccessCodeRequestDTO;
+
 import com.f5.buzon_inteligente_BE.profile.Profile;
 import com.f5.buzon_inteligente_BE.profile.ProfileRepository;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class AccessCodeService {
@@ -53,6 +52,6 @@ public class AccessCodeService {
 
     @Transactional(readOnly = true)
     public List<AccessCode> getAccessCodesByProfileId(Long profileId) {
-        return accessCodeRepository.findAllByProfile_ProfileId(profileId);
+        return accessCodeRepository.findAllByProfile_Id(profileId);
     }
 }
