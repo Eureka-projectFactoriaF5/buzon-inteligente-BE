@@ -7,7 +7,6 @@ VALUES
   ('AVAILABLE'),
   ('IN_MAINTENANCE');
 
-
 INSERT INTO lockers (address, time_limit, locker_status_id)
 VALUES
   ('Calle Falsa 123, Bloque A', 86400, 1),
@@ -49,3 +48,13 @@ INSERT INTO parcels (access_code_id, mailbox_id, delivery_date, alarm_date, dead
 VALUES
   (1, 1, NOW(), NOW() + INTERVAL 1 DAY, NOW() + INTERVAL 3 DAY),
   (2, 2, NOW(), NOW() + INTERVAL 1 DAY, NOW() + INTERVAL 3 DAY);
+
+INSERT INTO access_code_status (access_code_status_name) VALUES 
+  ('Pendiente'),
+  ('Entrega fallida'),
+  ('Entregado'),
+  ('Recogido'),
+  ('Pospuesto'),
+  ('No recogido'),
+  ('Entregado parcialmente'),
+  ('Recogido parcialmente');

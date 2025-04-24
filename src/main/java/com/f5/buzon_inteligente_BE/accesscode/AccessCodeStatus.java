@@ -20,7 +20,7 @@ public class AccessCodeStatus implements Serializable {
     private String accessCodeStatusName;
 
     @OneToMany(mappedBy = "accessCodeStatus", cascade = { CascadeType.PERSIST,
-            CascadeType.MERGE }, orphanRemoval = true)
+            CascadeType.MERGE })
     @JsonIgnore
     private List<AccessCode> accessCodes = new ArrayList<>();
 
