@@ -37,4 +37,15 @@ public class AccesCodeController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(accessCodeDTOs);
     }
+
+        @GetMapping("/credential/{permanentCredential}")
+    public ResponseEntity<?> getAccessCodesByCredential(@PathVariable String permanentCredential) {
+        try {
+            List<AccessCodeResponseDTO> accessCodes = accessCodeService.getAccessCodesByCredential(permanentCredential);
+            return new ResponseEntity<>(accessCodes, HttpStatus.OK);
+        } catch (AccessCodeException e) {
+            return new ResponseEntity<>("Credencial no válida. Intente nuevamente o contacte soporte.",
+                    HttpStatus.UNAUTHORIZED);
+        }
+    }
 }

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import com.f5.buzon_inteligente_BE.accesscode.AccessCode;
 import com.f5.buzon_inteligente_BE.accesscode.AccessCodeStatus;
+import com.f5.buzon_inteligente_BE.mailbox.Mailbox;
 
 public class AccessCodeResponseDTO {
     private Long accessCodeId; 
@@ -12,20 +13,43 @@ public class AccessCodeResponseDTO {
     private AccessCodeStatus accessCodeStatus;
     private LocalDateTime updateOn;
     private boolean isLocked = false;
+    private int mailboxNumber;
+
 
     public AccessCodeResponseDTO() {
     }
 
     public AccessCodeResponseDTO(Long accessCodeId, String code, String name, AccessCodeStatus accessCodeStatus, LocalDateTime updateOn,
-            boolean isLocked) {
+            boolean isLocked, int mailboxNumber) {
         this.accessCode = code;
         this.accessCodeName = name;
         this.accessCodeStatus = accessCodeStatus;
         this.updateOn = LocalDateTime.now();
         this.isLocked = isLocked;
+        this.mailboxNumber = mailboxNumber;
     }
 
-    public static AccessCodeResponseDTO fromEntities (AccessCode accessCode){
+    public AccessCodeResponseDTO(Long accessCodeId, String code, String name, AccessCodeStatus accessCodeStatus, LocalDateTime updateOn,
+    boolean isLocked) {
+this.accessCode = code;
+this.accessCodeName = name;
+this.accessCodeStatus = accessCodeStatus;
+this.updateOn = LocalDateTime.now();
+this.isLocked = isLocked;
+}
+
+    public static AccessCodeResponseDTO fromEntities (AccessCode accessCode, Mailbox mailbox) {
+        return new AccessCodeResponseDTO(
+            accessCode.getAccessCodeId(),
+            accessCode.getAccessCode(),
+            accessCode.getAccessCodeName(),
+            accessCode.getAccessCodeStatus(),
+            accessCode.getUpdateOn(),
+            accessCode.isLocked(),
+            mailbox.getMailboxNumber()
+        );
+    }
+    public static AccessCodeResponseDTO fromEntities (AccessCode accessCode) {
         return new AccessCodeResponseDTO(
             accessCode.getAccessCodeId(),
             accessCode.getAccessCode(),
@@ -35,6 +59,7 @@ public class AccessCodeResponseDTO {
             accessCode.isLocked()
         );
     }
+
     public Long getAccessCodeId() {
         return accessCodeId;
     }
@@ -81,6 +106,13 @@ public class AccessCodeResponseDTO {
     public void setLocked(boolean isLocked) {
         this.isLocked = isLocked;
     }
-
     
+    public int getMailboxNumber() {
+        return mailboxNumber;
+    }
+
+    public void setMailboxNumber(int mailboxNumber) {
+        this.mailboxNumber = mailboxNumber;
+}
+
 }
