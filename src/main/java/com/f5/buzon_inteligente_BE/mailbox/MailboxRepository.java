@@ -13,10 +13,11 @@ public interface MailboxRepository extends JpaRepository<Mailbox, Long> {
         FROM Mailbox m 
         WHERE m.mailboxSize.id = :mailboxSizeId 
         AND m.mailboxStatus.id = :mailboxStatusId
+        ORDER BY m.id ASC  -- Ordenar por un campo único (ej: ID)
     """)
     Optional<Mailbox> findFirstAvailableByExactSize(
-        @Param("sizeId") Long sizeId, 
-        @Param("statusId") Long statusId
+        @Param("mailboxSizeId") Long mailboxSizeId,
+        @Param("mailboxStatusId") Long mailboxStatusId
     );
 
     @Query("""
@@ -25,10 +26,10 @@ public interface MailboxRepository extends JpaRepository<Mailbox, Long> {
         JOIN m.mailboxSize s 
         WHERE s.capacity > :capacity 
         AND m.mailboxStatus.id = :mailboxStatusId 
-        ORDER BY s.capacity ASC
+        ORDER BY s.capacity ASC, m.id ASC  
     """)
     Optional<Mailbox> findFirstAvailableByMinCapacity(
-        @Param("capacity") Integer capacity, 
-        @Param("statusId") Long mailboxStatusId
+        @Param("capacity") Integer capacity,
+        @Param("mailboxStatusId") Long mailboxStatusId
     );
 }
