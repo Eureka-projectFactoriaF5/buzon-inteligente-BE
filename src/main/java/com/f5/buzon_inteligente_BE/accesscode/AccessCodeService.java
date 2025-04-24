@@ -1,9 +1,11 @@
 package com.f5.buzon_inteligente_BE.accesscode;
 
 import com.f5.buzon_inteligente_BE.accesscode.DTO.AccessCodeRequestDTO;
+import com.f5.buzon_inteligente_BE.accesscode.DTO.AccessCodeUpdateStatusRequestDTO;
 
 import com.f5.buzon_inteligente_BE.profile.Profile;
 import com.f5.buzon_inteligente_BE.profile.ProfileRepository;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,5 +55,22 @@ public class AccessCodeService {
     @Transactional(readOnly = true)
     public List<AccessCode> getAccessCodesByProfileId(Long profileId) {
         return accessCodeRepository.findAllByProfile_Id(profileId);
+    }
+
+    public void updateAccessCodeStatus(Long accessCodeId, AccessCodeUpdateStatusRequestDTO accessCodeRequestDTO) {        
+        AccessCode accessCode = accessCodeRepository.findById(accessCodeId)
+                .orElseThrow(() -> new AccessCodeException("Código de acceso no encontrado con ID: " + accessCodeId));
+        
+        AccessCodeStatus accessCodeStatus = statusRepository.findById(accessCodeRequestDTO.getAccessCodeStatusId())
+                .orElseThrow(() -> new AccessCodeException("Estado no encontrado con ID: " + accessCodeRequestDTO.getAccessCodeStatusId()));
+        
+        if(accessCodeStatus.getAccessCodeStatusId() == 3) {
+            accessCode.setLocked(true);
+        }
+
+        accessCode.setUpdateOn(LocalDateTime.now());
+        
+        accessCode.setAccessCodeStatus(accessCodeStatus);
+        accessCodeRepository.save(accessCode);
     }
 }
