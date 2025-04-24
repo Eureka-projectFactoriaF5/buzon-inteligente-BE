@@ -6,13 +6,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class LogoutService {
 
-    private final Set<String> blacklistedTokens = new HashSet<>();
+    private final Set<String> blacklistToken = new HashSet<>();
 
-    public void blacklistedTokens(String token){
-        blacklistedTokens.add(token);
+    public void blacklistToken(String token){
+        blacklistToken.add(token);
     }
 
     public boolean isTokenBlacklisted(String token){
-        return blacklistedTokens.contains(token);
+        return blacklistToken.contains(token);
     }
 }

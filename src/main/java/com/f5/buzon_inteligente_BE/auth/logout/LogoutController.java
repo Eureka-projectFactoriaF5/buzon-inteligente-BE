@@ -21,12 +21,12 @@ public class LogoutController {
 
         if (token == null || !token.startsWith("Bearer ")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new LogoutResponse("Token invalued"));
+                    .body(new LogoutResponse("Invalid token"));
         }
 
         String jwtToken = token.substring(7);
 
-        logoutService.blacklistedTokens(jwtToken);
+        logoutService.blacklistToken(jwtToken);
 
         return ResponseEntity.ok(new LogoutResponse("Session closed"));
     }
