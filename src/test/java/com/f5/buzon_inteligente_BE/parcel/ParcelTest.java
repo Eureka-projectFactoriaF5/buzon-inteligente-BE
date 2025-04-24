@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,6 +34,17 @@ class ParcelTest {
     @DisplayName("Should return correct access code")
     void testShouldGetAccessCode() {
         assertEquals(accessCode, parcel.getAccessCode());
+    }
+
+    @Test
+    @DisplayName("Should return correct parcelId")
+    void testShouldGetParcelId() throws Exception {
+
+        Field field = Parcel.class.getDeclaredField("parcelId");
+        field.setAccessible(true);
+        field.set(parcel, 123L);
+
+        assertEquals(123L, parcel.getParcelId());
     }
 
     @Test
