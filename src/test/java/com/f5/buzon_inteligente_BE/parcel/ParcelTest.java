@@ -60,7 +60,7 @@ class ParcelTest {
     @DisplayName("Should set alarm date based on deadline minus alarm hours")
     void testShouldSetAlarmDate() {
         parcel.setAlarmDate(5L);
-        
+
         assertEquals(parcel.getDeadlineDate().minusHours(5), parcel.getAlarmDate());
     }
 
@@ -75,5 +75,39 @@ class ParcelTest {
         assertEquals(
                 parcel.getDeadlineDate().withNano(0),
                 parcel.getDeliveryDate().plusHours(6).withNano(0));
+    }
+
+    @Test
+    @DisplayName("Should set alarmDate equal to deadlineDate when alarmHours is zero")
+    void testShouldSetAlarmDateWithZero() {
+        parcel.setAlarmDate(0L);
+        assertEquals(parcel.getDeadlineDate(), parcel.getAlarmDate());
+    }
+
+    @Test
+    @DisplayName("Should set alarmDate after deadlineDate if alarmHours is negative")
+    void testShouldSetAlarmDateWithNegativeHours() {
+        parcel.setAlarmDate(-2L);
+        assertEquals(parcel.getDeadlineDate().plusHours(2), parcel.getAlarmDate());
+    }
+
+    @Test
+    @DisplayName("Should set deadlineDate equal to deliveryDate when time limit is zero")
+    void testShouldSetDeadlineDateWithZero() {
+        when(locker.getTimeLimit()).thenReturn(0L);
+        parcel = new Parcel(accessCode, mailbox, now, now.plusHours(1), now.plusHours(2));
+        parcel.setDeadlineDate(locker);
+
+        assertEquals(parcel.getDeliveryDate().withNano(0), parcel.getDeadlineDate().withNano(0));
+    }
+
+    @Test
+    @DisplayName("Should set deadlineDate before deliveryDate when time limit is negative")
+    void testShouldSetDeadlineDateWithNegativeLimit() {
+        when(locker.getTimeLimit()).thenReturn(-3L);
+        parcel = new Parcel(accessCode, mailbox, now, now.plusHours(1), now.plusHours(2));
+        parcel.setDeadlineDate(locker);
+
+        assertEquals(parcel.getDeliveryDate().minusHours(3).withNano(0), parcel.getDeadlineDate().withNano(0));
     }
 }
