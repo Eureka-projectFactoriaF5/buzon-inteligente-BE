@@ -8,6 +8,7 @@ import com.f5.buzon_inteligente_BE.locker.Locker;
 @Entity
 @Table(name = "mailboxes")
 public class Mailbox implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

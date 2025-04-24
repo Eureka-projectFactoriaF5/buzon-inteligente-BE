@@ -43,11 +43,12 @@ public class LoginServiceTest {
         String encodedPassword = Base64.getEncoder().encodeToString(password.getBytes());
         LoginRequestDto request = new LoginRequestDto(email, encodedPassword);
 
+        when(userDetails.getUserId()).thenReturn(1L);
         when(userDetails.getUsername()).thenReturn(email);
         when(userDetails.getRole()).thenReturn(role);
         when(userDetails.getDni()).thenReturn(dni);
 
-        when(jwtUtils.generateJwtToken(email, role, dni)).thenReturn("token");
+        when(jwtUtils.generateJwtToken(email, role, dni, 1L)).thenReturn("token");
 
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, password);
         when(authenticationManager.authenticate(any())).thenReturn(authentication);

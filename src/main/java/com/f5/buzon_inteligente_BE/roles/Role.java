@@ -1,10 +1,12 @@
 package com.f5.buzon_inteligente_BE.roles;
 
+import java.io.Serializable;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name="roles")
-public class Role {
+public class Role implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
