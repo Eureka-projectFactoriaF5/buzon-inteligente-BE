@@ -1,13 +1,12 @@
 package com.f5.buzon_inteligente_BE.accesscode.DTO;
 
 import java.time.LocalDateTime;
-
 import com.f5.buzon_inteligente_BE.accesscode.AccessCode;
 import com.f5.buzon_inteligente_BE.accesscode.AccessCodeStatus;
 import com.f5.buzon_inteligente_BE.mailbox.Mailbox;
 
 public class AccessCodeResponseDTO {
-    private Long accessCodeId; 
+    private Long accessCodeId;
     private String accessCode;
     private String accessCodeName;
     private AccessCodeStatus accessCodeStatus;
@@ -15,12 +14,12 @@ public class AccessCodeResponseDTO {
     private boolean isLocked = false;
     private int mailboxNumber;
 
-
     public AccessCodeResponseDTO() {
     }
 
-    public AccessCodeResponseDTO(Long accessCodeId, String code, String name, AccessCodeStatus accessCodeStatus, LocalDateTime updateOn,
-            boolean isLocked, int mailboxNumber) {
+    public AccessCodeResponseDTO(Long accessCodeId, String code, String name, AccessCodeStatus accessCodeStatus,
+            LocalDateTime updateOn, boolean isLocked, int mailboxNumber) {
+        this.accessCodeId = accessCodeId;
         this.accessCode = code;
         this.accessCodeName = name;
         this.accessCodeStatus = accessCodeStatus;
@@ -29,40 +28,41 @@ public class AccessCodeResponseDTO {
         this.mailboxNumber = mailboxNumber;
     }
 
-    public AccessCodeResponseDTO(Long accessCodeId, String code, String name, AccessCodeStatus accessCodeStatus, LocalDateTime updateOn,
-    boolean isLocked) {
-this.accessCode = code;
-this.accessCodeName = name;
-this.accessCodeStatus = accessCodeStatus;
-this.updateOn = LocalDateTime.now();
-this.isLocked = isLocked;
-}
-
-    public static AccessCodeResponseDTO fromEntities (AccessCode accessCode, Mailbox mailbox) {
-        return new AccessCodeResponseDTO(
-            accessCode.getAccessCodeId(),
-            accessCode.getAccessCode(),
-            accessCode.getAccessCodeName(),
-            accessCode.getAccessCodeStatus(),
-            accessCode.getUpdateOn(),
-            accessCode.isLocked(),
-            mailbox.getMailboxNumber()
-        );
+    public AccessCodeResponseDTO(Long accessCodeId, String code, String name, AccessCodeStatus accessCodeStatus,
+            LocalDateTime updateOn,
+            boolean isLocked) {
+        this.accessCode = code;
+        this.accessCodeName = name;
+        this.accessCodeStatus = accessCodeStatus;
+        this.updateOn = LocalDateTime.now();
+        this.isLocked = isLocked;
     }
-    public static AccessCodeResponseDTO fromEntities (AccessCode accessCode) {
+
+    public static AccessCodeResponseDTO fromEntities(AccessCode accessCode, Mailbox mailbox) {
         return new AccessCodeResponseDTO(
-            accessCode.getAccessCodeId(),
-            accessCode.getAccessCode(),
-            accessCode.getAccessCodeName(),
-            accessCode.getAccessCodeStatus(),
-            accessCode.getUpdateOn(),
-            accessCode.isLocked()
-        );
+                accessCode.getAccessCodeId(),
+                accessCode.getAccessCode(),
+                accessCode.getAccessCodeName(),
+                accessCode.getAccessCodeStatus(),
+                accessCode.getUpdateOn(),
+                accessCode.isLocked(),
+                mailbox.getMailboxNumber());
+    }
+
+    public static AccessCodeResponseDTO fromEntities(AccessCode accessCode) {
+        return new AccessCodeResponseDTO(
+                accessCode.getAccessCodeId(),
+                accessCode.getAccessCode(),
+                accessCode.getAccessCodeName(),
+                accessCode.getAccessCodeStatus(),
+                accessCode.getUpdateOn(),
+                accessCode.isLocked());
     }
 
     public Long getAccessCodeId() {
         return accessCodeId;
     }
+
     public void setAccessCodeId(Long accessCodeId) {
         this.accessCodeId = accessCodeId;
     }
@@ -106,13 +106,13 @@ this.isLocked = isLocked;
     public void setLocked(boolean isLocked) {
         this.isLocked = isLocked;
     }
-    
+
     public int getMailboxNumber() {
         return mailboxNumber;
     }
 
     public void setMailboxNumber(int mailboxNumber) {
         this.mailboxNumber = mailboxNumber;
-}
+    }
 
 }

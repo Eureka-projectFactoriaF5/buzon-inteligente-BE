@@ -1,7 +1,7 @@
 package com.f5.buzon_inteligente_BE.accesscode;
 
 import com.f5.buzon_inteligente_BE.accesscode.DTO.AccessCodeRequestDTO;
-
+import com.f5.buzon_inteligente_BE.accesscode.DTO.AccessCodeResponseDTO;
 import com.f5.buzon_inteligente_BE.profile.Profile;
 import com.f5.buzon_inteligente_BE.profile.ProfileRepository;
 import org.springframework.stereotype.Service;
@@ -53,5 +53,20 @@ public class AccessCodeService {
     @Transactional(readOnly = true)
     public List<AccessCode> getAccessCodesByProfileId(Long profileId) {
         return accessCodeRepository.findAllByProfile_Id(profileId);
+    }
+
+  
+    @Transactional(readOnly = true)
+    public List<AccessCodeResponseDTO> getAccessCodesByCredential(String permanentCredential) {
+        Profile profile = profileRepository.findByPermanentCredential(permanentCredential)
+                .orElseThrow(() -> new AccessCodeException("Credencial no válida."));
+
+        return accessCodeRepository.findAllByProfile_Id(profile.getId()).stream()
+                .filter(ac -> {
+                    String status = ac.getAccessCodeStatus().getAccessCodeStatusName();
+                    return status.equalsIgnoreCase("Entregado") || status.equalsIgnoreCase("Entregado parcial");
+                })
+                .map(AccessCodeResponseDTO::fromEntities)
+                .toList();
     }
 }
