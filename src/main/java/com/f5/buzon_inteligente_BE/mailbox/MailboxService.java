@@ -1,6 +1,10 @@
 package com.f5.buzon_inteligente_BE.mailbox;
 
 
+import java.util.Optional;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,25 +26,27 @@ public class MailboxService {
 
     @Transactional(readOnly = true)
     public Mailbox findNextAvailableMailbox(Long requestedSizeId) {
+
+        Pageable firstOne = PageRequest.of(0,1);
         MailboxSize requestedSize = sizeRepo.findById(requestedSizeId)
-            .orElseThrow(() -> new MailboxNotFoundException("Tamaño no existe"));
+            .orElseThrow(() -> new MailboxNotFoundException("Requested size does not exist."));
 
         Integer requestedCapacity = requestedSize.getCapacity();
 
         Long freeStatusId = statusRepo.findByMailboxStatusName("FREE")
-            .orElseThrow(() -> new MailboxNotFoundException("Estado FREE no definido"))
+            .orElseThrow(() -> new MailboxNotFoundException("FREE status is not defined."))
             .getMailboxStatusId();
 
-        return mailboxRepo.findFirstAvailableByExactSize(requestedSizeId, freeStatusId)
-            .or(() ->
-                mailboxRepo
-                  .findFirstAvailableByMinCapacity(
-                      requestedCapacity, freeStatusId
-                  )
-            )
-            .orElseThrow(() ->
-                new MailboxNotFoundException("No hay buzones libres de tamaño " +
-                                              requestedCapacity + " ni superiores")
-            );
+            Optional<Mailbox> exact = mailboxRepo
+            .findAvailableByExactSize(requestedSizeId, freeStatusId, firstOne)
+            .stream().findFirst();
+    
+        Optional<Mailbox> next = mailboxRepo
+            .findAvailableByMinCapacity(requestedCapacity, freeStatusId, firstOne)
+            .stream().findFirst();
+
+            return exact.or(() -> next)
+                .orElseThrow(() -> new MailboxNotFoundException(
+                    "No free mailboxes of size " + requestedCapacity + " or larger are available."));
     }
 }

@@ -12,6 +12,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.f5.buzon_inteligente_BE.auth.logout.LogoutService;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,10 +26,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtils jwtUtils;
     private final UserDetailsService userDetailsService;
+    private final LogoutService logoutService;
 
-    public JwtAuthenticationFilter(JwtUtils jwtUtils, UserDetailsService userDetailsService) {
+    public JwtAuthenticationFilter(JwtUtils jwtUtils, UserDetailsService userDetailsService, LogoutService logoutService) {
         this.jwtUtils = jwtUtils;
         this.userDetailsService = userDetailsService;
+        this.logoutService = logoutService;
     }
 
     @Override
@@ -38,6 +42,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String jwt = jwtUtils.getJwtFromHeader(request);
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+                if(logoutService.isTokenBlacklisted(jwt)){
+                    logger.warn("Revoked token detected");
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.getWriter().write("Token has been revoked");
+                    return;
+                }
+
                 String username = jwtUtils.getUserNameFromJwtToken(jwt);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
