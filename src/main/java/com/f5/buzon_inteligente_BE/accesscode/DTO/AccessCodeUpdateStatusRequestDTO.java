@@ -4,6 +4,7 @@ public class AccessCodeUpdateStatusRequestDTO {
 
     private Long accessCodeId;
     private Long accessCodeStatusId;
+    private Long mailboxId;
 
     public Long getAccessCodeId() {
         return accessCodeId;
@@ -21,5 +22,9 @@ public class AccessCodeUpdateStatusRequestDTO {
     }
     public void setAccessCodeStatus(Long accessCodeStatusId) {
         this.accessCodeStatusId = accessCodeStatusId;
+    }
+
+    public Long getMailboxId() {
+        return mailboxId;
     }
 }
