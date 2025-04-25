@@ -4,6 +4,9 @@ import java.util.*;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import com.f5.buzon_inteligente_BE.profile.Profile;
+
 import jakarta.transaction.Transactional;
 
 public class AccessCodeValidationService {
@@ -25,15 +28,18 @@ public class AccessCodeValidationService {
             ));
         }
 
-        AccessCode accesCode = optionalAccessCode.get();
+        AccessCode accessCode = optionalAccessCode.get();
 
-        if(accesCode.isLocked()){
+        if(accessCode.isLocked()){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of(
                 "message", "The access code is blocked"
                 ));
         }
 
-        
+        Profile profile = accessCode.getProfile();
+        if(profile == null){
+            
+        }
     }
     
 }
