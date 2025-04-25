@@ -5,7 +5,9 @@ import java.util.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.f5.buzon_inteligente_BE.locker.Locker;
 import com.f5.buzon_inteligente_BE.profile.Profile;
+import com.f5.buzon_inteligente_BE.user.User;
 
 import jakarta.transaction.Transactional;
 
@@ -38,7 +40,23 @@ public class AccessCodeValidationService {
 
         Profile profile = accessCode.getProfile();
         if(profile == null){
-            
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
+                "message", "The access code is not associated with any profile"
+            ));
+        }
+
+        User user = profile.getUser();
+        if(user == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
+                "message", "The profile is not associated with any user"
+            ));
+        }
+
+        Locker locker = user.getLocker();
+        if(locker == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
+                "message", "The user is not associated with any locker"
+            ));
         }
     }
     
