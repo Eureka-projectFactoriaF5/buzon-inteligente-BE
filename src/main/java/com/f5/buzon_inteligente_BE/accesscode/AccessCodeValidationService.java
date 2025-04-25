@@ -12,9 +12,9 @@ import com.f5.buzon_inteligente_BE.user.User;
 import jakarta.transaction.Transactional;
 
 public class AccessCodeValidationService {
-    private final AccessCodeService accessCodeRepository;
+    private final AccessCodeRepository accessCodeRepository;
 
-    public AccessCodeValidationService(AccessCodeService accessCodeRepository) {
+    public AccessCodeValidationService(AccessCodeRepository accessCodeRepository) {
         this.accessCodeRepository = accessCodeRepository;
     }
 
@@ -58,6 +58,21 @@ public class AccessCodeValidationService {
                 "message", "The user is not associated with any locker"
             ));
         }
+
+        if(!"ACTIVO".equalsIgnoreCase(locker.getLockerStatus().getLockerStatusName())){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
+            "message", "The locker is not active"
+            ));
+        }
+
+        return ResponseEntity.ok(Map.of(
+            "message", "Access code is valid",
+            "accessCodeId", accessCode.getAccessCodeId(),
+            "profileId", profile.getId(),
+            "userId", user.getUserId(),
+            "LockerId", locker.getLockerId(),
+            "LockerAddress", locker.getAddress()
+        ));
     }
     
 }
