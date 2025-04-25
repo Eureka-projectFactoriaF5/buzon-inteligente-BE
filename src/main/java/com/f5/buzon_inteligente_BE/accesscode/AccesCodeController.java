@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import com.f5.buzon_inteligente_BE.accesscode.DTO.AccessCodeRequestDTO;
 import com.f5.buzon_inteligente_BE.accesscode.DTO.AccessCodeResponseDTO;
 import com.f5.buzon_inteligente_BE.accesscode.DTO.AccessCodeUpdateStatusRequestDTO;
+import com.f5.buzon_inteligente_BE.accesscode.DTO.AccessCodeUpdateStatusResponseDTO;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,8 +41,10 @@ public class AccesCodeController {
         return ResponseEntity.ok(accessCodeDTOs);
     }
     @PutMapping("/{accessCodeId}")
-    public ResponseEntity<?> putMethodName(@PathVariable Long accessCodeId, @RequestBody AccessCodeUpdateStatusRequestDTO accessCodeRequestDTO) {
-        accessCodeService.updateAccessCodeStatus(accessCodeId, accessCodeRequestDTO);
-        return ResponseEntity.ok("Estado actualizado");
+    public ResponseEntity<AccessCodeUpdateStatusResponseDTO> putMethodName(@PathVariable Long accessCodeId, @RequestBody AccessCodeUpdateStatusRequestDTO accessCodeRequestDTO) {
+        AccessCode updatedAccessCode = accessCodeService.updateAccessCodeStatus(accessCodeId, accessCodeRequestDTO);
+        return new ResponseEntity<>(
+                AccessCodeUpdateStatusResponseDTO.fromEntities(updatedAccessCode),
+                HttpStatus.OK);
     }
 }
