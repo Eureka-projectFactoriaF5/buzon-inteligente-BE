@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/accesscode")
-public class AccesCodeController {
+public class AccessCodeController {
 
     private final AccessCodeService accessCodeService;
 
-    public AccesCodeController(AccessCodeService accessCodeService) {
+    public AccessCodeController(AccessCodeService accessCodeService) {
         this.accessCodeService = accessCodeService;
     }
 
