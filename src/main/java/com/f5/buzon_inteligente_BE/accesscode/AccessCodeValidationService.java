@@ -9,8 +9,10 @@ import com.f5.buzon_inteligente_BE.locker.Locker;
 import com.f5.buzon_inteligente_BE.profile.Profile;
 import com.f5.buzon_inteligente_BE.user.User;
 
+import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 
+@Service
 public class AccessCodeValidationService {
     private final AccessCodeRepository accessCodeRepository;
 
@@ -19,7 +21,7 @@ public class AccessCodeValidationService {
     }
 
 
-    @Transactional
+    @Transactional(readOnly = true)
     public ResponseEntity<Map<String, Object>>validateAccessCode(String code){
 
         Optional<AccessCode> optionalAccessCode = accessCodeRepository.findByAccessCode(code);
@@ -59,7 +61,7 @@ public class AccessCodeValidationService {
             ));
         }
 
-        if(!"ACTIVO".equalsIgnoreCase(locker.getLockerStatus().getLockerStatusName())){
+        if(!"AVAILABLE".equalsIgnoreCase(locker.getLockerStatus().getLockerStatusName())){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
             "message", "The locker is not active"
             ));
@@ -67,11 +69,7 @@ public class AccessCodeValidationService {
 
         return ResponseEntity.ok(Map.of(
             "message", "Access code is valid",
-            "accessCodeId", accessCode.getAccessCodeId(),
-            "profileId", profile.getId(),
-            "userId", user.getUserId(),
-            "LockerId", locker.getLockerId(),
-            "LockerAddress", locker.getAddress()
+            "accessCodeId", accessCode.getAccessCodeId()
         ));
     }
     
