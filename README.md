@@ -1,10 +1,7 @@
 # Arkímedes
 
-🛠️ Purpose
-This system simplifies the logistics of last-mile delivery and offers a contactless, secure, and traceable way to manage package exchanges between couriers and recipients.
-
-## 🔐 Locker System – Smart Package Delivery & Pickup
-The Locker System is the physical interface of the Smart Locker project, designed for both delivery personnel and package recipients. It enables secure and automated handling of packages through an intuitive touch-based UI connected to smart compartments.
+## 📌 Description
+The backend is the core logic and data management system of the Arkímedes project, built with Java + Spring Boot. It provides a secure REST API to handle user authentication, package tracking and locker interactions.
 
 🚀 Main Responsibilities
 - User Registration & Login:
@@ -24,7 +21,6 @@ The Locker System is the physical interface of the Smart Locker project, designe
   - Provides user-specific dashboard data such as package lists, statuses, and notification summaries.
 
 ## Team
-
 - [Yeferson Gaviria](https://github.com/YefGav)
 - [Alejandra Fernández](https://github.com/Akalchi)
 - [Lanny Rivero](https://github.com/LannyRivero)
@@ -64,6 +60,7 @@ The Locker System is the physical interface of the Smart Locker project, designe
 ![Java](https://img.shields.io/badge/-Java-007396?logo=java&logoColor=white&style=flat)
 ![Spring Boot](https://img.shields.io/badge/-Spring%20Boot-6DB33F?style=flat&logo=springboot&logoColor=white)
 ![Spring Security](https://img.shields.io/badge/-Spring%20Security-6DB33F?style=flat&logo=spring&logoColor=white)
+![MySQL](https://img.shields.io/badge/-MySQL-4479A1?style=flat&logo=mysql&logoColor=white)
 ![JUnit](https://img.shields.io/badge/-JUnit-25A162?style=flat&logo=junit5&logoColor=white)
 ![Mockito](https://img.shields.io/badge/-Mockito-48C9B0?style=flat&logo=java&logoColor=white)
 
