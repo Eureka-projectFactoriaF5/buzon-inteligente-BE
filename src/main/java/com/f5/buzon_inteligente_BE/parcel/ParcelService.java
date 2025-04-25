@@ -38,11 +38,24 @@ public class ParcelService {
 
         LocalDateTime now = LocalDateTime.now();
 
-        Parcel newParcel = new Parcel(accessCode, mailbox, now, now.plusDays(3), null);
-        newParcel.setDeadlineDate(locker);
-        parcelRepository.save(newParcel);       
+        parcelRepository.findTopByAccessCodeOrderByDeliveryDateDesc(accessCode)
+                .ifPresent(previousParcel -> {
+                    if (previousParcel.getDeadlineDate().isBefore(now)) {
+                        AccessCodeStatus vencido = accessCodeStatusRepository
+                                .findByAccessCodeStatusName("No recogido")
+                                .orElseThrow(() -> new RuntimeException("Estado 'No recogido' no encontrado"));
+
+                        accessCode.setAccessCodeStatus(vencido);
+                        accessCodeRepository.save(accessCode);
+
+                        throw new RuntimeException("El plazo anterior venció. AccessCode marcado como 'No recogido'.");
+                    }
+                });
+
+                Parcel newParcel = new Parcel(accessCode, mailbox, now, now.plusDays(3), null); 
+                newParcel.setDeadlineDate(locker); 
+                parcelRepository.save(newParcel);    
 
         return ParcelResponseDTO.fromEntity(newParcel);
     }
-
 }
