@@ -95,7 +95,7 @@ public class AccessCodeService {
             accessCode.setLocked(true);
         }
         if (accessCodeStatus.getAccessCodeStatusId() == 6 || accessCodeStatus.getAccessCodeStatusId() == 7) {
-            //mailboxService.updateMailboxStatus(accessCodeRequestDTO.getMailboxId(), "FREE");
+            mailboxService.updateMailboxStatus(accessCodeRequestDTO.getMailboxId(), "FREE");
         }
 
         accessCode.setUpdateOn(LocalDateTime.now());
