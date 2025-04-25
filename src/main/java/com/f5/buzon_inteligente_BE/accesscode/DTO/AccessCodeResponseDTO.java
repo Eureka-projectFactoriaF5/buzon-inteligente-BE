@@ -18,6 +18,7 @@ public class AccessCodeResponseDTO {
 
     public AccessCodeResponseDTO(Long accessCodeId, String code, String name, AccessCodeStatus accessCodeStatus, LocalDateTime updateOn,
             boolean isLocked) {
+        this.accessCodeId = accessCodeId;
         this.accessCode = code;
         this.accessCodeName = name;
         this.accessCodeStatus = accessCodeStatus;
