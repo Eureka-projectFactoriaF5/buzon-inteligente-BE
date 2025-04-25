@@ -45,10 +45,11 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
 
-            .requestMatchers(AntPathRequestMatcher.antMatcher("/api/auth/**")).permitAll()
-            .requestMatchers(AntPathRequestMatcher.antMatcher("/api/mailboxes/**")).permitAll()
-            .requestMatchers(AntPathRequestMatcher.antMatcher("/user/**")).authenticated()
-            .anyRequest().authenticated())
+            .requestMatchers("/api/users/**").authenticated()
+            .requestMatchers("/api/profiles/**").authenticated()
+            .requestMatchers("/api/accesscode/**").authenticated()
+            
+            .anyRequest().permitAll())
             .addFilterBefore(new JwtAuthenticationFilter(jwtUtils, customUserDetailsService, logoutService),
             UsernamePasswordAuthenticationFilter.class);
         return http.build();

@@ -51,8 +51,8 @@ VALUES
 -- 8. Profiles
 INSERT INTO profiles (id, user_id, permanent_credential)
 VALUES
-  (101, 1, 'CRED-BOB01'),
-  (102, 2, 'CRED-FREDDIE01');
+  (1, 1, 'CRED-BOB01'),
+  (2, 2, 'CRED-FREDDIE01');
 
 -- 9. Access Code Status
 INSERT INTO access_code_status (access_code_status_name)
