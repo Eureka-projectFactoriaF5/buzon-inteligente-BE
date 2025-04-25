@@ -1,17 +1,21 @@
 package com.f5.buzon_inteligente_BE.accesscode;
 
-import com.f5.buzon_inteligente_BE.accesscode.DTO.AccessCodeRequestDTO;
-import com.f5.buzon_inteligente_BE.accesscode.DTO.AccessCodeUpdateStatusRequestDTO;
-
-import com.f5.buzon_inteligente_BE.profile.Profile;
-import com.f5.buzon_inteligente_BE.profile.ProfileRepository;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
+import com.f5.buzon_inteligente_BE.accesscode.DTO.AccessCodeRequestDTO;
+import com.f5.buzon_inteligente_BE.accesscode.DTO.AccessCodeUpdateStatusRequestDTO;
+import com.f5.buzon_inteligente_BE.locker.Locker;
+import com.f5.buzon_inteligente_BE.mailbox.Mailbox;
+import com.f5.buzon_inteligente_BE.mailbox.MailboxRepository;
+import com.f5.buzon_inteligente_BE.mailbox.MailboxService;
+//import com.f5.buzon_inteligente_BE.parcel.ParcelService;
+import com.f5.buzon_inteligente_BE.profile.Profile;
+import com.f5.buzon_inteligente_BE.profile.ProfileRepository;
 
 @Service
 public class AccessCodeService {
@@ -19,13 +23,23 @@ public class AccessCodeService {
     private final AccessCodeRepository accessCodeRepository;
     private final AccessCodeStatusRepository statusRepository;
     private final ProfileRepository profileRepository;
+    private MailboxService mailboxService;
+    //private ParcelService parcelService;
+    private MailboxRepository mailboxRepository;
 
     public AccessCodeService(AccessCodeRepository accessCodeRepository,
             AccessCodeStatusRepository statusRepository,
-            ProfileRepository profileRepository) {
+            ProfileRepository profileRepository,
+            MailboxService mailboxService,
+            MailboxRepository mailboxRepository
+            //ParcelService parcelService
+     ) {
         this.accessCodeRepository = accessCodeRepository;
         this.statusRepository = statusRepository;
         this.profileRepository = profileRepository;
+        this.mailboxService = mailboxService;
+        this.mailboxRepository = mailboxRepository;
+        //this.parcelService = parcelService;
     }
 
     @Transactional
@@ -57,20 +71,45 @@ public class AccessCodeService {
         return accessCodeRepository.findAllByProfile_Id(profileId);
     }
 
-    public void updateAccessCodeStatus(Long accessCodeId, AccessCodeUpdateStatusRequestDTO accessCodeRequestDTO) {        
+    public void updateAccessCodeStatus(Long accessCodeId, AccessCodeUpdateStatusRequestDTO accessCodeRequestDTO) {
         AccessCode accessCode = accessCodeRepository.findById(accessCodeId)
                 .orElseThrow(() -> new AccessCodeException("Código de acceso no encontrado con ID: " + accessCodeId));
-        
+
         AccessCodeStatus accessCodeStatus = statusRepository.findById(accessCodeRequestDTO.getAccessCodeStatusId())
-                .orElseThrow(() -> new AccessCodeException("Estado no encontrado con ID: " + accessCodeRequestDTO.getAccessCodeStatusId()));
-        
-        if(accessCodeStatus.getAccessCodeStatusId() == 3) {
+                .orElseThrow(() -> new AccessCodeException(
+                        "Estado no encontrado con ID: " + accessCodeRequestDTO.getAccessCodeStatusId()));
+
+        if (accessCodeStatus.getAccessCodeStatusId() == 2) { // entrega fallida
+            // devuelvo nombre, apellido, dni, fecha de entrega, status
+        }
+        if (accessCodeStatus.getAccessCodeStatusId() == 3 || accessCodeStatus.getAccessCodeStatusId() == 4) {// entregado
+            Mailbox mailbox = mailboxRepository.findById(accessCodeRequestDTO.getMailboxId())
+                    .stream()
+                    .findFirst()
+                    .orElseThrow(() -> new AccessCodeException(
+                            "Buzón no encontrada con ID: " + accessCodeRequestDTO.getMailboxId()));
+            Locker locker = mailbox.getLocker();
+            //parcelService.createParcelAndUpdateAccessCodeStatus(accessCode, mailbox, locker);
+
+            //mailboxService.updateMailboxStatus(accessCodeRequestDTO.getMailboxId(), "OCCUPIED");
+            // devuelvo nombre, apellido, dni, fecha de entrega, estatus, accessCode
+        }
+        if (accessCodeStatus.getAccessCodeStatusId() == 3) {// entregado
             accessCode.setLocked(true);
         }
 
+        if (accessCodeStatus.getAccessCodeStatusId() == 5) {
+            // devuelvo ok
+        } // pospuesto
+        if (accessCodeStatus.getAccessCodeStatusId() == 8 || accessCodeStatus.getAccessCodeStatusId() == 4) { // recogido
+                                                                                                              // parcialmente
+            //mailboxService.updateMailboxStatus(accessCodeRequestDTO.getMailboxId(), "FREE");
+            // devuelvo ok
+        }
+
         accessCode.setUpdateOn(LocalDateTime.now());
-        
         accessCode.setAccessCodeStatus(accessCodeStatus);
+
         accessCodeRepository.save(accessCode);
     }
 }
