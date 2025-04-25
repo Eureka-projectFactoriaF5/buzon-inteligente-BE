@@ -2,6 +2,7 @@ package com.f5.buzon_inteligente_BE.accesscode;
 
 import com.f5.buzon_inteligente_BE.accesscode.DTO.AccessCodeRequestDTO;
 import com.f5.buzon_inteligente_BE.accesscode.DTO.AccessCodeResponseDTO;
+import com.f5.buzon_inteligente_BE.mailbox.Mailbox;
 import com.f5.buzon_inteligente_BE.profile.Profile;
 import com.f5.buzon_inteligente_BE.profile.ProfileRepository;
 import org.springframework.stereotype.Service;
@@ -55,7 +56,6 @@ public class AccessCodeService {
         return accessCodeRepository.findAllByProfile_Id(profileId);
     }
 
-  
     @Transactional(readOnly = true)
     public List<AccessCodeResponseDTO> getAccessCodesByCredential(String permanentCredential) {
         Profile profile = profileRepository.findByPermanentCredential(permanentCredential)
@@ -66,7 +66,10 @@ public class AccessCodeService {
                     String status = ac.getAccessCodeStatus().getAccessCodeStatusName();
                     return status.equalsIgnoreCase("Entregado") || status.equalsIgnoreCase("Entregado parcial");
                 })
-                .map(AccessCodeResponseDTO::fromEntities)
+                .map(ac -> {
+                    Mailbox mailbox = ac.getParcels().isEmpty() ? null : ac.getParcels().get(0).getMailbox();
+                    return AccessCodeResponseDTO.fromEntities(ac, mailbox);
+                })
                 .toList();
     }
 }

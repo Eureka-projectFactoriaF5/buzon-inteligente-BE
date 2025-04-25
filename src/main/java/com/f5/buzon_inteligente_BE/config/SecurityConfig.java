@@ -48,6 +48,7 @@ public class SecurityConfig {
             .requestMatchers(AntPathRequestMatcher.antMatcher("/api/auth/**")).permitAll()
             .requestMatchers(AntPathRequestMatcher.antMatcher("/api/mailboxes/**")).permitAll()
             .requestMatchers(AntPathRequestMatcher.antMatcher("/user/**")).authenticated()
+            .requestMatchers("/api/accesscode/credential/**").permitAll()
             .anyRequest().authenticated())
             .addFilterBefore(new JwtAuthenticationFilter(jwtUtils, customUserDetailsService, logoutService),
             UsernamePasswordAuthenticationFilter.class);

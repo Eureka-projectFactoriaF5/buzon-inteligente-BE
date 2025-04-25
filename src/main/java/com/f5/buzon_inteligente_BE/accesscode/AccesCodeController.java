@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import com.f5.buzon_inteligente_BE.accesscode.DTO.AccessCodeRequestDTO;
 import com.f5.buzon_inteligente_BE.accesscode.DTO.AccessCodeResponseDTO;
+import com.f5.buzon_inteligente_BE.mailbox.Mailbox;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,21 +25,34 @@ public class AccesCodeController {
     public ResponseEntity<AccessCodeResponseDTO> createAccessCode(
             @RequestBody AccessCodeRequestDTO accessCodeRequestDTO) {
         AccessCode createdAccessCode = accessCodeService.createAccessCode(accessCodeRequestDTO);
+
+
+        Mailbox mailbox = createdAccessCode.getParcels().isEmpty()
+                ? null
+                : createdAccessCode.getParcels().get(0).getMailbox();
+
         return new ResponseEntity<>(
-                AccessCodeResponseDTO.fromEntities(createdAccessCode),
+                AccessCodeResponseDTO.fromEntities(createdAccessCode, mailbox),
                 HttpStatus.CREATED);
     }
 
     @GetMapping("/profile/{profileId}")
     public ResponseEntity<List<AccessCodeResponseDTO>> getAccessCodesByProfile(@PathVariable Long profileId) {
         List<AccessCode> accessCodes = accessCodeService.getAccessCodesByProfileId(profileId);
+
         List<AccessCodeResponseDTO> accessCodeDTOs = accessCodes.stream()
-                .map(AccessCodeResponseDTO::fromEntities)
+                .map(ac -> {
+                    Mailbox mailbox = ac.getParcels().isEmpty()
+                            ? null
+                            : ac.getParcels().get(0).getMailbox();
+                    return AccessCodeResponseDTO.fromEntities(ac, mailbox);
+                })
                 .collect(Collectors.toList());
+
         return ResponseEntity.ok(accessCodeDTOs);
     }
 
-        @GetMapping("/credential/{permanentCredential}")
+    @GetMapping("/credential/{permanentCredential}")
     public ResponseEntity<?> getAccessCodesByCredential(@PathVariable String permanentCredential) {
         try {
             List<AccessCodeResponseDTO> accessCodes = accessCodeService.getAccessCodesByCredential(permanentCredential);
