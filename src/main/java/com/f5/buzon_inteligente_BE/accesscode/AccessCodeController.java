@@ -41,7 +41,7 @@ public class AccessCodeController {
         return ResponseEntity.ok(accessCodeDTOs);
     }
     @PutMapping("/{accessCodeId}")
-    public ResponseEntity<AccessCodeUpdateStatusResponseDTO> putMethodName(@PathVariable Long accessCodeId, @RequestBody AccessCodeUpdateStatusRequestDTO accessCodeRequestDTO) {
+    public ResponseEntity<AccessCodeUpdateStatusResponseDTO> setAccessCodeStatusId(@PathVariable Long accessCodeId, @RequestBody AccessCodeUpdateStatusRequestDTO accessCodeRequestDTO) {
         AccessCode updatedAccessCode = accessCodeService.updateAccessCodeStatus(accessCodeId, accessCodeRequestDTO);
         return new ResponseEntity<>(
                 AccessCodeUpdateStatusResponseDTO.fromEntities(updatedAccessCode),
