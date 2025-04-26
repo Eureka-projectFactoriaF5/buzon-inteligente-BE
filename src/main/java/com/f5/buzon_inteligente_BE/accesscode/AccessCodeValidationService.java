@@ -26,7 +26,7 @@ public class AccessCodeValidationService {
 
         Optional<AccessCode> optionalAccessCode = accessCodeRepository.findByAccessCode(code);
 
-        if(optionalAccessCode.isEmpty()){
+        if (optionalAccessCode.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
                 "message", "Access code not found"
             ));
@@ -34,34 +34,34 @@ public class AccessCodeValidationService {
 
         AccessCode accessCode = optionalAccessCode.get();
 
-        if(accessCode.isLocked()){
+        if (accessCode.isLocked()){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of(
                 "message", "The access code is blocked"
                 ));
         }
 
         Profile profile = accessCode.getProfile();
-        if(profile == null){
+        if (profile == null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
                 "message", "The access code is not associated with any profile"
             ));
         }
 
         User user = profile.getUser();
-        if(user == null){
+        if (user == null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
                 "message", "The profile is not associated with any user"
             ));
         }
 
         Locker locker = user.getLocker();
-        if(locker == null){
+        if (locker == null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
                 "message", "The user is not associated with any locker"
             ));
         }
 
-        if(!"AVAILABLE".equalsIgnoreCase(locker.getLockerStatus().getLockerStatusName())){
+        if (!"AVAILABLE".equalsIgnoreCase(locker.getLockerStatus().getLockerStatusName())){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
             "message", "The locker is not active"
             ));
