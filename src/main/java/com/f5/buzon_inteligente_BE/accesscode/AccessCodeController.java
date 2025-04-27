@@ -6,18 +6,19 @@ import java.util.stream.Collectors;
 import com.f5.buzon_inteligente_BE.accesscode.DTO.AccessCodeRequestDTO;
 import com.f5.buzon_inteligente_BE.accesscode.DTO.AccessCodeResponseDTO;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/accesscode")
-public class AccesCodeController {
+public class AccessCodeController {
 
     private final AccessCodeService accessCodeService;
+    private final AccessCodeValidationService accessCodeValidationService;
 
-    public AccesCodeController(AccessCodeService accessCodeService) {
+    public AccessCodeController(AccessCodeService accessCodeService, AccessCodeValidationService accessCodeValidationService) {
         this.accessCodeService = accessCodeService;
+        this.accessCodeValidationService = accessCodeValidationService;
     }
 
     @PostMapping
@@ -36,5 +37,10 @@ public class AccesCodeController {
                 .map(AccessCodeResponseDTO::fromEntities)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(accessCodeDTOs);
+    }
+
+    @GetMapping("/validate")
+    public ResponseEntity<?> validateAccessCode(@RequestParam String code){
+        return accessCodeValidationService.validateAccessCode(code);
     }
 }
