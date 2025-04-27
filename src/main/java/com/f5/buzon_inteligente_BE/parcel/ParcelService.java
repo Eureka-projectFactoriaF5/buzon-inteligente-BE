@@ -29,7 +29,7 @@ public class ParcelService {
         this.accessCodeStatusRepository = accessCodeStatusRepository;
     }
 
-    @Transactional
+   @Transactional(noRollbackFor = RuntimeException.class)
     public ParcelResponseDTO createParcelAndUpdateAccessCodeStatus(
             AccessCode accessCode,
             Mailbox mailbox,
