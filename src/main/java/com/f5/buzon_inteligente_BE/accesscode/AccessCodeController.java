@@ -7,25 +7,26 @@ import com.f5.buzon_inteligente_BE.accesscode.DTO.AccessCodeRequestDTO;
 import com.f5.buzon_inteligente_BE.accesscode.DTO.AccessCodeResponseDTO;
 import com.f5.buzon_inteligente_BE.mailbox.Mailbox;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/accesscode")
-public class AccesCodeController {
+public class AccessCodeController {
 
     private final AccessCodeService accessCodeService;
+    private final AccessCodeValidationService accessCodeValidationService;
 
-    public AccesCodeController(AccessCodeService accessCodeService) {
+    public AccessCodeController(AccessCodeService accessCodeService,
+            AccessCodeValidationService accessCodeValidationService) {
         this.accessCodeService = accessCodeService;
+        this.accessCodeValidationService = accessCodeValidationService;
     }
 
     @PostMapping
     public ResponseEntity<AccessCodeResponseDTO> createAccessCode(
             @RequestBody AccessCodeRequestDTO accessCodeRequestDTO) {
         AccessCode createdAccessCode = accessCodeService.createAccessCode(accessCodeRequestDTO);
-
 
         Mailbox mailbox = createdAccessCode.getParcels().isEmpty()
                 ? null
@@ -61,5 +62,11 @@ public class AccesCodeController {
             return new ResponseEntity<>("Credencial no válida. Intente nuevamente o contacte soporte.",
                     HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    @GetMapping("/validate")
+    public ResponseEntity<?> validateAccessCode(@RequestParam String code) {
+        return accessCodeValidationService.validateAccessCode(code);
+
     }
 }
