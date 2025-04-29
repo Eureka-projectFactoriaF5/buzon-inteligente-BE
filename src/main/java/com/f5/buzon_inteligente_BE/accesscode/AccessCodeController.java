@@ -29,18 +29,19 @@ public class AccessCodeController {
     }
 
     @PostMapping
-    public ResponseEntity<AccessCodeResponseDTO> createAccessCode(
-            @RequestBody AccessCodeRequestDTO accessCodeRequestDTO) {
-        AccessCode createdAccessCode = accessCodeService.createAccessCode(accessCodeRequestDTO);
+public ResponseEntity<AccessCodeResponseDTO> createAccessCode(
+        @RequestBody AccessCodeRequestDTO accessCodeRequestDTO) {
+    AccessCode createdAccessCode = accessCodeService.createAccessCode(accessCodeRequestDTO);
 
-        Mailbox mailbox = createdAccessCode.getParcels().isEmpty()
-                ? null
-                : createdAccessCode.getParcels().get(0).getMailbox();
-
-        return new ResponseEntity<>(
-                AccessCodeResponseDTO.fromEntities(createdAccessCode, mailbox),
-                HttpStatus.CREATED);
+    Mailbox mailbox = null;
+    if (createdAccessCode.getParcels() != null && !createdAccessCode.getParcels().isEmpty()) {
+        mailbox = createdAccessCode.getParcels().get(0).getMailbox();
     }
+
+    return new ResponseEntity<>(
+            AccessCodeResponseDTO.fromEntities(createdAccessCode, mailbox),
+            HttpStatus.CREATED);
+}
 
     @GetMapping("/profile/{profileId}")
     public ResponseEntity<List<AccessCodeResponseDTO>> getAccessCodesByProfile(@PathVariable Long profileId) {

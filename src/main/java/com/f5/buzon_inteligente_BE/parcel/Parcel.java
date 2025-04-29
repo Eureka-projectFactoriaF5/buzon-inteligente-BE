@@ -20,7 +20,7 @@ public class Parcel implements Serializable {
     @JoinColumn(name = "access_code_id", referencedColumnName = "access_code_id",  nullable = false)
     private AccessCode accessCode;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mailbox_id", referencedColumnName = "mailbox_id",  nullable = false)
     private Mailbox mailbox;
 

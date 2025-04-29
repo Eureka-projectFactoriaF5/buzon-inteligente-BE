@@ -11,7 +11,7 @@ import com.f5.buzon_inteligente_BE.accesscode.AccessCodeStatusRepository;
 import com.f5.buzon_inteligente_BE.locker.Locker;
 import com.f5.buzon_inteligente_BE.mailbox.Mailbox;
 import com.f5.buzon_inteligente_BE.parcel.dto.ParcelResponseDTO;
-
+import com.f5.buzon_inteligente_BE.parcel.exceptions.ParcelException;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,33 +30,37 @@ public class ParcelService {
         this.accessCodeStatusRepository = accessCodeStatusRepository;
     }
 
-   @Transactional(noRollbackFor = RuntimeException.class)
+    @Transactional
     public ParcelResponseDTO createParcelAndUpdateAccessCodeStatus(
             AccessCode accessCode,
             Mailbox mailbox,
-            Locker locker
-          ) {
-
+            Locker locker) {
         LocalDateTime now = LocalDateTime.now();
 
-        parcelRepository.findTopByAccessCodeOrderByDeliveryDateDesc(accessCode)
-                .ifPresent(previousParcel -> {
-                    if (previousParcel.getDeadlineDate().isBefore(now)) {
-                        AccessCodeStatus vencido = accessCodeStatusRepository
-                                .findByAccessCodeStatusName("No recogido")
-                                .orElseThrow(() -> new RuntimeException("Estado 'No recogido' no encontrado"));
+        try {
+            parcelRepository.findTopByAccessCodeOrderByDeliveryDateDesc(accessCode)
+                    .ifPresent(previousParcel -> {
+                        if (previousParcel.getDeadlineDate().isBefore(now)) {
+                            AccessCodeStatus vencido = accessCodeStatusRepository
+                                    .findByAccessCodeStatusName("No recogido")
+                                    .orElseThrow(() -> new IllegalStateException("Estado 'No recogido' no encontrado"));
 
-                        accessCode.setAccessCodeStatus(vencido);
-                        accessCodeRepository.save(accessCode);
+                            accessCode.setAccessCodeStatus(vencido);
+                            accessCodeRepository.save(accessCode);
 
-                        throw new RuntimeException("El plazo anterior venció. AccessCode marcado como 'No recogido'.");
-                    }
-                });
+                            throw new IllegalStateException(
+                                    "El plazo anterior venció. AccessCode marcado como 'No recogido'.");
+                        }
+                    });
 
-                Parcel newParcel = new Parcel(accessCode, mailbox, now, now.plusDays(3), null); 
-                newParcel.setDeadlineDate(locker); 
-                parcelRepository.save(newParcel);    
+            Parcel newParcel = new Parcel(accessCode, mailbox, now, now.plusDays(3), null);
+            newParcel.setDeadlineDate(locker);
+            parcelRepository.save(newParcel);
 
-        return ParcelResponseDTO.fromEntity(newParcel);
+            return ParcelResponseDTO.fromEntity(newParcel);
+        } catch (IllegalStateException e) {
+
+            throw new ParcelException("No se pudo crear el parcel: " + e.getMessage(), e);
+        }
     }
 }
