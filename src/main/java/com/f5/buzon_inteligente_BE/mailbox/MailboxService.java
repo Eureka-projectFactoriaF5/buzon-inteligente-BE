@@ -41,12 +41,24 @@ public class MailboxService {
             .findAvailableByExactSize(requestedSizeId, freeStatusId, firstOne)
             .stream().findFirst();
     
-        Optional<Mailbox> next = mailboxRepo
+            Optional<Mailbox> next = mailboxRepo
             .findAvailableByMinCapacity(requestedCapacity, freeStatusId, firstOne)
             .stream().findFirst();
 
             return exact.or(() -> next)
                 .orElseThrow(() -> new MailboxNotFoundException(
                     "No free mailboxes of size " + requestedCapacity + " or larger are available."));
+    }
+
+    @Transactional
+    public void updateMailboxStatus(Long mailboxId, String statusName) {
+        Mailbox mailbox = mailboxRepo.findById(mailboxId)
+            .orElseThrow(() -> new MailboxNotFoundException("Mailbox not found with id " + mailboxId));
+
+        MailboxStatus newStatus = statusRepo.findByMailboxStatusName(statusName)
+            .orElseThrow(() -> new MailboxNotFoundException("MailboxStatus not found: " + statusName));
+
+        mailbox.setMailboxStatus(newStatus);
+        mailboxRepo.save(mailbox);
     }
 }
