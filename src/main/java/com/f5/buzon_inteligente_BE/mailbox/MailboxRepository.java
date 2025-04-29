@@ -1,6 +1,7 @@
 package com.f5.buzon_inteligente_BE.mailbox;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -35,4 +36,6 @@ public interface MailboxRepository extends JpaRepository<Mailbox, Long> {
         @Param("mailboxStatusId") Long mailboxStatusId,
         Pageable pageable
     );
+
+    Optional<Mailbox>findById(Long mailboxId);
 }
