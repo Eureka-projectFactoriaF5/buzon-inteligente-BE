@@ -21,7 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import com.f5.buzon_inteligente_BE.auth.logout.LogoutService;
 import com.f5.buzon_inteligente_BE.security.JwtUtils;
 
 @WebMvcTest(LoginController.class)
@@ -36,11 +36,13 @@ public class LoginControllerTest {
     private LoginService loginService;
 
     @MockitoBean
+    private LogoutService logoutService;
+
+    @MockitoBean
     private JwtUtils jwtUtils;
 
     @Autowired
     ObjectMapper objectMapper;
-
 
     @Test
     @DisplayName("Should login user")
@@ -52,16 +54,16 @@ public class LoginControllerTest {
         String json = objectMapper.writeValueAsString(requestDto);
 
         MockHttpServletResponse response = mockMvc.perform(post("/api/auth/login")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(json))
-            .andExpect(status().isOk())
-            .andReturn()
-            .getResponse();
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse();
 
         assertThat(response.getStatus(), is(200));
-        assertThat(response.getContentAsString(),containsString("Login exitoso"));
-        assertThat(response.getContentAsString(),containsString("token"));
-        assertThat(response.getContentAsString(),containsString("USER"));
+        assertThat(response.getContentAsString(), containsString("Login exitoso"));
+        assertThat(response.getContentAsString(), containsString("token"));
+        assertThat(response.getContentAsString(), containsString("USER"));
     }
 
     @Test
@@ -69,19 +71,19 @@ public class LoginControllerTest {
     void testLoginFail() throws Exception {
         LoginRequestDto requestDto = new LoginRequestDto("email", "password");
         when(loginService.authenticate(any(LoginRequestDto.class)))
-        .thenThrow(new BadCredentialsException("Not authenticate user"));
+                .thenThrow(new BadCredentialsException("Not authenticate user"));
 
         String json = objectMapper.writeValueAsString(requestDto);
 
         MockHttpServletResponse response = mockMvc.perform(post("/api/auth/login")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(json))
-            .andExpect(status().isUnauthorized())
-            .andReturn()
-            .getResponse();
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isUnauthorized())
+                .andReturn()
+                .getResponse();
 
         assertThat(response.getStatus(), is(401));
-        assertThat(response.getContentAsString(),containsString("Credenciales inválidas"));
+        assertThat(response.getContentAsString(), containsString("Credenciales inválidas"));
     }
 
     @Test
@@ -90,17 +92,18 @@ public class LoginControllerTest {
         LoginRequestDto requestDto = new LoginRequestDto("email", "####");
 
         when(loginService.authenticate(any(LoginRequestDto.class)))
-        .thenThrow(new IllegalArgumentException("Password mal codificado"));
+                .thenThrow(new IllegalArgumentException("Password mal codificado"));
+
         String json = objectMapper.writeValueAsString(requestDto);
 
         MockHttpServletResponse response = mockMvc.perform(post("/api/auth/login")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(json))
-            .andExpect(status().isBadRequest())
-            .andReturn()
-            .getResponse();
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isBadRequest())
+                .andReturn()
+                .getResponse();
 
         assertThat(response.getStatus(), is(400));
-        assertThat(response.getContentAsString(),containsString("Formato de password inválido"));
+        assertThat(response.getContentAsString(), containsString("Formato de password inválido"));
     }
 }

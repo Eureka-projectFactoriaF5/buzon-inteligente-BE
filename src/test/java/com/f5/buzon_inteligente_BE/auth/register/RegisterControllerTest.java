@@ -22,6 +22,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.f5.buzon_inteligente_BE.auth.logout.LogoutService;
 import com.f5.buzon_inteligente_BE.auth.register.RegisterExceptions.DniAlreadyExistsException;
 import com.f5.buzon_inteligente_BE.auth.register.RegisterExceptions.EmailAlreadyExistsException;
 import com.f5.buzon_inteligente_BE.auth.register.RegisterExceptions.RegisterException;
@@ -33,110 +34,113 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @ActiveProfiles("test")
 @AutoConfigureMockMvc(addFilters = false)
 public class RegisterControllerTest {
-    @Autowired
-    private MockMvc mockMvc;
+        @Autowired
+        private MockMvc mockMvc;
 
-    @MockitoBean
-    private RegisterService registerService;
+        @MockitoBean
+        private RegisterService registerService;
 
-    @MockitoBean
-    private JwtUtils jwtUtils;
+        @MockitoBean
+        private LogoutService logoutService;
 
-    @Autowired
-    ObjectMapper objectMapper;
+        @MockitoBean
+        private JwtUtils jwtUtils;
 
-    private RegisterRequest registerRequest;
-    private String json;
+        @Autowired
+        ObjectMapper objectMapper;
 
-    @BeforeEach
-    public void setup() throws JsonProcessingException {
-        registerRequest = new RegisterRequest("12345678", "name", "surname", "email@example.com", "password");
-        json = objectMapper.writeValueAsString(registerRequest);
-    }
+        private RegisterRequest registerRequest;
+        private String json;
 
-    @Test
-    @DisplayName("Should registerUser success")
-    public void shouldRegisterUserSuccess() throws Exception {
-        when(registerService.registerUser(any(RegisterRequest.class)))
-                .thenReturn(Map.of("message", "Success"));
+        @BeforeEach
+        public void setup() throws JsonProcessingException {
+                registerRequest = new RegisterRequest("12345678", "name", "surname", "email@example.com", "password");
+                json = objectMapper.writeValueAsString(registerRequest);
+        }
 
-        MockHttpServletResponse response = mockMvc.perform(post("/api/auth/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json))
-                .andExpect(status().isCreated())
-                .andReturn()
-                .getResponse();
+        @Test
+        @DisplayName("Should registerUser success")
+        public void shouldRegisterUserSuccess() throws Exception {
+                when(registerService.registerUser(any(RegisterRequest.class)))
+                                .thenReturn(Map.of("message", "Success"));
 
-        assertThat(response.getStatus(), is(201));
-        assertThat(response.getContentType(), is("application/json"));
-        assertThat(response.getContentAsString(), is("{\"message\":\"Success\"}"));
-    }
+                MockHttpServletResponse response = mockMvc.perform(post("/api/auth/register")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(json))
+                                .andExpect(status().isCreated())
+                                .andReturn()
+                                .getResponse();
 
-    @Test
-    @DisplayName("Should registerUser fail email already exists")
-    public void shouldRegisterUserFailEmailAlreadyExists() throws Exception {
-        when(registerService.registerUser(any(RegisterRequest.class)))
-                .thenThrow(new EmailAlreadyExistsException("Email already exists"));
+                assertThat(response.getStatus(), is(201));
+                assertThat(response.getContentType(), is("application/json"));
+                assertThat(response.getContentAsString(), is("{\"message\":\"Success\"}"));
+        }
 
-        MockHttpServletResponse response = mockMvc.perform(post("/api/auth/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json))
-                .andExpect(status().isBadRequest())
-                .andReturn()
-                .getResponse();
+        @Test
+        @DisplayName("Should registerUser fail email already exists")
+        public void shouldRegisterUserFailEmailAlreadyExists() throws Exception {
+                when(registerService.registerUser(any(RegisterRequest.class)))
+                                .thenThrow(new EmailAlreadyExistsException("Email already exists"));
 
-        assertThat(response.getStatus(), is(400));
-        assertThat(response.getContentAsString(), containsString("Email already exists"));
-    }
+                MockHttpServletResponse response = mockMvc.perform(post("/api/auth/register")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(json))
+                                .andExpect(status().isBadRequest())
+                                .andReturn()
+                                .getResponse();
 
-    @Test
-    @DisplayName("Should registerUser fail DNI already exists")
-    public void shouldRegisterUserFailDniAlreadyExists() throws Exception {
-        when(registerService.registerUser(any(RegisterRequest.class)))
-                .thenThrow(new DniAlreadyExistsException("DNI already exists"));
+                assertThat(response.getStatus(), is(400));
+                assertThat(response.getContentAsString(), containsString("Email already exists"));
+        }
 
-        MockHttpServletResponse response = mockMvc.perform(post("/api/auth/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json))
-                .andExpect(status().isBadRequest())
-                .andReturn()
-                .getResponse();
+        @Test
+        @DisplayName("Should registerUser fail DNI already exists")
+        public void shouldRegisterUserFailDniAlreadyExists() throws Exception {
+                when(registerService.registerUser(any(RegisterRequest.class)))
+                                .thenThrow(new DniAlreadyExistsException("DNI already exists"));
 
-        assertThat(response.getStatus(), is(400));
-        assertThat(response.getContentAsString(), containsString("DNI already exists"));
-    }
+                MockHttpServletResponse response = mockMvc.perform(post("/api/auth/register")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(json))
+                                .andExpect(status().isBadRequest())
+                                .andReturn()
+                                .getResponse();
 
-    @Test
-    @DisplayName("Should registerUser fail register")
-    public void shouldRegisterUserFailRegister() throws Exception {
-        when(registerService.registerUser(any(RegisterRequest.class)))
-                .thenThrow(new RegisterException("Register error"));
+                assertThat(response.getStatus(), is(400));
+                assertThat(response.getContentAsString(), containsString("DNI already exists"));
+        }
 
-        MockHttpServletResponse response = mockMvc.perform(post("/api/auth/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json))
-                .andExpect(status().isInternalServerError())
-                .andReturn()
-                .getResponse();
+        @Test
+        @DisplayName("Should registerUser fail register")
+        public void shouldRegisterUserFailRegister() throws Exception {
+                when(registerService.registerUser(any(RegisterRequest.class)))
+                                .thenThrow(new RegisterException("Register error"));
 
-        assertThat(response.getStatus(), is(500));
-        assertThat(response.getContentAsString(), containsString("Register error"));
-    }
+                MockHttpServletResponse response = mockMvc.perform(post("/api/auth/register")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(json))
+                                .andExpect(status().isInternalServerError())
+                                .andReturn()
+                                .getResponse();
 
-    @Test
-    @DisplayName("Should registerUser fail exception")
-    public void shouldRegisterUserFailException() throws Exception {
-        when(registerService.registerUser(any(RegisterRequest.class)))
-                .thenThrow(new RuntimeException("Unexpected error"));
+                assertThat(response.getStatus(), is(500));
+                assertThat(response.getContentAsString(), containsString("Register error"));
+        }
 
-        MockHttpServletResponse response = mockMvc.perform(post("/api/auth/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json))
-                .andExpect(status().isInternalServerError())
-                .andReturn()
-                .getResponse();
+        @Test
+        @DisplayName("Should registerUser fail exception")
+        public void shouldRegisterUserFailException() throws Exception {
+                when(registerService.registerUser(any(RegisterRequest.class)))
+                                .thenThrow(new RuntimeException("Unexpected error"));
 
-        assertThat(response.getStatus(), is(500));
-        assertThat(response.getContentAsString(), containsString("Unexpected error"));
-    }
+                MockHttpServletResponse response = mockMvc.perform(post("/api/auth/register")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(json))
+                                .andExpect(status().isInternalServerError())
+                                .andReturn()
+                                .getResponse();
+
+                assertThat(response.getStatus(), is(500));
+                assertThat(response.getContentAsString(), containsString("Unexpected error"));
+        }
 }

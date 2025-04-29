@@ -1,5 +1,6 @@
 package com.f5.buzon_inteligente_BE.config;
 
+import com.f5.buzon_inteligente_BE.auth.logout.LogoutService;
 import com.f5.buzon_inteligente_BE.security.CustomUserDetailsService;
 import com.f5.buzon_inteligente_BE.security.JwtUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @DisplayName("Unit tests for SecurityConfig")
@@ -27,12 +28,15 @@ class SecurityConfigTest {
     @Mock
     private JwtUtils jwtUtils;
 
+    @Mock
+    private LogoutService logoutService;
+
     private SecurityConfig securityConfig;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        securityConfig = new SecurityConfig(customUserDetailsService, jwtUtils);
+        securityConfig = new SecurityConfig(customUserDetailsService, jwtUtils, logoutService);
     }
 
     @Test
@@ -57,21 +61,19 @@ class SecurityConfigTest {
         HttpSecurity http = mock(HttpSecurity.class, RETURNS_DEEP_STUBS);
         AuthenticationManagerBuilder builder = mock(AuthenticationManagerBuilder.class);
         @SuppressWarnings("unchecked")
-        DaoAuthenticationConfigurer<AuthenticationManagerBuilder, CustomUserDetailsService> daoConfigurer = mock(
-                DaoAuthenticationConfigurer.class);
+        DaoAuthenticationConfigurer<AuthenticationManagerBuilder, CustomUserDetailsService> daoConfigurer = mock(DaoAuthenticationConfigurer.class);
 
         when(http.getSharedObject(AuthenticationManagerBuilder.class)).thenReturn(builder);
         when(builder.userDetailsService(customUserDetailsService)).thenReturn(daoConfigurer);
         when(daoConfigurer.passwordEncoder(any(PasswordEncoder.class))).thenReturn(daoConfigurer);
         when(builder.build()).thenReturn(mock(AuthenticationManager.class));
 
-        AuthenticationManager authenticationManager = securityConfig.authenticationManager(http,
-                securityConfig.passwordEncoder());
+        AuthenticationManager authenticationManager = securityConfig.authenticationManager(http, securityConfig.passwordEncoder());
 
         assertThat(authenticationManager).isNotNull();
 
         verify(builder).userDetailsService(customUserDetailsService);
         verify(daoConfigurer).passwordEncoder(any(PasswordEncoder.class));
     }
-
 }
+
