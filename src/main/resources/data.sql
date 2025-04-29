@@ -51,20 +51,19 @@ VALUES
 -- 8. Profiles
 INSERT INTO profiles (id, user_id, permanent_credential)
 VALUES
-  (101, 1, 'CRED-BOB01'),
-  (102, 2, 'CRED-FREDDIE01');
+  (1, 1, 'CRED-BOB01'),
+  (2, 2, 'CRED-FREDDIE01');
 
 -- 9. Access Code Status
-INSERT INTO access_code_status (access_code_status_name)
-VALUES
-  ('Pendiente'),
-  ('Entrega fallida'),
-  ('Entregado parcialmente'),
-  ('Entregado'),
-  ('Pospuesto'),
-  ('Recogido parcialmente'),
-  ('Recogido'),
-  ('No recogido');
+INSERT INTO access_code_status (access_code_status_id, access_code_status_name) VALUES
+  (1, 'Pendiente'),
+  (2, 'Entrega fallida'),
+  (3, 'Entregado parcialmente'),
+  (4, 'Entregado'),
+  (5, 'Pospuesto'),
+  (6, 'Recogido parcialmente'),
+  (7, 'Recogido'),
+  (8, 'No recogido');
 
 -- 10. Access Codes
 

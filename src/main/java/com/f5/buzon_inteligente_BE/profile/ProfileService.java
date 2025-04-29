@@ -10,9 +10,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.f5.buzon_inteligente_BE.auth.register.RegisterExceptions.RegisterException;
+
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import java.util.Base64;
+import java.util.Base64.Decoder;
 
 @Service
 public class ProfileService {
@@ -71,6 +77,14 @@ public class ProfileService {
         user.setUserEmail(dto.getUserEmail());
 
         if (dto.getUserPassword() != null && !dto.getUserPassword().isEmpty()) {
+        String decodedPassword; 
+        try {
+            Decoder decoder = Base64.getDecoder();
+            byte[] decodedBytes = decoder.decode(dto.getUserPassword());
+            decodedPassword = new String(decodedBytes);
+        } catch (Exception e) {
+            throw new RegisterException("Error decoding password from Base64", e);
+        }    
             String encodedPassword = passwordEncoder.encode(dto.getUserPassword());
             user.setUserPassword(encodedPassword);
         }
