@@ -1,13 +1,16 @@
 package com.f5.buzon_inteligente_BE.accesscode;
 
+import com.f5.buzon_inteligente_BE.accesscode.DTO.AccessCodeRequestDTO;
+
+import com.f5.buzon_inteligente_BE.profile.Profile;
+import com.f5.buzon_inteligente_BE.profile.ProfileRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.f5.buzon_inteligente_BE.accesscode.DTO.AccessCodeRequestDTO;
 import com.f5.buzon_inteligente_BE.accesscode.DTO.AccessCodeResponseDTO;
 import com.f5.buzon_inteligente_BE.accesscode.DTO.AccessCodeUpdateStatusRequestDTO;
 import com.f5.buzon_inteligente_BE.locker.Locker;
@@ -15,8 +18,6 @@ import com.f5.buzon_inteligente_BE.mailbox.Mailbox;
 import com.f5.buzon_inteligente_BE.mailbox.MailboxRepository;
 import com.f5.buzon_inteligente_BE.mailbox.MailboxService;
 import com.f5.buzon_inteligente_BE.parcel.ParcelService;
-import com.f5.buzon_inteligente_BE.profile.Profile;
-import com.f5.buzon_inteligente_BE.profile.ProfileRepository;
 
 @Service
 public class AccessCodeService {
@@ -70,6 +71,23 @@ public class AccessCodeService {
     @Transactional(readOnly = true)
     public List<AccessCode> getAccessCodesByProfileId(Long profileId) {
         return accessCodeRepository.findAllByProfile_Id(profileId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<AccessCodeResponseDTO> getAccessCodesByCredential(String permanentCredential) {
+        Profile profile = profileRepository.findByPermanentCredential(permanentCredential)
+                .orElseThrow(() -> new AccessCodeException("Credencial no válida."));
+
+        return accessCodeRepository.findAllByProfile_Id(profile.getId()).stream()
+                .filter(ac -> {
+                    String status = ac.getAccessCodeStatus().getAccessCodeStatusName();
+                    return status.equalsIgnoreCase("Entregado") || status.equalsIgnoreCase("Entregado parcial");
+                })
+                .map(ac -> {
+                    Mailbox mailbox = ac.getParcels().isEmpty() ? null : ac.getParcels().get(0).getMailbox();
+                    return AccessCodeResponseDTO.fromEntities(ac, mailbox);
+                })
+                .toList();
     }
 
     public AccessCode updateAccessCodeStatus(Long accessCodeId, AccessCodeUpdateStatusRequestDTO accessCodeRequestDTO) {
