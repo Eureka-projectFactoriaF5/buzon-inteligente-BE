@@ -58,12 +58,12 @@ VALUES
 INSERT INTO access_code_status (access_code_status_id, access_code_status_name) VALUES
   (1, 'Pendiente'),
   (2, 'Entrega fallida'),
-  (3, 'Entregado'),
-  (4, 'Recogido'),
+  (3, 'Entregado parcialmente'),
+  (4, 'Entregado'),
   (5, 'Pospuesto'),
-  (6, 'No recogido'),
-  (7, 'Entregado parcialmente'),
-  (8, 'Recogido parcialmente');
+  (6, 'Recogido parcialmente'),
+  (7, 'Recogido'),
+  (8, 'No recogido');
 
 -- 10. Access Codes
 
