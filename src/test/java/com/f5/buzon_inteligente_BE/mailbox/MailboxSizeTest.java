@@ -15,7 +15,7 @@ public class MailboxSizeTest {
 
     @BeforeEach
     void setUp() throws NoSuchFieldException, IllegalAccessException {
-        mailboxSize = new MailboxSize("LARGE");
+        mailboxSize = new MailboxSize("LARGE", 10);
         Field mailboxSizeId = MailboxSize.class.getDeclaredField("mailboxSizeId");
         mailboxSizeId.setAccessible(true);
         mailboxSizeId.set(mailboxSize, 1L);
@@ -38,5 +38,18 @@ public class MailboxSizeTest {
     void testSetMailboxSizeName() {
         mailboxSize.setMailboxSizeName("SMALL");
         assertThat(mailboxSize.getMailboxSizeName(), is("SMALL"));  
+    }
+
+    @Test
+    @DisplayName("getCapacity test")
+    void testGetCapacity() {
+        assertThat(mailboxSize.getCapacity(), is(10));
+    }
+
+    @Test
+    @DisplayName("setCapacity test")
+    void testSetCapacity() {
+        mailboxSize.setCapacity(20);
+        assertThat(mailboxSize.getCapacity(), is(20));
     }
 }
