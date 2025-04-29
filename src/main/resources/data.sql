@@ -69,8 +69,8 @@ INSERT INTO access_code_status (access_code_status_id, access_code_status_name) 
 
 INSERT INTO access_codes (access_code, access_code_name, profile_id, access_code_status_id, update_on, is_locked)
 VALUES 
-  ('ABCD1234', 'Paquete Amazon', 101, 3, CURRENT_TIMESTAMP, false),
-  ('XYZ98765', 'Pedido Shein', 102, 7, CURRENT_TIMESTAMP, false);
+  ('ABCD1234', 'Paquete Amazon', 1, 3, CURRENT_TIMESTAMP, false),
+  ('XYZ98765', 'Pedido Shein', 2, 7, CURRENT_TIMESTAMP, false);
 
 
 -- 11. Parcels

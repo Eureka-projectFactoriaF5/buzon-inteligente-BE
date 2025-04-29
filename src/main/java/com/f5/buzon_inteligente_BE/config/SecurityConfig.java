@@ -26,7 +26,8 @@ public class SecurityConfig {
     private final JwtUtils jwtUtils;
     private final LogoutService logoutService;
 
-    public SecurityConfig(CustomUserDetailsService customUserDetailsService, JwtUtils jwtUtils, LogoutService logoutService) {
+    public SecurityConfig(CustomUserDetailsService customUserDetailsService, JwtUtils jwtUtils,
+            LogoutService logoutService) {
         this.customUserDetailsService = customUserDetailsService;
         this.jwtUtils = jwtUtils;
         this.logoutService = logoutService;
@@ -38,29 +39,31 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .cors(cors -> Customizer.withDefaults())
-            .csrf(csrf -> csrf.disable())
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
+                .cors(cors -> Customizer.withDefaults())
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
 
-            .requestMatchers(AntPathRequestMatcher.antMatcher("/api/auth/**")).permitAll()
-            .requestMatchers(AntPathRequestMatcher.antMatcher("/api/mailboxes/**")).permitAll()
-            .requestMatchers(AntPathRequestMatcher.antMatcher("/user/**")).authenticated()
-            .requestMatchers("/api/accesscode/credential/**").permitAll()
-            .anyRequest().authenticated())
-            .addFilterBefore(new JwtAuthenticationFilter(jwtUtils, customUserDetailsService, logoutService),
-            UsernamePasswordAuthenticationFilter.class);
+                        .requestMatchers("/api/users/**").authenticated()
+                        .requestMatchers("/api/profiles/**").authenticated()
+                        .requestMatchers("/api/accesscode/**").authenticated()
+
+                        .anyRequest().permitAll())
+
+                .addFilterBefore(new JwtAuthenticationFilter(jwtUtils, customUserDetailsService, logoutService),
+                        UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder) throws Exception {
+    public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder)
+            throws Exception {
         AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
         builder
-            .userDetailsService(customUserDetailsService)
-            .passwordEncoder(passwordEncoder);
+                .userDetailsService(customUserDetailsService)
+                .passwordEncoder(passwordEncoder);
         return builder.build();
     }
 
