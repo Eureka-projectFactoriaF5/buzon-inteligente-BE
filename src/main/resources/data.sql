@@ -55,18 +55,27 @@ VALUES
   (102, 2, 'CRED-FREDDIE01');
 
 -- 9. Access Code Status
-INSERT INTO access_code_status (access_code_status_name)
-VALUES
-  ('Pendiente'),
-  ('Entrega fallida'),
-  ('Entregado'),
-  ('Recogido'),
-  ('Pospuesto'),
-  ('No recogido'),
-  ('Entregado parcialmente'),
-  ('Recogido parcialmente');
+INSERT INTO access_code_status (access_code_status_id, access_code_status_name) VALUES
+  (1, 'Pendiente'),
+  (2, 'Entrega fallida'),
+  (3, 'Entregado'),
+  (4, 'Recogido'),
+  (5, 'Pospuesto'),
+  (6, 'No recogido'),
+  (7, 'Entregado parcialmente'),
+  (8, 'Recogido parcialmente');
 
 -- 10. Access Codes
 
+INSERT INTO access_codes (access_code, access_code_name, profile_id, access_code_status_id, update_on, is_locked)
+VALUES 
+  ('ABCD1234', 'Paquete Amazon', 101, 3, CURRENT_TIMESTAMP, false),
+  ('XYZ98765', 'Pedido Shein', 102, 7, CURRENT_TIMESTAMP, false);
+
 
 -- 11. Parcels
+
+INSERT INTO parcels (access_code_id, mailbox_id, delivery_date, alarm_date, deadline_date)
+VALUES 
+  (1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 1 HOUR, CURRENT_TIMESTAMP + INTERVAL 24 HOUR),
+  (2, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 2 HOUR, CURRENT_TIMESTAMP + INTERVAL 36 HOUR);

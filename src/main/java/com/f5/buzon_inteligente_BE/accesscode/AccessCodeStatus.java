@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "access_code_status")
+
 public class AccessCodeStatus implements Serializable {
     private static final long serialVersionUID = 1L;
 
