@@ -21,7 +21,7 @@ public class MailboxTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        mailboxSize = new MailboxSize("LARGE");
+        mailboxSize = new MailboxSize("LARGE", 10);
         mailboxStatus = new MailboxStatus("FREE");
         locker = new Locker();
         mailbox = new Mailbox(mailboxSize, locker, mailboxStatus, 42);
@@ -69,7 +69,7 @@ public class MailboxTest {
 
     @Test
     void testSetMailboxSize() {
-        mailbox.setMailboxSize(new MailboxSize("SMALL"));
+        mailbox.setMailboxSize(new MailboxSize("SMALL", 1));
         assertThat(mailbox.getMailboxSize().getMailboxSizeName(), is("SMALL"));
     }
 
